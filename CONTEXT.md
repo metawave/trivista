@@ -73,7 +73,7 @@ Der letzte verarbeitete Scan desselben Branches bzw. Cluster-Projects und Artifa
 _Avoid_: Previous, Baseline
 
 **Diff**:
-Neue und behobene Findings eines Scans gegenüber seinem Predecessor.
+Neue und nicht mehr gemeldete Findings eines Scans gegenüber seinem Predecessor. "Nicht mehr gemeldet" heißt nicht zwingend behoben, die Scan-Konfiguration kann sich geändert haben.
 _Avoid_: Comparison, Delta
 
 **Trend**:

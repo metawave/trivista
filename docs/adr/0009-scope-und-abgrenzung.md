@@ -14,4 +14,4 @@ Trivista ist bewusst schmal: Es sammelt Trivy-Reports per Push und zeigt sie an.
 
 ## Consequences
 
-Trivy scannt per Default nur `vuln,secret`. Für alle Finding-Typen muss die CI `--scanners vuln,misconfig,secret,license` setzen.
+Trivy scannt per Default nur `vuln,secret`. Für alle Finding-Typen muss die CI `--scanners vuln,misconfig,secret,license` setzen. Trivista kennt die Scan-Konfiguration nicht und zeigt deshalb "nicht mehr gemeldet" statt "behoben"; die README empfiehlt eine gleichbleibende Konfiguration pro Artifact.
