@@ -26,8 +26,25 @@ class BranchTrendTest < ActionDispatch::IntegrationTest
     get branch_path(branches(:shop_backend_main), type: "package", range: "1000", trigger: "nightly")
 
     assert_response :success
-    assert_select "select[name=type] option[selected][value=vulnerability]"
-    assert_select "select[name=range] option[selected][value='90']"
-    assert_select "select[name=trigger] option[selected][value='']"
+    assert_select ".tab[aria-current=page]", text: "Vulnerabilities"
+    assert_select ".segmented a[aria-current=true]", text: "90d"
+    assert_select ".toggle[aria-current=true]", text: "all"
+  end
+
+  test "filter links keep the other filters" do
+    get branch_path(branches(:shop_backend_main), type: "secret", range: "7", trigger: "tag")
+
+    assert_select ".segmented a[href=?]", branch_path(branches(:shop_backend_main), type: "secret", range: "30", trigger: "tag")
+    assert_select ".toggle[href=?]", branch_path(branches(:shop_backend_main), type: "secret", range: "7"), text: "all"
+  end
+
+  test "lists the scans with trigger and diff" do
+    get branch_path(branches(:shop_backend_main))
+
+    assert_select "tbody tr", 1 do
+      assert_select "a[href=?]", scan_path(scans(:shop_main_first)), text: "01234567"
+      assert_select ".chip", text: "push"
+      assert_select "td", text: "first scan"
+    end
   end
 end

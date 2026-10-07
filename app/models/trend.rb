@@ -1,7 +1,7 @@
 # Finding counts over the scans of a branch, one series per artifact (ADR 0008).
 class Trend
   Series = Data.define(:artifact, :points)
-  Point = Data.define(:scan_id, :uploaded_at, :commit_sha, :counts)
+  Point = Data.define(:scan_id, :uploaded_at, :commit_sha, :tag, :trigger, :counts)
 
   def initialize(branch, finding_type:, since: nil, trigger: nil)
     @branch = branch
@@ -27,7 +27,7 @@ class Trend
     end
 
     def point(scan)
-      Point.new(scan_id: scan.id, uploaded_at: scan.created_at, commit_sha: scan.commit_sha,
+      Point.new(scan_id: scan.id, uploaded_at: scan.created_at, commit_sha: scan.commit_sha, tag: scan.tag, trigger: scan.trigger,
         counts: scan.counts.fetch(finding_type, {}))
     end
 end

@@ -380,6 +380,10 @@ form.button_to { display: inline; }
 .tab[aria-current="page"] { border-bottom-color: var(--accent); color: var(--text); font-weight: 600; }
 .tab .count { font-size: 12px; font-weight: 500; }
 
+.tab-bar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--border); }
+.tab-bar .tabs { padding: 0; border-bottom: 0; }
+.tab-bar > .filter-group { gap: 16px; padding-bottom: 8px; }
+
 .filters { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px; border-bottom: 1px solid var(--line); }
 .filter-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 

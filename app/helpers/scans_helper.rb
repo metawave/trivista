@@ -17,6 +17,15 @@ module ScansHelper
     tag.span(severity, class: [ "badge", "badge--#{severity.downcase}", ("badge--outline" if outline) ])
   end
 
+  def diff_chips(diff)
+    return tag.span("first scan", class: "muted") unless diff.predecessor
+
+    tag.span(class: "diff") do
+      tag.span(class: "diff__new") { tag.b("+#{diff.new_finding_ids.size}") + " new" } +
+        tag.span(class: "diff__gone") { tag.b("−#{diff.no_longer_reported_finding_ids.size}") + " no longer reported" }
+    end
+  end
+
   def type_count(counts, finding_type)
     counts.fetch(finding_type, {}).values.sum
   end

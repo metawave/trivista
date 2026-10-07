@@ -9,6 +9,7 @@ export default class extends Controller {
 
   connect() {
     const styles = getComputedStyle(document.documentElement)
+    const font = { family: styles.getPropertyValue("--font-mono").trim(), size: 11 }
     this.chart = new Chart(this.canvasTarget, {
       type: "bar",
       data: {
@@ -22,10 +23,13 @@ export default class extends Controller {
       },
       options: {
         maintainAspectRatio: false,
+        onClick: (_event, elements) => {
+          if (elements.length) Turbo.visit(this.pointsValue[elements[0].index].url)
+        },
         plugins: { legend: { display: false } },
         scales: {
-          x: { stacked: true, grid: { display: false }, ticks: { font: { family: "IBM Plex Mono", size: 11 } } },
-          y: { stacked: true, beginAtZero: true, border: { display: false }, ticks: { precision: 0, font: { family: "IBM Plex Mono", size: 11 } } }
+          x: { stacked: true, grid: { display: false }, ticks: { font } },
+          y: { stacked: true, beginAtZero: true, border: { display: false }, ticks: { precision: 0, font } }
         }
       }
     })
