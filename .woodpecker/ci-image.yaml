@@ -8,7 +8,7 @@ when:
 
 steps:
   - name: build-ci-image
-    image: woodpeckerci/plugin-docker-buildx:6.1.1
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
     settings:
       repo: registry.metawave.ch/metawave/trivista-ci
       tags: latest

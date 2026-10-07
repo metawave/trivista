@@ -7,7 +7,7 @@ when:
 
 steps:
   - name: build-and-push
-    image: woodpeckerci/plugin-docker-buildx:6.1.1
+    image: woodpeckerci/plugin-docker-buildx:6.1.2
     settings:
       repo: registry.metawave.ch/metawave/trivista
       tags:
