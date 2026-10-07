@@ -481,3 +481,9 @@ form.button_to { display: inline; }
 .sign-in__card { padding: 28px; border-radius: 8px; background: var(--surface); display: flex; flex-direction: column; gap: 16px; }
 .sign-in__card form.button_to { display: block; }
 .sign-in__card .btn { width: 100%; height: 44px; font-size: 15px; }
+
+/* Styleguide (/design, local environments) */
+
+.styleguide-row { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; align-items: start; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; font-size: 12px; }
+.swatch-tile { height: 48px; margin-bottom: 6px; border: 1px solid var(--border); border-radius: var(--radius-m); }

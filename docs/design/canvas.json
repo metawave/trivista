@@ -1,0 +1,45 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Main.dc.html": { "h": 1280, "title": "Foundations", "w": 1440, "x": 0, "y": 0 },
+    "Components.dc.html": { "h": 1680, "title": "Components", "w": 1440, "x": 1520, "y": 0 },
+    "Projects.dc.html": { "expand": "fill", "h": 960, "title": "Screen · Projects", "w": 1440, "x": 0, "y": 2100 },
+    "Branch.dc.html": { "expand": "fill", "h": 1100, "title": "Screen · Branch Trend", "is_interactive": true, "w": 1440, "x": 1520, "y": 2100 },
+    "Scan.dc.html": { "expand": "fill", "h": 1560, "title": "Screen · Scan Findings", "is_interactive": true, "w": 1440, "x": 3040, "y": 2100 },
+    "Project.dc.html": { "expand": "fill", "h": 760, "title": "Screen · Project", "w": 1440, "x": 0, "y": 4080 },
+    "ProjectSettings.dc.html": { "expand": "fill", "h": 1400, "title": "Screen · Project Settings", "w": 1440, "x": 1520, "y": 4080 },
+    "ServiceAccounts.dc.html": { "expand": "fill", "h": 700, "title": "Screen · Service Accounts", "w": 1440, "x": 0, "y": 5900 },
+    "ServiceAccountNew.dc.html": { "expand": "fill", "h": 700, "title": "Screen · New Service Account", "w": 1440, "x": 1520, "y": 5900 },
+    "ServiceAccount.dc.html": { "expand": "fill", "h": 960, "title": "Screen · Service Account", "w": 1440, "x": 3040, "y": 5900 },
+    "TokenCreated.dc.html": { "expand": "fill", "h": 700, "title": "Screen · Token Created", "w": 1440, "x": 4560, "y": 5900 },
+    "Users.dc.html": { "expand": "fill", "h": 760, "title": "Screen · Users (Admin)", "w": 1440, "x": 6080, "y": 5900 },
+    "SignIn.dc.html": { "expand": "fill", "h": 760, "title": "Screen · Sign in", "w": 1440, "x": 7600, "y": 5900 }
+  },
+  "createdOnFiles": { "at": "2026-10-07T09:00:00Z", "v": 1 },
+  "designSystems": [],
+  "launch": { "view": "canvas" },
+  "notes": {
+    "system": { "kind": "title1", "maxW": 2960, "text": "Foundations & Components", "w": 240, "x": 0, "y": -300 },
+    "screens": { "kind": "title1", "maxW": 4480, "text": "Findings", "w": 240, "x": 0, "y": 1800 },
+    "settings": { "kind": "title1", "maxW": 2960, "text": "Project & settings", "x": 0, "y": 3780 },
+    "access": { "kind": "title1", "maxW": 9040, "text": "Access & admin", "x": 0, "y": 5600 }
+  },
+  "order": [
+    "Main.dc.html",
+    "Components.dc.html",
+    "Projects.dc.html",
+    "Branch.dc.html",
+    "Scan.dc.html",
+    "Project.dc.html",
+    "ProjectSettings.dc.html",
+    "ServiceAccounts.dc.html",
+    "ServiceAccountNew.dc.html",
+    "ServiceAccount.dc.html",
+    "TokenCreated.dc.html",
+    "Users.dc.html",
+    "SignIn.dc.html"
+  ],
+  "pages": [],
+  "title": "Trivista Design System"
+}

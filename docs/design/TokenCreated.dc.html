@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Token created</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:underline}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 700px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45">
+
+<header style="background: #15181d; color: #ffffff">
+<div style="max-width: 1360px; margin: 0 auto; padding: 0 24px; min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 28px">
+<a href="Projects.dc.html" style="display: flex; align-items: center; gap: 10px; color: #ffffff; font-weight: 600; font-size: 16px; text-decoration: none"><svg width="24" height="24" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="#2a2f37"></rect><rect x="6" y="7" width="16" height="3" rx="1" fill="#d0362c"></rect><rect x="6" y="12.5" width="12" height="3" rx="1" fill="#e8821e"></rect><rect x="6" y="18" width="7" height="3" rx="1" fill="#f0c94a"></rect></svg>Trivista</a>
+<nav aria-label="Main" style="display: flex; gap: 4px; font-size: 14px">
+<a href="Projects.dc.html" style="padding: 6px 10px; border-radius: 6px; color: #c3c9d1; text-decoration: none">Projects</a>
+<a href="ServiceAccounts.dc.html" aria-current="page" style="padding: 6px 10px; border-radius: 6px; background: #2a2f37; color: #ffffff; text-decoration: none">Service accounts</a>
+</nav>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: #c3c9d1">
+<span>[USER NAME]</span>
+<button type="button" style="height: 32px; padding: 0 12px; border: 1px solid #4a525e; border-radius: 6px; background: transparent; color: #ffffff; font: 500 13px 'IBM Plex Sans', sans-serif; cursor: pointer">Sign out</button>
+</div>
+</div>
+</header>
+
+<main style="max-width: 720px; margin: 0 auto; padding: 32px 24px 64px; display: flex; flex-direction: column; gap: 20px">
+<nav aria-label="Breadcrumb" style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #68717d">
+<a href="ServiceAccounts.dc.html">Service accounts</a><span aria-hidden="true">/</span><a href="ServiceAccount.dc.html" style="font-family: 'IBM Plex Mono', monospace">ci-platform-api</a><span aria-hidden="true">/</span><span style="color: #15181d">Token created</span>
+</nav>
+<h1 style="margin: 0; font-size: 32px; line-height: 40px; font-weight: 600; letter-spacing: -0.01em">Token created</h1>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<p role="alert" style="margin: 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 6px; border: 1px solid #f2d9a6; background: #fdf5e3; color: #6b4a00; font-size: 13px; font-weight: 500"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9.5 17h-19z"></path><path d="M12 10v4"></path><path d="M12 17.5v.5"></path></svg>Copy the token now. It is shown only once.</p>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 13px; font-weight: 600">Upload Token</span>
+<div style="display: flex; gap: 8px">
+<code style="flex: 1; min-width: 0; display: flex; align-items: center; padding: 0 14px; min-height: 44px; border: 1px solid #c3c9d1; border-radius: 6px; background: #f0f2f5; font: 500 14px 'IBM Plex Mono', monospace; overflow-wrap: anywhere; user-select: all">[TOKEN SECRET]</code>
+<button type="button" style="height: 44px; display: inline-flex; align-items: center; gap: 8px; padding: 0 14px; border: 1px solid #2b55c9; border-radius: 6px; background: #2b55c9; color: #ffffff; font: 500 14px 'IBM Plex Sans', sans-serif; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"></path></svg>Copy</button>
+</div>
+<span style="font-size: 13px; color: #4a525e">Expires on <span style="font-family: 'IBM Plex Mono', monospace; color: #15181d">2027-01-07</span>. Allows scan uploads only.</span>
+</div>
+</section>
+<a href="ServiceAccount.dc.html" style="align-self: flex-start; font-weight: 500">← Back to ci-platform-api</a>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

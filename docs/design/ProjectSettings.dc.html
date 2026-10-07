@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:underline}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 1400px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45">
+
+<header style="background: #15181d; color: #ffffff">
+<div style="max-width: 1360px; margin: 0 auto; padding: 0 24px; min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 28px">
+<a href="Projects.dc.html" style="display: flex; align-items: center; gap: 10px; color: #ffffff; font-weight: 600; font-size: 16px; text-decoration: none"><svg width="24" height="24" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="#2a2f37"></rect><rect x="6" y="7" width="16" height="3" rx="1" fill="#d0362c"></rect><rect x="6" y="12.5" width="12" height="3" rx="1" fill="#e8821e"></rect><rect x="6" y="18" width="7" height="3" rx="1" fill="#f0c94a"></rect></svg>Trivista</a>
+<nav aria-label="Main" style="display: flex; gap: 4px; font-size: 14px">
+<a href="Projects.dc.html" aria-current="page" style="padding: 6px 10px; border-radius: 6px; background: #2a2f37; color: #ffffff; text-decoration: none">Projects</a>
+<a href="ServiceAccounts.dc.html" style="padding: 6px 10px; border-radius: 6px; color: #c3c9d1; text-decoration: none">Service accounts</a>
+</nav>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: #c3c9d1">
+<span>[USER NAME]</span>
+<button type="button" style="height: 32px; padding: 0 12px; border: 1px solid #4a525e; border-radius: 6px; background: transparent; color: #ffffff; font: 500 13px 'IBM Plex Sans', sans-serif; cursor: pointer">Sign out</button>
+</div>
+</div>
+</header>
+
+<p role="status" style="max-width: 1040px; box-sizing: border-box; margin: 20px auto 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 6px; border: 1px solid #c9d6f6; background: #e8eefc; color: #1f429f; font-size: 13px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5"></path></svg>Default branch updated.</p>
+
+<main style="max-width: 1040px; margin: 0 auto; padding: 20px 24px 64px; display: flex; flex-direction: column; gap: 24px">
+<nav aria-label="Breadcrumb" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; color: #68717d">
+<a href="Project.dc.html">acme-platform</a><span aria-hidden="true">/</span><span style="color: #15181d">Settings</span>
+</nav>
+<h1 style="margin: 0; font-size: 32px; line-height: 40px; font-weight: 600; letter-spacing: -0.01em">Settings</h1>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 20px 24px; display: flex; flex-wrap: wrap; gap: 24px">
+<div style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600">Visibility</h2>
+<span style="font-size: 13px; color: #68717d">Who can see this project and its findings.</span>
+</div>
+<form style="flex: 2 1 480px; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600">Visibility
+<select style="height: 36px; min-width: 200px; padding: 0 10px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #15181d; font: 400 14px 'IBM Plex Sans', sans-serif"><option>Group</option><option>Only me</option><option>All signed-in users</option></select></label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600">Group
+<select style="height: 36px; min-width: 200px; padding: 0 10px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #15181d; font: 400 14px 'IBM Plex Mono', monospace"><option>team-platform</option><option>team-sre</option></select></label>
+<button type="submit" style="height: 36px; padding: 0 14px; border: 1px solid #2b55c9; border-radius: 6px; background: #2b55c9; color: #ffffff; font: 500 14px 'IBM Plex Sans', sans-serif; cursor: pointer">Save</button>
+</form>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600">Repos</h2>
+<sc-for list="{{repos}}" as="r" hint-placeholder-count="2">
+<article style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; overflow: hidden">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; padding: 16px 24px; border-bottom: 1px solid #e6e9ed">
+<h3 style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600">{{r.name}}</h3>
+<form style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px">
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600">Default branch
+<select style="height: 36px; min-width: 180px; padding: 0 10px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #15181d; font: 400 14px 'IBM Plex Mono', monospace"><option>{{r.def}}</option></select></label>
+<button type="submit" style="height: 36px; padding: 0 14px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #15181d; font: 500 14px 'IBM Plex Sans', sans-serif; cursor: pointer">Set</button>
+</form>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0">
+<sc-for list="{{r.branches}}" as="b" hint-placeholder-count="3">
+<li style="min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 24px; border-bottom: 1px solid #e6e9ed">
+<span style="display: inline-flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace">{{b.name}}<sc-if value="{{b.isDefault}}" hint-placeholder-val="{{false}}"><span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 400 12px 'IBM Plex Sans', sans-serif; color: #4a525e">Default</span></sc-if></span>
+<form style="display: flex; gap: 8px">
+<label style="display: flex">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Type {{b.name}} to confirm</span>
+<input placeholder="type {{b.name}}" style="width: 220px; height: 32px; box-sizing: border-box; padding: 0 10px; border: 1px solid #c3c9d1; border-radius: 6px; font: 400 13px 'IBM Plex Mono', monospace">
+</label>
+<button type="submit" style="height: 32px; padding: 0 12px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #b42a22; font: 500 13px 'IBM Plex Sans', sans-serif; cursor: pointer">Delete branch</button>
+</form>
+</li>
+</sc-for>
+</ul>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 24px; background: #fdf6f5">
+<span style="font-size: 13px; color: #4a525e">Delete repo with all branches, scans and findings.</span>
+<form style="display: flex; gap: 8px">
+<label style="display: flex">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Type {{r.name}} to confirm</span>
+<input placeholder="type {{r.name}}" style="width: 220px; height: 32px; box-sizing: border-box; padding: 0 10px; border: 1px solid #c3c9d1; border-radius: 6px; font: 400 13px 'IBM Plex Mono', monospace">
+</label>
+<button type="submit" style="height: 32px; padding: 0 12px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #b42a22; font: 500 13px 'IBM Plex Sans', sans-serif; cursor: pointer">Delete repo</button>
+</form>
+</div>
+</article>
+</sc-for>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #f0c4c0; border-radius: 6px; padding: 20px 24px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600; color: #8a1f19">Delete project</h2>
+<span style="font-size: 13px; color: #4a525e">Deletes all repos, branches, scans and findings of this project.</span>
+</div>
+<form style="display: flex; gap: 8px">
+<label style="display: flex">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Type acme-platform to confirm</span>
+<input placeholder="type acme-platform" style="width: 240px; height: 36px; box-sizing: border-box; padding: 0 10px; border: 1px solid #c3c9d1; border-radius: 6px; font: 400 14px 'IBM Plex Mono', monospace">
+</label>
+<button type="submit" style="height: 36px; padding: 0 14px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #b42a22; font: 500 14px 'IBM Plex Sans', sans-serif; cursor: pointer">Delete project</button>
+</form>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const repo = (name, def, names) => ({
+      name, def,
+      branches: names.map((n) => ({ name: n, isDefault: n === def }))
+    });
+    return {
+      repos: [
+        repo('platform-api', 'main', ['feature/oidc-groups', 'main', 'release/2.4']),
+        repo('platform-worker', 'develop', ['develop', 'main'])
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

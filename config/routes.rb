@@ -28,5 +28,8 @@ Rails.application.routes.draw do
     end
   end
 
+  # Living styleguide of docs/design-system.md; local environments only, it needs no login.
+  get "design" => "design#show" if Rails.env.local?
+
   root "projects#index"
 end

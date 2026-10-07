@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Scan findings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:underline}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 1560px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45">
+
+<header style="background: #15181d; color: #ffffff">
+<div style="max-width: 1360px; margin: 0 auto; padding: 0 24px; min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 28px">
+<a href="Projects.dc.html" style="display: flex; align-items: center; gap: 10px; color: #ffffff; font-weight: 600; font-size: 16px; text-decoration: none"><svg width="24" height="24" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="#2a2f37"></rect><rect x="6" y="7" width="16" height="3" rx="1" fill="#d0362c"></rect><rect x="6" y="12.5" width="12" height="3" rx="1" fill="#e8821e"></rect><rect x="6" y="18" width="7" height="3" rx="1" fill="#f0c94a"></rect></svg>Trivista</a>
+<nav aria-label="Main" style="display: flex; gap: 4px; font-size: 14px">
+<a href="Projects.dc.html" aria-current="page" style="padding: 6px 10px; border-radius: 6px; background: #2a2f37; color: #ffffff; text-decoration: none">Projects</a>
+<a href="ServiceAccounts.dc.html" style="padding: 6px 10px; border-radius: 6px; color: #c3c9d1; text-decoration: none">Service accounts</a>
+</nav>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: #c3c9d1">
+<span>[USER NAME]</span>
+<button type="button" style="height: 32px; padding: 0 12px; border: 1px solid #4a525e; border-radius: 6px; background: transparent; color: #ffffff; font: 500 13px 'IBM Plex Sans', sans-serif; cursor: pointer">Sign out</button>
+</div>
+</div>
+</header>
+
+<main style="max-width: 1360px; margin: 0 auto; padding: 24px 24px 64px; display: flex; flex-direction: column; gap: 20px">
+<nav aria-label="Breadcrumb" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; color: #68717d">
+<a href="Project.dc.html">acme-platform</a><span aria-hidden="true">/</span><a href="#">platform-api</a><span aria-hidden="true">/</span><a href="Branch.dc.html" style="font-family: 'IBM Plex Mono', monospace">main</a><span aria-hidden="true">/</span><span style="color: #15181d; font-family: 'IBM Plex Mono', monospace">4f2a91c8</span>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<h1 style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 28px; line-height: 36px; font-weight: 600">4f2a91c8</h1>
+<span style="padding: 1px 7px; border-radius: 3px; border: 1px solid #c3c9d1; font-family: 'IBM Plex Mono', monospace; font-size: 12px">v2.4.1</span>
+<span style="padding: 1px 7px; border-radius: 3px; border: 1px solid #c3c9d1; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #4a525e">tag</span>
+</div>
+<button type="button" style="height: 36px; padding: 0 14px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #b42a22; font: 500 14px 'IBM Plex Sans', sans-serif; cursor: pointer">Delete scan</button>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 20px">
+<dl style="flex: 999 1 640px; margin: 0; background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 16px 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px 24px; font-size: 13px">
+<div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Artifact</dt><dd style="margin: 0"><span style="font-family: 'IBM Plex Mono', monospace">ghcr.io/acme/platform-api</span> <span style="color: #68717d">container_image</span></dd></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Commit</dt><dd style="margin: 0; display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; min-width: 0"><span style="overflow: hidden; text-overflow: ellipsis">4f2a91c8e03b7d51a6f2c9e8d4b0a17c3e5f6a92</span><button type="button" aria-label="Copy commit" style="flex: none; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #4a525e; cursor: pointer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"></path></svg></button></dd></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Uploaded</dt><dd style="margin: 0; font-family: 'IBM Plex Mono', monospace">2026-09-26 14:02</dd></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Uploaded by</dt><dd style="margin: 0"><a href="ServiceAccount.dc.html" style="font-family: 'IBM Plex Mono', monospace">ci-platform-api</a> <span style="color: #68717d">team-platform</span></dd></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Trivy</dt><dd style="margin: 0; font-family: 'IBM Plex Mono', monospace">0.56.2</dd></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><dt style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Compared to</dt><dd style="margin: 0; font-family: 'IBM Plex Mono', monospace"><span style="color: #4a525e">2026-09-25 09:41</span> <a href="#">b81e0d44</a></dd></div>
+</dl>
+
+<section aria-label="Diff" style="flex: 1 1 280px; background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 16px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px">
+<div style="display: flex; gap: 28px">
+<div style="display: flex; flex-direction: column"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; line-height: 1.1; font-weight: 600; color: #2b55c9">+1</span><span style="font-size: 12px; color: #4a525e">new</span></div>
+<div style="display: flex; flex-direction: column"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; line-height: 1.1; font-weight: 600; color: #4a525e">−1</span><span style="font-size: 12px; color: #4a525e">no longer reported</span></div>
+</div>
+<span style="font-size: 12px; color: #68717d">vs. predecessor b81e0d44</span>
+</section>
+</div>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px">
+<div style="padding: 0 20px; border-bottom: 1px solid #d9dde3">
+<nav aria-label="Finding type" style="display: flex; flex-wrap: wrap; gap: 4px">
+<a href="#" aria-current="page" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 8px; border-bottom: 2px solid #2b55c9; color: #15181d; font-weight: 600; text-decoration: none">Vulnerabilities <span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 500 12px 'IBM Plex Mono', monospace; color: #4a525e">55</span></a>
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 8px; border-bottom: 2px solid transparent; color: #4a525e; text-decoration: none">Misconfigurations <span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 500 12px 'IBM Plex Mono', monospace">8</span></a>
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 8px; border-bottom: 2px solid transparent; color: #4a525e; text-decoration: none">Secrets <span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 500 12px 'IBM Plex Mono', monospace">1</span></a>
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 8px; border-bottom: 2px solid transparent; color: #4a525e; text-decoration: none">Licenses <span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 500 12px 'IBM Plex Mono', monospace">2</span></a>
+</nav>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #e6e9ed">
+<div role="group" aria-label="Severity" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="5">
+<button type="button" aria-pressed="{{c.pressed}}" onClick="{{c.toggle}}" style="height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; border-radius: 6px; border: 1px solid {{c.border}}; background: {{c.bgc}}; color: {{c.ink}}; font: 500 12px 'IBM Plex Mono', monospace; cursor: pointer"><span style="width: 10px; height: 10px; box-sizing: border-box; border-radius: 2px; border: 2px solid {{c.dot}}; background: {{c.fill}}"></span>{{c.label}} {{c.n}}</button>
+</sc-for>
+</div>
+<button type="button" aria-pressed="{{onlyNewPressed}}" onClick="{{toggleNew}}" style="height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; border-radius: 6px; border: 1px solid {{newBorder}}; background: {{newBg}}; color: {{newInk}}; font: 500 12px 'IBM Plex Sans', sans-serif; cursor: pointer"><span style="font: 600 12px 'IBM Plex Mono', monospace">+1</span>Only new</button>
+</div>
+
+<div style="overflow-x: auto">
+<table style="width: 100%; min-width: 1000px; border-collapse: collapse; font-size: 13px">
+<thead>
+<tr style="background: #f0f2f5; text-align: left; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">
+<th style="padding: 8px 20px; font-weight: 600">Severity</th>
+<th style="padding: 8px 12px; font-weight: 600">ID</th>
+<th style="padding: 8px 12px; font-weight: 600">Package / Target</th>
+<th style="padding: 8px 12px; font-weight: 600">Installed</th>
+<th style="padding: 8px 12px; font-weight: 600">Fixed in</th>
+<th style="padding: 8px 20px 8px 12px; font-weight: 600">Title</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+<tr style="height: 44px">
+<td style="padding: 0 20px; border-top: 1px solid #e6e9ed"><span style="padding: 2px 6px; border-radius: 3px; background: {{r.bg}}; color: {{r.fg}}; font: 600 11px 'IBM Plex Mono', monospace; letter-spacing: 0.04em">{{r.sev}}</span></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; white-space: nowrap"><a href="#">{{r.id}}</a><sc-if value="{{r.isNew}}" hint-placeholder-val="{{false}}"><span style="margin-left: 8px; padding: 0 5px; border-radius: 3px; border: 1px solid #2b55c9; color: #2b55c9; font: 600 10px 'IBM Plex Mono', monospace">NEW</span></sc-if></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace">{{r.pkg}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; white-space: nowrap">{{r.inst}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; white-space: nowrap">{{r.fix}}</td>
+<td style="padding: 0 20px 0 12px; border-top: 1px solid #e6e9ed; max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{r.title}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div style="padding: 12px 20px; border-top: 1px solid #e6e9ed; font-size: 13px; color: #4a525e">Showing the first {{rowCount}}. Narrow the filters to see the rest.</div>
+</section>
+
+<section style="background: #ffffff; border: 1px dashed #c3c9d1; border-radius: 6px">
+<div style="display: flex; flex-direction: column; gap: 4px; padding: 14px 20px; border-bottom: 1px solid #e6e9ed">
+<h2 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 18px; line-height: 26px; font-weight: 600; color: #4a525e">No longer reported <span style="padding: 0 7px; border-radius: 3px; background: #f0f2f5; font: 500 13px 'IBM Plex Mono', monospace">1</span></h2>
+<span style="font-size: 13px; color: #68717d">Not reported compared to the previous scan. This does not necessarily mean fixed; the scan configuration may have changed.</span>
+</div>
+<div style="overflow-x: auto">
+<table style="width: 100%; min-width: 1000px; border-collapse: collapse; font-size: 13px; color: #68717d">
+<tbody>
+<tr style="height: 44px">
+<td style="padding: 0 20px; border-top: 1px solid #e6e9ed; width: 110px"><span style="padding: 2px 6px; border-radius: 3px; border: 1px solid #f0c94a; color: #4a525e; font: 600 11px 'IBM Plex Mono', monospace; letter-spacing: 0.04em">LOW</span></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; white-space: nowrap"><a href="#" style="color: #4a525e">CVE-2022-41723</a></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace">golang.org/x/net</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace">0.4.0</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace">0.7.0</td>
+<td style="padding: 0 20px 0 12px; border-top: 1px solid #e6e9ed">Quadratic complexity in HPACK decoding</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1560}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { off: {}, onlyNew: false };
+  }
+  renderVals() {
+    const sev = {
+      CRITICAL: { bg: '#8E1330', fg: '#FFFFFF', n: 2 },
+      HIGH: { bg: '#D0362C', fg: '#FFFFFF', n: 14 },
+      MEDIUM: { bg: '#E8821E', fg: '#15181D', n: 31 },
+      LOW: { bg: '#F0C94A', fg: '#15181D', n: 8 },
+      UNKNOWN: { bg: '#B9C0CA', fg: '#15181D', n: 0 }
+    };
+    const { off, onlyNew } = this.state;
+    const chips = Object.entries(sev).map(([label, s]) => ({
+      label, n: s.n, dot: s.bg,
+      fill: off[label] ? 'transparent' : s.bg,
+      pressed: off[label] ? 'false' : 'true',
+      bgc: off[label] ? '#FFFFFF' : '#F0F2F5',
+      border: off[label] ? '#E6E9ED' : '#C3C9D1',
+      ink: off[label] ? '#68717D' : '#15181D',
+      toggle: () => this.setState({ off: { ...off, [label]: !off[label] } })
+    }));
+    const r = (s, id, pkg, inst, fix, title, isNew) => ({ sev: s, ...sev[s], id, pkg, inst, fix, title, isNew: !!isNew });
+    const rows = [
+      r('CRITICAL', 'CVE-2024-45337', 'golang.org/x/crypto', '0.21.0', '0.31.0', 'Misuse of ServerConfig.PublicKeyCallback may cause authorization bypass', true),
+      r('CRITICAL', 'CVE-2024-24790', 'stdlib', '1.21.4', '1.21.11, 1.22.4', 'Unexpected behavior from Is methods for IPv4-mapped IPv6 addresses'),
+      r('HIGH', 'CVE-2023-39325', 'golang.org/x/net', '0.15.0', '0.17.0', 'HTTP/2 rapid reset can cause excessive work'),
+      r('HIGH', 'CVE-2024-34156', 'stdlib', '1.21.4', '1.22.7', 'Stack exhaustion in Decoder.Decode'),
+      r('HIGH', 'CVE-2023-45288', 'golang.org/x/net', '0.15.0', '0.23.0', 'Unlimited CONTINUATION frames cause DoS'),
+      r('MEDIUM', 'CVE-2024-6104', 'go-retryablehttp', '0.7.4', '0.7.7', 'URL may be written to log file with basic auth credentials'),
+      r('MEDIUM', 'CVE-2023-48795', 'golang.org/x/crypto', '0.14.0', '0.17.0', 'Prefix truncation attack on BPP via SSH'),
+      r('LOW', 'CVE-2024-24791', 'stdlib', '1.21.4', '1.21.12', 'Denial of service due to improper 100-continue handling')
+    ].filter((row) => !off[row.sev] && (!onlyNew || row.isNew));
+    return {
+      chips,
+      rows,
+      rowCount: rows.length,
+      onlyNewPressed: onlyNew ? 'true' : 'false',
+      newBorder: onlyNew ? '#2B55C9' : '#C3C9D1',
+      newBg: onlyNew ? '#E8EEFC' : '#FFFFFF',
+      newInk: onlyNew ? '#1F429F' : '#15181D',
+      toggleNew: () => this.setState({ onlyNew: !onlyNew })
+    };
+  }
+}
+</script>
+</body>
+</html>

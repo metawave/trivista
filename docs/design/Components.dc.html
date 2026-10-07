@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Trivista Components</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:underline}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1680px; box-sizing: border-box; padding: 56px 64px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-direction: column; gap: 32px">
+
+<header style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 24px; border-bottom: 1px solid #d9dde3">
+<div style="display: flex; align-items: center; gap: 12px">
+<svg width="32" height="32" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="#15181d"></rect><rect x="6" y="7" width="16" height="3" rx="1" fill="#d0362c"></rect><rect x="6" y="12.5" width="12" height="3" rx="1" fill="#e8821e"></rect><rect x="6" y="18" width="7" height="3" rx="1" fill="#f0c94a"></rect></svg>
+<span style="font-size: 22px; font-weight: 600; letter-spacing: -0.01em">Trivista</span>
+<span style="font-size: 22px; font-weight: 400; color: #68717d">Design System</span>
+</div>
+<div style="display: flex; gap: 24px; font-size: 13px; color: #4a525e">
+<span>Components</span>
+<span style="font-family: 'IBM Plex Mono', monospace">v0.1</span>
+</div>
+</header>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Severity badge</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.04em">
+<span style="padding: 2px 6px; border-radius: 3px; background: #8e1330; color: #ffffff">CRITICAL</span>
+<span style="padding: 2px 6px; border-radius: 3px; background: #d0362c; color: #ffffff">HIGH</span>
+<span style="padding: 2px 6px; border-radius: 3px; background: #e8821e; color: #15181d">MEDIUM</span>
+<span style="padding: 2px 6px; border-radius: 3px; background: #f0c94a; color: #15181d">LOW</span>
+<span style="padding: 2px 6px; border-radius: 3px; background: #b9c0ca; color: #15181d">UNKNOWN</span>
+</div>
+<div style="display: flex; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600">
+<span style="width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; background: #8e1330; color: #ffffff" title="Critical">C</span>
+<span style="width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; background: #d0362c; color: #ffffff" title="High">H</span>
+<span style="width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; background: #e8821e; color: #15181d" title="Medium">M</span>
+<span style="width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; background: #f0c94a; color: #15181d" title="Low">L</span>
+<span style="width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; background: #b9c0ca; color: #15181d" title="Unknown">U</span>
+</div>
+<span style="font-size: 13px; color: #68717d">Full label in finding rows; letter form in dense grids, with title text.</span>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Severity counts</h2>
+<div style="display: inline-flex; align-self: flex-start; border: 1px solid #d9dde3; border-radius: 3px; overflow: hidden; font-family: 'IBM Plex Mono', monospace; font-size: 12px">
+<span style="display: inline-flex; gap: 6px; padding: 3px 8px; background: #8e1330; color: #ffffff"><b>C</b>2</span>
+<span style="display: inline-flex; gap: 6px; padding: 3px 8px; background: #d0362c; color: #ffffff"><b>H</b>14</span>
+<span style="display: inline-flex; gap: 6px; padding: 3px 8px; background: #e8821e; color: #15181d"><b>M</b>31</span>
+<span style="display: inline-flex; gap: 6px; padding: 3px 8px; background: #f0c94a; color: #15181d"><b>L</b>8</span>
+<span style="display: inline-flex; gap: 6px; padding: 3px 8px; background: #f0f2f5; color: #68717d"><b>U</b>0</span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 12px">
+<div style="display: flex; width: 160px; height: 8px; border-radius: 2px; overflow: hidden; background: #f0f2f5">
+<span style="width: 4%; background: #8e1330"></span><span style="width: 25%; background: #d0362c"></span><span style="width: 56%; background: #e8821e"></span><span style="width: 15%; background: #f0c94a"></span>
+</div>
+<span>55</span>
+</div>
+<div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #68717d"><span style="font-family: 'IBM Plex Mono', monospace">–</span><span>no findings of this type</span></div>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Diff</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px">
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 3px; background: #e8eefc; color: #1f429f; font-weight: 500"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">+5</span>new</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 3px; background: #f0f2f5; color: #4a525e; font-weight: 500"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">−3</span>no longer reported</span>
+</div>
+<div style="display: flex; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.04em">
+<span style="padding: 1px 6px; border-radius: 3px; border: 1px solid #2b55c9; color: #2b55c9">NEW</span>
+<span style="padding: 1px 6px; border-radius: 3px; border: 1px dashed #68717d; color: #68717d">GONE</span>
+</div>
+<span style="font-size: 13px; color: #68717d">Row markers. “Gone” is never styled as fixed — the scan config may have changed.</span>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Finding type</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; font-weight: 500">
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 3px; background: #f0f2f5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M12 8v5"></path><path d="M12 16.5v.5"></path></svg>Vulnerability</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 3px; background: #f0f2f5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10"></path><path d="M18 6h2"></path><circle cx="16" cy="6" r="2"></circle><path d="M4 12h2"></path><path d="M10 12h10"></path><circle cx="8" cy="12" r="2"></circle><path d="M4 18h12"></path><circle cx="18" cy="18" r="2"></circle></svg>Misconfiguration</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 3px; background: #f0f2f5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"></circle><path d="M11 12l9-9"></path><path d="M17 6l3 3"></path></svg>Secret</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 3px; background: #f0f2f5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M14 3v5h5"></path><path d="M9 13h7"></path><path d="M9 17h5"></path></svg>License</span>
+</div>
+<span style="font-size: 13px; color: #68717d">Neutral on purpose: color is reserved for severity.</span>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Trigger · Visibility</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #4a525e">
+<span style="padding: 1px 7px; border-radius: 3px; border: 1px solid #c3c9d1">push</span>
+<span style="padding: 1px 7px; border-radius: 3px; border: 1px solid #c3c9d1">tag</span>
+<span style="padding: 1px 7px; border-radius: 3px; border: 1px solid #c3c9d1">schedule</span>
+<span style="padding: 1px 7px; border-radius: 3px; border: 1px solid #c3c9d1">manual</span>
+<span style="padding: 1px 7px; border-radius: 3px; border: 1px solid #c3c9d1">pr</span>
+<span style="padding: 1px 7px; border-radius: 3px; border: 1px dashed #c3c9d1; color: #68717d">unknown</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: #4a525e">
+<span style="display: inline-flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1-4 4-6 8-6s7 2 8 6"></path></svg>user</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><circle cx="17" cy="9" r="2.5"></circle><path d="M2.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5"></path><path d="M16 14.5c2.6 0 4.6 1.6 5.3 4.5"></path></svg>group</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9s1-6.5 3.5-9z"></path></svg>public</span>
+</div>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Identifiers</h2>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 12px">
+<span style="display: inline-flex; align-items: center; gap: 5px; padding: 1px 7px; border-radius: 3px; background: #f0f2f5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="5" r="2.5"></circle><circle cx="6" cy="19" r="2.5"></circle><circle cx="18" cy="7" r="2.5"></circle><path d="M6 7.5v9"></path><path d="M18 9.5c0 4-6 3-11.5 7"></path></svg>main</span>
+<span style="display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px; border-radius: 3px; background: #f0f2f5"><span style="color: #68717d">Default</span></span>
+<a href="#" style="padding: 1px 7px; border-radius: 3px; background: #f0f2f5">4f2a91c8</a>
+<span style="padding: 1px 7px; border-radius: 3px; border: 1px solid #c3c9d1">v2.4.1</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">ghcr.io/acme/platform-api</span>
+<span style="font-size: 12px; color: #68717d">container_image</span>
+</div>
+</section>
+
+</div>
+
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px">
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Buttons</h2>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<button type="button" style="height: 36px; padding: 0 14px; border: 1px solid #2b55c9; border-radius: 6px; background: #2b55c9; color: #ffffff; font: 500 14px 'IBM Plex Sans', sans-serif; cursor: pointer">Apply</button>
+<button type="button" style="height: 36px; padding: 0 14px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #15181d; font: 500 14px 'IBM Plex Sans', sans-serif; cursor: pointer">Sign out</button>
+<button type="button" style="height: 36px; padding: 0 10px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #2b55c9; font: 500 14px 'IBM Plex Sans', sans-serif; cursor: pointer">Copy token</button>
+<button type="button" style="height: 36px; padding: 0 14px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #b42a22; font: 500 14px 'IBM Plex Sans', sans-serif; cursor: pointer">Revoke token</button>
+<button type="button" disabled style="height: 36px; padding: 0 14px; border: 1px solid #e6e9ed; border-radius: 6px; background: #f0f2f5; color: #68717d; font: 500 14px 'IBM Plex Sans', sans-serif">Disabled</button>
+<button type="button" aria-label="Copy commit" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #4a525e; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"></path></svg></button>
+</div>
+<span style="font-size: 13px; color: #68717d">36 px, dense desktop. One primary per view. Destructive is text-colored, never a red fill (red means severity).</span>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Tabs &amp; filters</h2>
+<nav aria-label="Finding type" style="display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid #d9dde3">
+<a href="#" aria-current="page" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px; margin-bottom: -1px; border-bottom: 2px solid #2b55c9; color: #15181d; font-weight: 600; text-decoration: none">Vulnerabilities <span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 500 12px 'IBM Plex Mono', monospace; color: #4a525e">55</span></a>
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px; margin-bottom: -1px; border-bottom: 2px solid transparent; color: #4a525e; text-decoration: none">Misconfigurations <span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 500 12px 'IBM Plex Mono', monospace">8</span></a>
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px; margin-bottom: -1px; border-bottom: 2px solid transparent; color: #4a525e; text-decoration: none">Secrets <span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 500 12px 'IBM Plex Mono', monospace">1</span></a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<div role="group" aria-label="Range" style="display: inline-flex; border: 1px solid #c3c9d1; border-radius: 6px; overflow: hidden; font: 400 12px 'IBM Plex Mono', monospace">
+<button type="button" aria-pressed="false" style="height: 30px; padding: 0 12px; border: 0; background: #ffffff; color: #4a525e; font: inherit; cursor: pointer">7d</button>
+<button type="button" aria-pressed="true" style="height: 30px; padding: 0 12px; border: 0; border-left: 1px solid #c3c9d1; background: #e8eefc; color: #1f429f; font: inherit; font-weight: 600; cursor: pointer">30d</button>
+<button type="button" aria-pressed="false" style="height: 30px; padding: 0 12px; border: 0; border-left: 1px solid #c3c9d1; background: #ffffff; color: #4a525e; font: inherit; cursor: pointer">90d</button>
+<button type="button" aria-pressed="false" style="height: 30px; padding: 0 12px; border: 0; border-left: 1px solid #c3c9d1; background: #ffffff; color: #4a525e; font: inherit; cursor: pointer">All</button>
+</div>
+<button type="button" aria-pressed="true" style="height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; border-radius: 6px; border: 1px solid #c3c9d1; background: #f0f2f5; color: #15181d; font: 500 12px 'IBM Plex Mono', monospace; cursor: pointer"><span style="width: 10px; height: 10px; border-radius: 2px; background: #d0362c"></span>HIGH 14</button>
+<button type="button" aria-pressed="false" style="height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; border-radius: 6px; border: 1px solid #e6e9ed; background: #ffffff; color: #68717d; font: 500 12px 'IBM Plex Mono', monospace; cursor: pointer"><span style="width: 10px; height: 10px; box-sizing: border-box; border-radius: 2px; border: 2px solid #f0c94a"></span>LOW 8</button>
+<button type="button" aria-pressed="true" style="height: 30px; padding: 0 10px; border-radius: 6px; border: 1px solid #2b55c9; background: #e8eefc; color: #1f429f; font: 500 12px 'IBM Plex Mono', monospace; cursor: pointer">push</button>
+</div>
+<span style="font-size: 13px; color: #68717d">No selects, no Apply: tabs, segments and chips are links that set one query param each.</span>
+<nav aria-label="Breadcrumb" style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #68717d">
+<a href="#">acme-platform</a><span aria-hidden="true">/</span><a href="#">platform-api</a><span aria-hidden="true">/</span><span style="color: #15181d; font-family: 'IBM Plex Mono', monospace">main</span>
+</nav>
+</section>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Flash</h2>
+<p role="status" style="margin: 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 6px; border: 1px solid #c9d6f6; background: #e8eefc; color: #1f429f; font-size: 13px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5"></path></svg>Project settings saved.</p>
+<p role="alert" style="margin: 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 6px; border: 1px solid #f0c4c0; background: #fbeceb; color: #8a1f19; font-size: 13px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5"></path><path d="M12 16.5v.5"></path></svg>Confirmation does not match.</p>
+<span style="font-size: 13px; color: #68717d">Full width under the header. Errors with role="alert".</span>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Form field</h2>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<label for="ds-name" style="font-size: 13px; font-weight: 600">Name</label>
+<input id="ds-name" value="ci-platform-api" style="height: 36px; box-sizing: border-box; padding: 0 10px; border: 1px solid #c3c9d1; border-radius: 6px; font: 400 14px 'IBM Plex Mono', monospace; color: #15181d">
+<span style="font-size: 12px; color: #68717d">Lowercase, unique per owner.</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<label for="ds-exp" style="font-size: 13px; font-weight: 600">Expires on</label>
+<input id="ds-exp" type="date" aria-invalid="true" aria-describedby="ds-exp-err" style="height: 36px; box-sizing: border-box; padding: 0 10px; border: 1px solid #b42a22; border-radius: 6px; font: 400 14px 'IBM Plex Sans', sans-serif; color: #15181d">
+<span id="ds-exp-err" style="font-size: 12px; color: #8a1f19">Expires on can't be blank</span>
+</div>
+</section>
+
+<section style="background: #ffffff; border: 1px solid #f0c4c0; border-radius: 6px; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #8a1f19">Type to confirm</h2>
+<span style="font-size: 13px; color: #4a525e">Deletes all branches, scans and findings of this repo.</span>
+<form style="display: flex; flex-wrap: wrap; gap: 8px">
+<label style="display: flex; flex: 1 1 160px">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Type platform-api to confirm</span>
+<input placeholder="type platform-api" style="flex: 1; min-width: 0; height: 36px; box-sizing: border-box; padding: 0 10px; border: 1px solid #c3c9d1; border-radius: 6px; font: 400 14px 'IBM Plex Mono', monospace">
+</label>
+<button type="submit" style="height: 36px; padding: 0 14px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #b42a22; font: 500 14px 'IBM Plex Sans', sans-serif; cursor: pointer">Delete repo</button>
+</form>
+<span style="font-size: 13px; color: #68717d">Every destructive action names its target; the name must be typed.</span>
+</section>
+</div>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; overflow: hidden">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid #d9dde3">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Findings table</h2>
+<span style="font-size: 13px; color: #68717d">40 px rows · sticky header · mono for copyable values</span>
+</div>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 13px">
+<thead>
+<tr style="background: #f0f2f5; text-align: left; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">
+<th style="padding: 8px 20px; font-weight: 600; border-bottom: 1px solid #d9dde3">Severity</th>
+<th style="padding: 8px 12px; font-weight: 600; border-bottom: 1px solid #d9dde3">ID</th>
+<th style="padding: 8px 12px; font-weight: 600; border-bottom: 1px solid #d9dde3">Package</th>
+<th style="padding: 8px 12px; font-weight: 600; border-bottom: 1px solid #d9dde3">Installed → Fixed</th>
+<th style="padding: 8px 12px; font-weight: 600; border-bottom: 1px solid #d9dde3">Artifact</th>
+<th style="padding: 8px 20px 8px 12px; font-weight: 600; border-bottom: 1px solid #d9dde3; text-align: right">First seen</th>
+</tr>
+</thead>
+<tbody>
+<tr style="height: 40px">
+<td style="padding: 0 20px; border-bottom: 1px solid #e6e9ed"><span style="padding: 2px 6px; border-radius: 3px; background: #8e1330; color: #ffffff; font: 600 11px 'IBM Plex Mono', monospace; letter-spacing: 0.04em">CRITICAL</span></td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace"><a href="#">CVE-2024-45337</a> <span style="margin-left: 6px; padding: 0 5px; border-radius: 3px; border: 1px solid #2b55c9; color: #2b55c9; font: 600 10px 'IBM Plex Mono', monospace">NEW</span></td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace">golang.org/x/crypto</td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace">0.21.0 <span style="color: #68717d">→</span> 0.31.0</td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; color: #4a525e">ghcr.io/acme/platform-api</td>
+<td style="padding: 0 20px 0 12px; border-bottom: 1px solid #e6e9ed; text-align: right; color: #4a525e">today</td>
+</tr>
+<tr style="height: 40px; background: #e8eefc">
+<td style="padding: 0 20px; border-bottom: 1px solid #e6e9ed"><span style="padding: 2px 6px; border-radius: 3px; background: #d0362c; color: #ffffff; font: 600 11px 'IBM Plex Mono', monospace; letter-spacing: 0.04em">HIGH</span></td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace"><a href="#">CVE-2023-39325</a></td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace">golang.org/x/net</td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace">0.15.0 <span style="color: #68717d">→</span> 0.17.0</td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; color: #4a525e">ghcr.io/acme/platform-api</td>
+<td style="padding: 0 20px 0 12px; border-bottom: 1px solid #e6e9ed; text-align: right; color: #4a525e">12 days ago</td>
+</tr>
+<tr style="height: 40px">
+<td style="padding: 0 20px; border-bottom: 1px solid #e6e9ed"><span style="padding: 2px 6px; border-radius: 3px; background: #e8821e; color: #15181d; font: 600 11px 'IBM Plex Mono', monospace; letter-spacing: 0.04em">MEDIUM</span></td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace"><a href="#">KSV-0014</a></td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed">Root file system is not read-only</td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; color: #68717d">–</td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; color: #4a525e">deploy/api.yaml</td>
+<td style="padding: 0 20px 0 12px; border-bottom: 1px solid #e6e9ed; text-align: right; color: #4a525e">2 months ago</td>
+</tr>
+<tr style="height: 40px; color: #68717d">
+<td style="padding: 0 20px"><span style="padding: 2px 6px; border-radius: 3px; background: #f0c94a; color: #15181d; font: 600 11px 'IBM Plex Mono', monospace; letter-spacing: 0.04em">LOW</span></td>
+<td style="padding: 0 12px; font-family: 'IBM Plex Mono', monospace"><span style="text-decoration: line-through">CVE-2022-41723</span> <span style="margin-left: 6px; padding: 0 5px; border-radius: 3px; border: 1px dashed #68717d; font: 600 10px 'IBM Plex Mono', monospace">GONE</span></td>
+<td style="padding: 0 12px; font-family: 'IBM Plex Mono', monospace">golang.org/x/net</td>
+<td style="padding: 0 12px; font-family: 'IBM Plex Mono', monospace">0.4.0 → 0.7.0</td>
+<td style="padding: 0 12px; font-family: 'IBM Plex Mono', monospace">ghcr.io/acme/platform-api</td>
+<td style="padding: 0 20px 0 12px; text-align: right">5 months ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section style="background: #ffffff; border: 1px dashed #c3c9d1; border-radius: 6px; padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
+<span style="font-weight: 600">No scans in this range.</span>
+<span style="font-size: 13px; color: #68717d">Widen the range or upload a Trivy-Report with an Upload Token.</span>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1680}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

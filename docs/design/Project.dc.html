@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:underline}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 760px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45">
+
+<header style="background: #15181d; color: #ffffff">
+<div style="max-width: 1360px; margin: 0 auto; padding: 0 24px; min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 28px">
+<a href="Projects.dc.html" style="display: flex; align-items: center; gap: 10px; color: #ffffff; font-weight: 600; font-size: 16px; text-decoration: none"><svg width="24" height="24" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="#2a2f37"></rect><rect x="6" y="7" width="16" height="3" rx="1" fill="#d0362c"></rect><rect x="6" y="12.5" width="12" height="3" rx="1" fill="#e8821e"></rect><rect x="6" y="18" width="7" height="3" rx="1" fill="#f0c94a"></rect></svg>Trivista</a>
+<nav aria-label="Main" style="display: flex; gap: 4px; font-size: 14px">
+<a href="Projects.dc.html" aria-current="page" style="padding: 6px 10px; border-radius: 6px; background: #2a2f37; color: #ffffff; text-decoration: none">Projects</a>
+<a href="ServiceAccounts.dc.html" style="padding: 6px 10px; border-radius: 6px; color: #c3c9d1; text-decoration: none">Service accounts</a>
+</nav>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: #c3c9d1">
+<span>[USER NAME]</span>
+<button type="button" style="height: 32px; padding: 0 12px; border: 1px solid #4a525e; border-radius: 6px; background: transparent; color: #ffffff; font: 500 13px 'IBM Plex Sans', sans-serif; cursor: pointer">Sign out</button>
+</div>
+</div>
+</header>
+
+<main style="max-width: 1360px; margin: 0 auto; padding: 32px 24px 64px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-size: 32px; line-height: 40px; font-weight: 600; letter-spacing: -0.01em">acme-platform</h1>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px; font-size: 13px; color: #4a525e">
+<span>Owner <b style="font-weight: 500; color: #15181d">team-platform</b></span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><circle cx="17" cy="9" r="2.5"></circle><path d="M2.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5"></path><path d="M16 14.5c2.6 0 4.6 1.6 5.3 4.5"></path></svg>Visible to group</span>
+</div>
+</div>
+<a href="ProjectSettings.dc.html" style="height: 36px; display: inline-flex; align-items: center; gap: 8px; padding: 0 14px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #15181d; font-weight: 500; text-decoration: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10"></path><path d="M18 6h2"></path><circle cx="16" cy="6" r="2"></circle><path d="M4 12h2"></path><path d="M10 12h10"></path><circle cx="8" cy="12" r="2"></circle><path d="M4 18h12"></path><circle cx="18" cy="18" r="2"></circle></svg>Settings</a>
+</div>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; overflow: hidden">
+<div style="padding: 14px 20px; border-bottom: 1px solid #d9dde3; display: flex; align-items: center; gap: 8px">
+<h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600">Repos</h2>
+<span style="padding: 0 7px; border-radius: 3px; background: #f0f2f5; font: 500 13px 'IBM Plex Mono', monospace; color: #4a525e">4</span>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0">
+<sc-for list="{{repos}}" as="r" hint-placeholder-count="4">
+<li style="min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 20px; border-top: 1px solid #e6e9ed">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4a525e" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"></path><path d="M9 9h6"></path><path d="M9 13h6"></path></svg>
+<a href="#" style="font-family: 'IBM Plex Mono', monospace; font-weight: 500">{{r.name}}</a>
+</div>
+<div style="display: flex; align-items: center; gap: 16px; font-size: 13px; color: #4a525e">
+<span style="display: inline-flex; align-items: center; gap: 5px; padding: 1px 7px; border-radius: 3px; background: #f0f2f5; font-family: 'IBM Plex Mono', monospace; font-size: 12px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="5" r="2.5"></circle><circle cx="6" cy="19" r="2.5"></circle><circle cx="18" cy="7" r="2.5"></circle><path d="M6 7.5v9"></path><path d="M18 9.5c0 4-6 3-11.5 7"></path></svg>{{r.branch}}</span>
+<span>{{r.count}} branches</span>
+</div>
+</li>
+</sc-for>
+</ul>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      repos: [
+        { name: 'platform-api', branch: 'main', count: 7 },
+        { name: 'platform-gateway', branch: 'main', count: 3 },
+        { name: 'platform-worker', branch: 'develop', count: 5 },
+        { name: 'platform-infra', branch: 'main', count: 2 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

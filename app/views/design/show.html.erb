@@ -1,0 +1,136 @@
+<% content_for :title, "Design System" %>
+<main class="page">
+  <div>
+    <h1 class="with-icon"><%= logo(size: 32, background: "#15181d") %>Design System</h1>
+    <p class="note">Rendered from <code>application.css</code> and the view helpers. Rules: <code>docs/design-system.md</code>, canvas sources: <code>docs/design/</code>.</p>
+  </div>
+
+  <section class="panel panel--padded form">
+    <h2>Color</h2>
+    <% { "Neutrals" => %w[bg surface surface-2 line border border-strong text-3 text-2 text chrome],
+         "Accent" => %w[accent accent-hover accent-tint accent-line],
+         "Feedback" => %w[danger-text danger-ink danger-tint warning-ink warning-tint],
+         "Severity" => Occurrence::SEVERITIES.map { "sev-#{it.downcase}" } }.each do |group, tokens| %>
+      <div class="styleguide-row">
+        <span class="field__label"><%= group %></span>
+        <div class="swatches">
+          <% tokens.each do |token| %>
+            <div><div class="swatch-tile" style="background: var(--<%= token %>)"></div><code>--<%= token %></code></div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="panel panel--padded form">
+    <h2>Type</h2>
+    <h1>Display 32 · Projects</h1>
+    <h2>Heading 18 · Vulnerabilities</h2>
+    <p>Body 14 · Scan of commit 4f2a91c8 on main, triggered by push.</p>
+    <p class="note">Note 13 · Compared with predecessor 9c0d17e2</p>
+    <p class="mono">Mono · CVE-2024-45337 golang.org/x/crypto 0.21.0 → 0.31.0</p>
+  </section>
+
+  <section class="panel panel--padded form">
+    <h2>Severity</h2>
+    <div class="filter-group"><% Occurrence::SEVERITIES.each do |severity| %><%= severity_badge(severity) %><% end %></div>
+    <div class="filter-group"><% Occurrence::SEVERITIES.each do |severity| %><%= severity_badge(severity, outline: true) %><% end %></div>
+    <div class="filter-group">
+      <%= severity_counts({ "CRITICAL" => 2, "HIGH" => 14, "MEDIUM" => 31, "LOW" => 8 }) %>
+      <%= severity_counts({}) %>
+    </div>
+  </section>
+
+  <section class="panel panel--padded form">
+    <h2>Chips, markers, status</h2>
+    <div class="filter-group">
+      <span class="chip">push</span><span class="chip chip--dashed">unknown</span><span class="chip">v2.4.1</span>
+      <span class="chip chip--fill"><%= icon(:branch, size: 12) %>main</span><span class="chip chip--fill chip--plain">Default Branch</span>
+      <span class="mono">CVE-2024-45337</span><span class="marker">NEW</span>
+    </div>
+    <div class="filter-group"><%= diff_chips(@diff) %><%= diff_chips(@first_diff) %></div>
+    <div class="filter-group">
+      <span class="status">active</span><span class="status status--off">revoked</span>
+      <span class="badge badge--admin">ADMIN</span><span class="badge badge--outline">BREAK-GLASS</span>
+    </div>
+  </section>
+
+  <section class="panel panel--padded form">
+    <h2>Buttons</h2>
+    <div class="filter-group">
+      <button type="button" class="btn btn--primary">Apply</button>
+      <button type="button" class="btn">Sign out</button>
+      <button type="button" class="btn btn--danger">Revoke token</button>
+      <button type="button" class="btn" disabled>Disabled</button>
+      <button type="button" class="btn btn--small">Small</button>
+      <%= copy_button("4f2a91c8", label: "Copy commit") %>
+    </div>
+  </section>
+
+  <section class="panel">
+    <nav class="tabs" aria-label="Finding type">
+      <a class="tab" href="#" aria-current="page">Vulnerabilities <span class="count">55</span></a>
+      <a class="tab" href="#">Misconfigurations <span class="count">8</span></a>
+      <a class="tab" href="#">Secrets <span class="count">1</span></a>
+    </nav>
+    <div class="filters">
+      <div class="filter-group">
+        <a class="toggle" href="#" aria-current="true"><span class="swatch swatch--high"></span>HIGH 14</a>
+        <a class="toggle" href="#" aria-current="false"><span class="swatch swatch--low"></span>LOW 8</a>
+        <a class="toggle toggle--accent" href="#" aria-current="true">push</a>
+      </div>
+      <div class="segmented" role="group" aria-label="Range">
+        <a href="#" aria-current="false">7d</a><a href="#" aria-current="true">30d</a><a href="#" aria-current="false">All</a>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table class="table">
+        <thead><tr><th>Severity</th><th>ID</th><th>Package / Target</th><th class="num">First seen</th></tr></thead>
+        <tbody>
+          <tr><td><%= severity_badge("CRITICAL") %></td><td class="mono"><a href="#">CVE-2024-45337</a><span class="marker">NEW</span></td><td class="mono">golang.org/x/crypto</td><td class="num muted">today</td></tr>
+          <tr class="muted"><td><%= severity_badge("LOW", outline: true) %></td><td class="mono">CVE-2022-41723</td><td class="mono">golang.org/x/net</td><td class="num">5 months ago</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel__foot">Showing the first 2 of 55.</div>
+  </section>
+
+  <div class="section-split">
+    <section class="panel panel--padded form section-split__intro">
+      <h2>Flash</h2>
+      <p class="flash" role="status"><%= icon(:notice) %>Project settings saved.</p>
+      <p class="flash flash--alert" role="alert"><%= icon(:alert) %>Type the repo name to confirm.</p>
+      <p class="flash flash--warning" role="alert"><%= icon(:warning) %>Copy the token now. It is shown only once.</p>
+    </section>
+    <section class="panel panel--padded form section-split__intro">
+      <h2>Form</h2>
+      <div class="field">
+        <label for="design-name">Name</label>
+        <input type="text" id="design-name" class="mono" value="ci-platform-api">
+        <span class="field__hint">With a group owner, every group member manages its tokens.</span>
+      </div>
+      <div class="field">
+        <label for="design-expires">Expires on</label>
+        <input type="date" id="design-expires" aria-invalid="true">
+      </div>
+    </section>
+    <section class="panel panel--padded panel--danger form section-split__intro">
+      <h2 class="title-danger">Type to confirm</h2>
+      <span class="note">Deletes all branches, scans and findings of this repo.</span>
+      <div class="inline-form">
+        <label for="design-confirm" class="visually-hidden">Type platform-api to confirm</label>
+        <input type="text" id="design-confirm" class="mono small" placeholder="type platform-api">
+        <button type="button" class="btn btn--small btn--danger">Delete repo</button>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel panel--padded form">
+    <h2>Icons</h2>
+    <div class="filter-group">
+      <% ApplicationHelper::ICONS.each_key do |name| %><span class="chip chip--fill"><%= icon(name) %><%= name %></span><% end %>
+    </div>
+  </section>
+
+  <p class="panel empty muted">Empty state · No findings match these filters.</p>
+</main>

@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Branch trend</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:underline}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 1100px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45">
+
+<header style="background: #15181d; color: #ffffff">
+<div style="max-width: 1360px; margin: 0 auto; padding: 0 24px; min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 28px">
+<a href="#" style="display: flex; align-items: center; gap: 10px; color: #ffffff; font-weight: 600; font-size: 16px; text-decoration: none"><svg width="24" height="24" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="#2a2f37"></rect><rect x="6" y="7" width="16" height="3" rx="1" fill="#d0362c"></rect><rect x="6" y="12.5" width="12" height="3" rx="1" fill="#e8821e"></rect><rect x="6" y="18" width="7" height="3" rx="1" fill="#f0c94a"></rect></svg>Trivista</a>
+<nav aria-label="Main" style="display: flex; gap: 4px; font-size: 14px">
+<a href="#" aria-current="page" style="padding: 6px 10px; border-radius: 6px; background: #2a2f37; color: #ffffff; text-decoration: none">Projects</a>
+<a href="#" style="padding: 6px 10px; border-radius: 6px; color: #c3c9d1; text-decoration: none">Service Accounts</a>
+</nav>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: #c3c9d1">
+<span>Signed in as [USER NAME]</span>
+<button type="button" style="height: 32px; padding: 0 12px; border: 1px solid #4a525e; border-radius: 6px; background: transparent; color: #ffffff; font: 500 13px 'IBM Plex Sans', sans-serif; cursor: pointer">Sign out</button>
+</div>
+</div>
+</header>
+
+<main style="max-width: 1360px; margin: 0 auto; padding: 24px 24px 64px; display: flex; flex-direction: column; gap: 20px">
+<nav aria-label="Breadcrumb" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; color: #68717d">
+<a href="#">acme-platform</a><span aria-hidden="true">/</span><a href="#">platform-api</a><span aria-hidden="true">/</span><span style="color: #15181d">main</span>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<h1 style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 28px; line-height: 36px; font-weight: 600">main</h1>
+<span style="padding: 1px 7px; border-radius: 3px; background: #f0f2f5; font-size: 12px; color: #4a525e">Default Branch</span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; border-bottom: 1px solid #d9dde3">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px">
+<nav aria-label="Finding type" style="display: flex; flex-wrap: wrap; gap: 4px">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+<a href="#" aria-current="{{t.current}}" onClick="{{t.pick}}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 8px; margin-bottom: -1px; border-bottom: 2px solid {{t.line}}; color: {{t.ink}}; font-weight: {{t.weight}}; text-decoration: none">{{t.label}}</a>
+</sc-for>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-bottom: 8px">
+<div role="group" aria-label="Range" style="display: inline-flex; border: 1px solid #c3c9d1; border-radius: 6px; overflow: hidden; background: #ffffff">
+<sc-for list="{{ranges}}" as="r" hint-placeholder-count="4">
+<button type="button" aria-pressed="{{r.pressed}}" onClick="{{r.pick}}" style="height: 30px; padding: 0 12px; border: 0; border-left: 1px solid {{r.divider}}; background: {{r.bg}}; color: {{r.ink}}; font: {{r.weight}} 12px 'IBM Plex Mono', monospace; cursor: pointer">{{r.label}}</button>
+</sc-for>
+</div>
+<div role="group" aria-label="Trigger" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{triggers}}" as="g" hint-placeholder-count="6">
+<button type="button" aria-pressed="{{g.pressed}}" onClick="{{g.pick}}" style="height: 30px; padding: 0 10px; border-radius: 6px; border: 1px solid {{g.border}}; background: {{g.bg}}; color: {{g.ink}}; font: 500 12px 'IBM Plex Mono', monospace; cursor: pointer">{{g.label}}</button>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-bottom: 1px solid #e6e9ed">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600">ghcr.io/acme/platform-api</h2>
+<span style="font-size: 12px; color: #68717d">container_image · Trend over 14 scans</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #4a525e">
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 2px; background: #8e1330"></span>Critical</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 2px; background: #d0362c"></span>High</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 2px; background: #e8821e"></span>Medium</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 2px; background: #f0c94a"></span>Low</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 2px; background: #b9c0ca"></span>Unknown</span>
+</div>
+</div>
+
+<div style="padding: 20px 20px 12px; overflow-x: auto">
+<div style="min-width: 720px; display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 8px">
+<div style="height: 200px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #68717d">
+<span style="line-height: 1">{{axisTop}}</span><span style="line-height: 1">{{axisMid}}</span><span style="line-height: 1">0</span>
+</div>
+<div style="position: relative; height: 200px; border-bottom: 1px solid #c3c9d1; background: linear-gradient(#e6e9ed, #e6e9ed) 0 0 / 100% 1px no-repeat, linear-gradient(#e6e9ed, #e6e9ed) 0 50% / 100% 1px no-repeat; display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; padding: 0 6px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="14">
+<a href="#" title="{{b.title}}" style="flex: 1 1 0; max-width: 44px; height: {{b.h}}; display: flex; flex-direction: column-reverse; border-radius: 2px 2px 0 0; overflow: hidden; outline-offset: 2px; background: {{b.ring}}">
+<sc-for list="{{b.segs}}" as="s" hint-placeholder-count="4"><span style="display: block; height: {{s.h}}; background: {{s.bg}}"></span></sc-for>
+</a>
+</sc-for>
+</div>
+<span></span>
+<div style="display: flex; justify-content: space-between; gap: 10px; padding: 6px 6px 0; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #68717d">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="14"><span style="flex: 1 1 0; max-width: 44px; text-align: center">{{b.day}}</span></sc-for>
+</div>
+</div>
+</div>
+
+<div style="overflow-x: auto; border-top: 1px solid #e6e9ed">
+<table style="width: 100%; min-width: 900px; border-collapse: collapse; font-size: 13px">
+<thead>
+<tr style="background: #f0f2f5; text-align: left; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">
+<th style="padding: 8px 20px; font-weight: 600">Commit</th>
+<th style="padding: 8px 12px; font-weight: 600">Tag</th>
+<th style="padding: 8px 12px; font-weight: 600">Trigger</th>
+<th style="padding: 8px 12px; font-weight: 600">Uploaded</th>
+<th style="padding: 8px 12px; font-weight: 600">Diff vs. predecessor</th>
+<th style="padding: 8px 20px 8px 12px; font-weight: 600">Findings</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{scans}}" as="r" hint-placeholder-count="5">
+<tr style="height: 44px">
+<td style="padding: 0 20px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace"><a href="Scan.dc.html">{{r.sha}}</a></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #4a525e">{{r.tag}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed"><span style="padding: 1px 7px; border-radius: 3px; border: 1px solid #c3c9d1; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #4a525e">{{r.trigger}}</span></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #4a525e">{{r.at}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed">
+<span style="display: inline-flex; gap: 6px; font-size: 12px">
+<span style="padding: 1px 7px; border-radius: 3px; background: #e8eefc; color: #1f429f; font-weight: 500"><b style="font-family: 'IBM Plex Mono', monospace">+{{r.add}}</b> new</span>
+<span style="padding: 1px 7px; border-radius: 3px; background: #f0f2f5; color: #4a525e; font-weight: 500"><b style="font-family: 'IBM Plex Mono', monospace">−{{r.gone}}</b> no longer reported</span>
+</span>
+</td>
+<td style="padding: 0 20px 0 12px; border-top: 1px solid #e6e9ed">
+<span style="display: inline-flex; border-radius: 3px; overflow: hidden; font-family: 'IBM Plex Mono', monospace; font-size: 12px">
+<sc-for list="{{r.segs}}" as="s" hint-placeholder-count="4"><span style="display: inline-flex; gap: 5px; padding: 2px 7px; background: {{s.bg}}; color: {{s.fg}}"><b>{{s.l}}</b>{{s.n}}</span></sc-for>
+</span>
+</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'Vulnerabilities', range: '30d', trigger: 'all' };
+  }
+  renderVals() {
+    const { tab, range, trigger } = this.state;
+    const tabs = ['Vulnerabilities', 'Misconfigurations', 'Secrets', 'Licenses'].map((label) => ({
+      label,
+      current: label === tab ? 'page' : 'false',
+      line: label === tab ? '#2B55C9' : 'transparent',
+      ink: label === tab ? '#15181D' : '#4A525E',
+      weight: label === tab ? 600 : 400,
+      pick: (e) => { e.preventDefault(); this.setState({ tab: label }); }
+    }));
+    const ranges = ['7d', '30d', '90d', 'All'].map((label, i) => ({
+      label,
+      pressed: label === range ? 'true' : 'false',
+      bg: label === range ? '#E8EEFC' : '#FFFFFF',
+      ink: label === range ? '#1F429F' : '#4A525E',
+      weight: label === range ? 600 : 400,
+      divider: i === 0 ? 'transparent' : '#C3C9D1',
+      pick: () => this.setState({ range: label })
+    }));
+    const triggers = ['all', 'push', 'tag', 'schedule', 'manual', 'pr', 'unknown'].map((label) => ({
+      label,
+      pressed: label === trigger ? 'true' : 'false',
+      bg: label === trigger ? '#E8EEFC' : '#FFFFFF',
+      border: label === trigger ? '#2B55C9' : '#C3C9D1',
+      ink: label === trigger ? '#1F429F' : '#4A525E',
+      pick: () => this.setState({ trigger: label })
+    }));
+    const order = [
+      { k: 'C', bg: '#8E1330', fg: '#FFFFFF' },
+      { k: 'H', bg: '#D0362C', fg: '#FFFFFF' },
+      { k: 'M', bg: '#E8821E', fg: '#15181D' },
+      { k: 'L', bg: '#F0C94A', fg: '#15181D' },
+      { k: 'U', bg: '#B9C0CA', fg: '#15181D' }
+    ];
+    const series = [
+      [9, '[0,18,40,12,0]'], [10, '[0,18,41,12,0]'], [11, '[1,19,41,12,0]'], [12, '[1,19,42,12,0]'],
+      [13, '[1,20,42,13,0]'], [16, '[1,20,40,13,0]'], [17, '[2,21,40,12,1]'], [18, '[2,21,39,12,1]'],
+      [19, '[2,16,36,10,0]'], [20, '[2,16,34,10,0]'], [23, '[2,15,33,9,0]'], [24, '[3,15,33,9,0]'],
+      [25, '[2,14,32,8,0]'], [26, '[2,14,31,8,0]']
+    ].map(([day, raw]) => ({ day: 'Sep ' + day, counts: JSON.parse(raw) }));
+    const max = 80;
+    const px = (n) => (n / max * 200) + 'px';
+    const bars = series.map((p, i) => {
+      const total = p.counts.reduce((a, b) => a + b, 0);
+      return {
+        day: i % 2 === 0 ? p.day : '',
+        h: px(total),
+        ring: 'transparent',
+        title: p.day + ' · ' + total + ' findings',
+        segs: order.map((o, j) => ({ h: px(p.counts[j]), bg: o.bg })).filter((s) => s.h !== '0px')
+      };
+    });
+    const segs = (c) => order.map((o, j) => ({ l: o.k, n: c[j], bg: o.bg, fg: o.fg })).filter((s) => s.n > 0);
+    return {
+      tabs,
+      ranges,
+      triggers,
+      axisTop: max,
+      axisMid: max / 2,
+      bars,
+      scans: [
+        { sha: '4f2a91c8', tag: 'v2.4.1', trigger: 'tag', at: '2026-09-26 14:02', add: 1, gone: 1, segs: segs([2, 14, 31, 8, 0]) },
+        { sha: 'b81e0d44', tag: '', trigger: 'push', at: '2026-09-25 09:41', add: 0, gone: 2, segs: segs([2, 14, 32, 8, 0]) },
+        { sha: '9c0d17e2', tag: '', trigger: 'schedule', at: '2026-09-24 03:00', add: 1, gone: 0, segs: segs([3, 15, 33, 9, 0]) },
+        { sha: '3e77a0f1', tag: '', trigger: 'push', at: '2026-09-23 16:18', add: 0, gone: 1, segs: segs([2, 15, 33, 9, 0]) },
+        { sha: 'e04c5b9a', tag: 'v2.4.0', trigger: 'tag', at: '2026-09-20 11:30', add: 0, gone: 2, segs: segs([2, 16, 34, 10, 0]) }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

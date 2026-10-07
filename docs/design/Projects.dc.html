@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Projects</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:underline}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 960px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45">
+
+<header style="background: #15181d; color: #ffffff">
+<div style="max-width: 1360px; margin: 0 auto; padding: 0 24px; min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 28px">
+<a href="#" style="display: flex; align-items: center; gap: 10px; color: #ffffff; font-weight: 600; font-size: 16px; text-decoration: none"><svg width="24" height="24" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="#2a2f37"></rect><rect x="6" y="7" width="16" height="3" rx="1" fill="#d0362c"></rect><rect x="6" y="12.5" width="12" height="3" rx="1" fill="#e8821e"></rect><rect x="6" y="18" width="7" height="3" rx="1" fill="#f0c94a"></rect></svg>Trivista</a>
+<nav aria-label="Main" style="display: flex; gap: 4px; font-size: 14px">
+<a href="#" aria-current="page" style="padding: 6px 10px; border-radius: 6px; background: #2a2f37; color: #ffffff; text-decoration: none">Projects</a>
+<a href="#" style="padding: 6px 10px; border-radius: 6px; color: #c3c9d1; text-decoration: none">Service Accounts</a>
+<a href="#" style="padding: 6px 10px; border-radius: 6px; color: #c3c9d1; text-decoration: none">Users</a>
+</nav>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: #c3c9d1">
+<span>Signed in as [USER NAME]</span>
+<button type="button" style="height: 32px; padding: 0 12px; border: 1px solid #4a525e; border-radius: 6px; background: transparent; color: #ffffff; font: 500 13px 'IBM Plex Sans', sans-serif; cursor: pointer">Sign out</button>
+</div>
+</div>
+</header>
+
+<main style="max-width: 1360px; margin: 0 auto; padding: 32px 24px 64px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-size: 32px; line-height: 40px; font-weight: 600; letter-spacing: -0.01em">Projects</h1>
+<span style="font-size: 13px; color: #4a525e">Counts from each repo’s Default Branch, latest scan.</span>
+</div>
+<form role="search" style="display: flex; flex-wrap: wrap; gap: 8px">
+<label style="position: relative; display: flex; align-items: center">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Filter projects</span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#68717d" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 10px"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+<input type="search" placeholder="Filter projects" style="height: 36px; width: 240px; box-sizing: border-box; padding: 0 10px 0 34px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; font: 400 14px 'IBM Plex Sans', sans-serif; color: #15181d">
+</label>
+<div role="group" aria-label="Visibility" style="display: inline-flex; align-self: center; border: 1px solid #c3c9d1; border-radius: 6px; overflow: hidden; background: #ffffff; font: 400 12px 'IBM Plex Mono', monospace">
+<a href="#" aria-current="true" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; background: #e8eefc; color: #1f429f; font-weight: 600; text-decoration: none">all</a>
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; color: #4a525e; text-decoration: none">user</a>
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; color: #4a525e; text-decoration: none">group</a>
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; color: #4a525e; text-decoration: none">public</a>
+</div>
+</form>
+</div>
+
+<div style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; overflow-x: auto">
+<table style="width: 100%; min-width: 1080px; border-collapse: collapse; font-size: 13px">
+<thead>
+<tr style="background: #f0f2f5; text-align: left; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">
+<th style="padding: 8px 20px; font-weight: 600; border-bottom: 1px solid #d9dde3">Project</th>
+<th style="padding: 8px 12px; font-weight: 600; border-bottom: 1px solid #d9dde3">Owner</th>
+<th style="padding: 8px 12px; font-weight: 600; border-bottom: 1px solid #d9dde3">Vulnerabilities</th>
+<th style="padding: 8px 12px; font-weight: 600; border-bottom: 1px solid #d9dde3">Misconfigurations</th>
+<th style="padding: 8px 12px; font-weight: 600; border-bottom: 1px solid #d9dde3">Secrets</th>
+<th style="padding: 8px 12px; font-weight: 600; border-bottom: 1px solid #d9dde3">Licenses</th>
+<th style="padding: 8px 20px 8px 12px; font-weight: 600; border-bottom: 1px solid #d9dde3; text-align: right">Last scan</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{projects}}" as="p" hint-placeholder-count="8">
+<tr style="height: 48px">
+<td style="padding: 0 20px; border-bottom: 1px solid #e6e9ed">
+<div style="display: flex; align-items: center; gap: 10px">
+<sc-if value="{{p.cluster}}" hint-placeholder-val="{{false}}">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4a525e" stroke-width="2" stroke-linejoin="round" aria-label="Cluster"><path d="M12 2l8.5 5v10L12 22l-8.5-5V7z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+</sc-if>
+<sc-if value="{{p.repo}}" hint-placeholder-val="{{true}}">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4a525e" stroke-width="2" stroke-linejoin="round" aria-label="Repos"><path d="M5 4h11l3 3v13H5z"></path><path d="M9 9h6"></path><path d="M9 13h6"></path></svg>
+</sc-if>
+<a href="#" style="font-weight: 600; font-size: 14px">{{p.name}}</a>
+<span style="font-size: 12px; color: #68717d">{{p.meta}}</span>
+</div>
+</td>
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed; color: #4a525e">{{p.owner}}</td>
+<sc-for list="{{p.types}}" as="t" hint-placeholder-count="4">
+<td style="padding: 0 12px; border-bottom: 1px solid #e6e9ed">
+<sc-if value="{{t.empty}}" hint-placeholder-val="{{false}}"><span style="font-family: 'IBM Plex Mono', monospace; color: #68717d">–</span></sc-if>
+<sc-if value="{{t.any}}" hint-placeholder-val="{{true}}">
+<span style="display: inline-flex; border-radius: 3px; overflow: hidden; font-family: 'IBM Plex Mono', monospace; font-size: 12px">
+<sc-for list="{{t.segs}}" as="s" hint-placeholder-count="3"><span style="display: inline-flex; gap: 5px; padding: 2px 7px; background: {{s.bg}}; color: {{s.fg}}" title="{{s.title}}"><b>{{s.l}}</b>{{s.n}}</span></sc-for>
+</span>
+</sc-if>
+</td>
+</sc-for>
+<td style="padding: 0 20px 0 12px; border-bottom: 1px solid #e6e9ed; text-align: right; color: #4a525e; white-space: nowrap">{{p.last}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<span style="font-size: 12px; color: #68717d">Zero counts are hidden; “–” means no findings of that type.</span>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const sev = {
+      C: { bg: '#8E1330', fg: '#FFFFFF', title: 'Critical' },
+      H: { bg: '#D0362C', fg: '#FFFFFF', title: 'High' },
+      M: { bg: '#E8821E', fg: '#15181D', title: 'Medium' },
+      L: { bg: '#F0C94A', fg: '#15181D', title: 'Low' },
+      U: { bg: '#B9C0CA', fg: '#15181D', title: 'Unknown' }
+    };
+    const cell = (counts) => {
+      const segs = Object.entries(counts).filter(([, n]) => n > 0).map(([l, n]) => ({ l, n, ...sev[l] }));
+      return { segs, any: segs.length > 0, empty: segs.length === 0 };
+    };
+    const row = (name, meta, owner, cluster, v, m, s, l, last) => ({
+      name, meta, owner, cluster, repo: !cluster, last,
+      types: [cell(v), cell(m), cell(s), cell(l)]
+    });
+    return {
+      projects: [
+        row('acme-platform', '4 repos', 'team-platform', false, { C: 2, H: 14, M: 31, L: 8 }, { H: 3, M: 5 }, {}, { U: 2 }, '2 h ago'),
+        row('billing', '2 repos', 'team-billing', false, { H: 6, M: 12, L: 19 }, { M: 2 }, { H: 1 }, {}, '5 h ago'),
+        row('prod-eu-1', 'cluster', 'team-sre', true, { C: 1, H: 22, M: 64, L: 40, U: 3 }, { C: 1, H: 9, M: 17 }, {}, {}, 'today 06:00'),
+        row('customer-portal', '3 repos', 'team-web', false, { M: 4, L: 11 }, {}, {}, { L: 1 }, 'yesterday'),
+        row('identity', '1 repo', 'team-platform', false, {}, { L: 2 }, {}, {}, '3 days ago'),
+        row('staging-eu-1', 'cluster', 'team-sre', true, { H: 9, M: 30, L: 22 }, { H: 4, M: 6 }, {}, {}, 'today 06:00'),
+        row('data-pipeline', '5 repos', 'team-data', false, { C: 3, H: 8, M: 9 }, { M: 1 }, { C: 1 }, { M: 4 }, '1 week ago'),
+        row('docs-site', '1 repo', '[USER NAME]', false, {}, {}, {}, {}, '2 weeks ago')
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Trivista Foundations</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2b55c9}a:hover{color:#1f429f}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1280px; box-sizing: border-box; padding: 56px 64px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-direction: column; gap: 40px">
+
+<header style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 24px; border-bottom: 1px solid #d9dde3">
+<div style="display: flex; align-items: center; gap: 12px">
+<svg width="32" height="32" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="#15181d"></rect><rect x="6" y="7" width="16" height="3" rx="1" fill="#d0362c"></rect><rect x="6" y="12.5" width="12" height="3" rx="1" fill="#e8821e"></rect><rect x="6" y="18" width="7" height="3" rx="1" fill="#f0c94a"></rect></svg>
+<span style="font-size: 22px; font-weight: 600; letter-spacing: -0.01em">Trivista</span>
+<span style="font-size: 22px; font-weight: 400; color: #68717d">Design System</span>
+</div>
+<div style="display: flex; gap: 24px; font-size: 13px; color: #4a525e">
+<span>Foundations</span>
+<span style="font-family: 'IBM Plex Mono', monospace">v0.1</span>
+</div>
+</header>
+
+<section style="display: flex; flex-direction: column; gap: 28px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Color</h2>
+
+<div style="display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 600">Neutrals</span><span style="font-size: 13px; color: #68717d">Grounds, lines, ink. Structure is carried by borders, not shadows.</span></div>
+<div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 16px">
+<sc-for list="{{neutrals}}" as="s" hint-placeholder-count="8">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="height: 64px; border-radius: 6px; border: 1px solid #d9dde3; background: {{s.hex}}"></div>
+<div style="display: flex; flex-direction: column; gap: 1px; font-size: 12px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-weight: 500">{{s.token}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; color: #68717d">{{s.hex}}</span>
+<span style="color: #4a525e">{{s.use}}</span>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 600">Accent &amp; Diff</span><span style="font-size: 13px; color: #68717d">One accent for links, actions and focus. Diff reuses it for “new”; “no longer reported” stays neutral, never green.</span></div>
+<div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 16px">
+<sc-for list="{{accents}}" as="s" hint-placeholder-count="6">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="height: 64px; border-radius: 6px; border: 1px solid #d9dde3; background: {{s.hex}}"></div>
+<div style="display: flex; flex-direction: column; gap: 1px; font-size: 12px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-weight: 500">{{s.token}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; color: #68717d">{{s.hex}}</span>
+<span style="color: #4a525e">{{s.use}}</span>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 600">Severity</span><span style="font-size: 13px; color: #68717d">Ordered dark → light, so the scale reads in grayscale. Always shown with its label or letter.</span></div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px">
+<sc-for list="{{severities}}" as="s" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; border: 1px solid #d9dde3; border-radius: 6px; overflow: hidden; background: #ffffff">
+<div style="height: 88px; box-sizing: border-box; padding: 12px 14px; background: {{s.bg}}; color: {{s.on}}; display: flex; flex-direction: column; justify-content: space-between">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.04em">{{s.name}}</span>
+<span style="font-size: 28px; font-weight: 600; line-height: 1">{{s.letter}}</span>
+</div>
+<div style="padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 2px; font-size: 12px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-weight: 500">{{s.token}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; color: #68717d">fill {{s.bg}} · on {{s.on}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; color: #68717d">text <span style="color: {{s.text}}; font-weight: 600">{{s.text}}</span></span>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 56px; padding-top: 32px; border-top: 1px solid #d9dde3">
+
+<section style="display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Type · IBM Plex Sans / Mono</h2>
+<div style="display: flex; flex-direction: column; border-top: 1px solid #e6e9ed">
+<div style="display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #e6e9ed"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #68717d">display 32/40 600</span><span style="font-size: 32px; line-height: 40px; font-weight: 600; letter-spacing: -0.01em">Projects</span></div>
+<div style="display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #e6e9ed"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #68717d">title 24/32 600</span><span style="font-size: 24px; line-height: 32px; font-weight: 600">platform-api / main</span></div>
+<div style="display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #e6e9ed"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #68717d">heading 18/26 600</span><span style="font-size: 18px; line-height: 26px; font-weight: 600">Vulnerabilities</span></div>
+<div style="display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #e6e9ed"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #68717d">body 14/20 400</span><span style="font-size: 14px; line-height: 20px">Scan of commit 4f2a91c8 on main, triggered by push.</span></div>
+<div style="display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #e6e9ed"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #68717d">small 13/18 400</span><span style="font-size: 13px; line-height: 18px; color: #4a525e">Compared with predecessor 9c0d17e2 · 3 days earlier</span></div>
+<div style="display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #e6e9ed"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #68717d">label 12/16 600 caps</span><span style="font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Severity · Package · Installed</span></div>
+<div style="display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #e6e9ed"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #68717d">mono 13/18 400</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 18px">CVE-2024-45337  golang.org/x/crypto  0.21.0 → 0.31.0</span></div>
+</div>
+<span style="font-size: 13px; color: #68717d">Mono for anything a developer copies: IDs, SHAs, versions, paths, image refs.</span>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Space · 4 px base</h2>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{spaces}}" as="sp" hint-placeholder-count="8">
+<div style="display: grid; grid-template-columns: 72px 40px minmax(0, 1fr); gap: 12px; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px">
+<span style="font-weight: 500">{{sp.token}}</span>
+<span style="color: #68717d">{{sp.px}}</span>
+<div style="height: 12px; width: {{sp.px}}; background: #2b55c9; border-radius: 2px"></div>
+</div>
+</sc-for>
+</div>
+
+<h2 style="margin: 16px 0 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Radius &amp; Line</h2>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 12px">
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 56px; background: #ffffff; border: 1px solid #c3c9d1; border-radius: 3px"></div><span>--radius-s 3px</span><span style="color: #68717d">badges, chips</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 56px; background: #ffffff; border: 1px solid #c3c9d1; border-radius: 6px"></div><span>--radius-m 6px</span><span style="color: #68717d">controls, panels</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 56px; background: #ffffff; border: 1px solid #c3c9d1; border-radius: 6px; box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #2b55c9"></div><span>--focus 2px</span><span style="color: #68717d">offset ring, accent</span></div>
+</div>
+</section>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1280}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      neutrals: [
+        { token: '--bg', hex: '#F6F7F9', use: 'Page ground' },
+        { token: '--surface', hex: '#FFFFFF', use: 'Panels, tables' },
+        { token: '--surface-2', hex: '#F0F2F5', use: 'Headers, chips' },
+        { token: '--line', hex: '#E6E9ED', use: 'Row dividers' },
+        { token: '--border', hex: '#D9DDE3', use: 'Panel edges' },
+        { token: '--border-strong', hex: '#C3C9D1', use: 'Inputs' },
+        { token: '--text-2', hex: '#4A525E', use: 'Secondary ink' },
+        { token: '--text', hex: '#15181D', use: 'Primary ink' }
+      ],
+      accents: [
+        { token: '--accent', hex: '#2B55C9', use: 'Links, primary' },
+        { token: '--accent-hover', hex: '#1F429F', use: 'Hover, pressed' },
+        { token: '--accent-tint', hex: '#E8EEFC', use: 'Selected row' },
+        { token: '--text-3', hex: '#68717D', use: 'Muted ink, 4.6:1' },
+        { token: '--diff-new', hex: '#2B55C9', use: '+ new finding' },
+        { token: '--diff-gone', hex: '#68717D', use: '− no longer reported' }
+      ],
+      severities: [
+        { name: 'CRITICAL', letter: 'C', token: '--sev-critical', bg: '#8E1330', on: '#FFFFFF', text: '#8E1330' },
+        { name: 'HIGH', letter: 'H', token: '--sev-high', bg: '#D0362C', on: '#FFFFFF', text: '#B42A22' },
+        { name: 'MEDIUM', letter: 'M', token: '--sev-medium', bg: '#E8821E', on: '#15181D', text: '#A14F00' },
+        { name: 'LOW', letter: 'L', token: '--sev-low', bg: '#F0C94A', on: '#15181D', text: '#7A5A00' },
+        { name: 'UNKNOWN', letter: 'U', token: '--sev-unknown', bg: '#B9C0CA', on: '#15181D', text: '#5B636E' }
+      ],
+      spaces: [
+        { token: '--sp-1', px: '4px' },
+        { token: '--sp-2', px: '8px' },
+        { token: '--sp-3', px: '12px' },
+        { token: '--sp-4', px: '16px' },
+        { token: '--sp-5', px: '24px' },
+        { token: '--sp-6', px: '32px' },
+        { token: '--sp-7', px: '48px' },
+        { token: '--sp-8', px: '64px' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sign in</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:underline}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 760px; box-sizing: border-box; padding: 48px 24px; background: #15181d; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; align-items: center; justify-content: center">
+<main style="width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; align-items: center; justify-content: center; gap: 12px; color: #ffffff">
+<svg width="36" height="36" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="#2a2f37"></rect><rect x="6" y="7" width="16" height="3" rx="1" fill="#d0362c"></rect><rect x="6" y="12.5" width="12" height="3" rx="1" fill="#e8821e"></rect><rect x="6" y="18" width="7" height="3" rx="1" fill="#f0c94a"></rect></svg>
+<h1 style="margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.01em">Trivista</h1>
+</div>
+<section style="background: #ffffff; border-radius: 8px; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<p role="alert" style="margin: 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 6px; border: 1px solid #f0c4c0; background: #fbeceb; color: #8a1f19; font-size: 13px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5"></path><path d="M12 16.5v.5"></path></svg>Your session has expired. Please sign in again.</p>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600">Sign in</h2>
+<span style="font-size: 13px; color: #4a525e">Trivy findings across your projects, read-only.</span>
+</div>
+<form style="display: flex">
+<button type="submit" style="flex: 1; height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid #2b55c9; border-radius: 6px; background: #2b55c9; color: #ffffff; font: 500 15px 'IBM Plex Sans', sans-serif; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-5"></path><path d="M10 16l4-4-4-4"></path><path d="M14 12H4"></path></svg>Sign in with [IDENTITY PROVIDER]</button>
+</form>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
