@@ -1,6 +1,6 @@
-# Roh-JSON nur als Allowlist-Projektion speichern
+# Nur Allowlist-Felder speichern, kein Roh-JSON
 
-Trivy-Reports können Secrets an vielen Stellen im Klartext enthalten: in den Kontextzeilen von Secret-Findings (`Code`, Trivy maskiert nur den Regeltreffer), in Image-Konfiguration und Build-Befehlen (`ImageConfig`, `Layer.CreatedBy`), in Code-Vorschauen und Rego-Traces von Misconfigurations (`CauseMetadata.Code`, `RenderedCause`, `Traces`) und in Repo-URLs mit Zugangsdaten. Deshalb wird der Trivy-Report synchron im Upload-Request, vor jedem Speichern, auf eine Allowlist bekannter Felder reduziert; alles andere wird verworfen, auch Felder künftiger Trivy-Versionen. Diese Projektion wird als Roh-JSON gespeichert. Trivista hält damit keine Kopie von Secrets in DB, Backups oder Dumps.
+Trivy-Reports können Secrets an vielen Stellen im Klartext enthalten: in den Kontextzeilen von Secret-Findings (`Code`, Trivy maskiert nur den Regeltreffer), in Image-Konfiguration und Build-Befehlen (`ImageConfig`, `Layer.CreatedBy`), in Code-Vorschauen und Rego-Traces von Misconfigurations (`CauseMetadata.Code`, `RenderedCause`, `Traces`) und in Repo-URLs mit Zugangsdaten. Deshalb liest der Upload-Request aus dem Trivy-Report ausschließlich die Felder einer Allowlist und speichert sie in Spalten von Scan, Finding und Occurrence; alles andere wird verworfen, auch Felder künftiger Trivy-Versionen. Ein Roh-JSON wird nicht gespeichert. Trivista hält damit keine Kopie von Secrets in DB, Backups oder Dumps.
 
 ## Allowlist
 
@@ -9,7 +9,7 @@ Trivy-Reports können Secrets an vielen Stellen im Klartext enthalten: in den Ko
 | Report | `SchemaVersion`, `CreatedAt`, `ArtifactName` (bei URLs nur `scheme://host/path`, ohne Userinfo, Query und Fragment), `ArtifactType`, `Metadata.OS.Family`, `Metadata.OS.Name`, `Trivy.Version` |
 | Result | `Target`, `Class`, `Type` |
 | Vulnerability | `VulnerabilityID`, `PkgName`, `PkgPath`, `InstalledVersion`, `FixedVersion`, `Status`, `Severity`, `Title`, `Description`, `PrimaryURL`, `References`, `PublishedDate`, `LastModifiedDate` |
-| Misconfiguration | `ID`, `Type`, `Title`, `Description`, `Resolution`, `Severity`, `Status`, `PrimaryURL`, `References`, `CauseMetadata.Resource`, `CauseMetadata.Provider`, `CauseMetadata.Service`, `CauseMetadata.StartLine`, `CauseMetadata.EndLine` |
+| Misconfiguration | `ID`, `Namespace`, `Type`, `Title`, `Description`, `Resolution`, `Severity`, `Status`, `PrimaryURL`, `References`, `CauseMetadata.Resource`, `CauseMetadata.Provider`, `CauseMetadata.Service`, `CauseMetadata.StartLine`, `CauseMetadata.EndLine` |
 | Secret | `RuleID`, `Category`, `Severity`, `Title`, `StartLine`, `EndLine` |
 | License | `Name`, `Category`, `Severity`, `PkgName`, `FilePath`, `Confidence`, `Link` |
 
@@ -19,17 +19,17 @@ Vor der Projektion liegt der unbereinigte Report kurzzeitig in Tempfiles von Pum
 
 ## URLs aus Reports
 
-`PrimaryURL`, `References` und `Link` stammen von externen Uploadern. Sie werden ohne Userinfo gespeichert und nur als Link dargestellt, wenn sie absolute `http`- oder `https`-URLs sind; alles andere erscheint als Text, damit z. B. `javascript:`-URLs keinen Code im Browser eines Lesers ausführen.
+`PrimaryURL`, `References` und `Link` stammen von externen Uploadern. Sie werden wie `ArtifactName` nur als `scheme://host/path` gespeichert, ohne Userinfo, Query und Fragment, und nur als Link dargestellt, wenn sie absolute `http`- oder `https`-URLs sind; alles andere erscheint als Text, damit z. B. `javascript:`-URLs keinen Code im Browser eines Lesers ausführen.
 
 ## Considered Options
 
 - Unbereinigt speichern und nur über die Anwendung nicht ausliefern: verworfen, Backups, Dumps und DB-Zugriff legen die Secrets offen.
 - Unbereinigt mit Active Record Encryption: verworfen, der Schlüssel liegt in derselben App.
 - Blocklist bekannter Leck-Felder: verworfen, jede Prüfrunde fand ein weiteres Feld (`Code`, `ImageConfig`, `Layer.CreatedBy`, `Traces`), und neue Trivy-Versionen können neue bringen.
-- Gar kein Roh-JSON: verworfen, Neu-Import bei Schemaänderungen von Trivista soll möglich bleiben.
+- Allowlist-Projektion zusätzlich als Roh-JSON speichern: verworfen. Sie enthält nur Felder, die ohnehin in Spalten stehen, wiederholt Beschreibungen bei jedem Scan und dominiert den Speicherbedarf; ein Neu-Import daraus brächte kaum Gewinn.
 
 ## Consequences
 
 - Keine Code-Vorschau bei Secrets und Misconfigurations, keine Image-Konfiguration, kein Package-Inventar.
-- Neu-Import alter Scans ist nur für Felder der Allowlist möglich.
+- Alte Scans lassen sich nicht neu importieren; Schemaänderungen arbeiten mit den gespeicherten Spalten.
 - Jede Erweiterung der Allowlist braucht eine Prüfung, ob das Feld Secret-Klartext enthalten kann. `Message` bei Misconfigurations ist bewusst nicht enthalten, weil Trivy-Checks dort Befehlszeilen aus dem gescannten Input einsetzen (z. B. DS025).
