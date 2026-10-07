@@ -133,7 +133,7 @@ code, .mono { font-family: var(--font-mono); }
 
 .page-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
 .page-head__title { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.page-head__sub { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; margin-top: 6px; font-size: 13px; color: var(--text-2); }
+.page-head__sub { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; margin: 6px 0 0; font-size: 13px; color: var(--text-2); }
 .page-title--mono { font-family: var(--font-mono); font-size: 28px; line-height: 36px; }
 
 .breadcrumb { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--text-3); }
@@ -357,6 +357,10 @@ input[aria-invalid="true"] { border-color: var(--danger-text); }
 .inline-form { display: flex; flex-wrap: wrap; gap: 8px; }
 .inline-form input { width: 220px; }
 form.button_to { display: inline; }
+
+.search { position: relative; display: flex; align-items: center; }
+.search .icon { position: absolute; left: 10px; color: var(--text-3); }
+.search input { width: 240px; padding-left: 34px; }
 
 .field { display: flex; flex-direction: column; gap: 4px; }
 .field label { font-size: 13px; font-weight: 600; }

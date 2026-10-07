@@ -28,4 +28,32 @@ class ProjectListTest < ActionDispatch::IntegrationTest
       assert_select "td.misconfiguration", text: "–"
     end
   end
+
+  test "filters by name and visibility" do
+    sign_in(sub: "dave-sub")
+
+    get root_path(q: "SHA")
+    assert_select "tbody tr", 1
+    assert_select "a", text: "shared"
+
+    get root_path(visibility: "public")
+    assert_select "tbody tr td:first-child a", text: /\A(public|open)\z/, count: 2
+    assert_select ".segmented a[aria-current=true]", text: "public"
+
+    get root_path(q: "%")
+    assert_select "tbody tr", 0
+  end
+
+  test "shows repo count and the last scan of each project" do
+    scans(:shop_main_first).update!(created_at: 2.hours.ago)
+    sign_in(sub: "dave-sub")
+
+    get root_path
+
+    assert_select "tr#project_#{projects(:shop).id}" do
+      assert_select "td", text: /1 repo/
+      assert_select "time", text: "about 2 hours ago"
+    end
+    assert_select "tr#project_#{projects(:alice_shared).id} td.num", text: "never"
+  end
 end

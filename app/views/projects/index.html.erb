@@ -1,24 +1,61 @@
-<h1>Projects</h1>
-
-<table class="projects">
-  <thead>
-    <tr>
-      <th>Project</th>
-      <th>Owner</th>
-      <% Finding::TYPES.each do |finding_type| %>
-        <th><%= finding_type.pluralize.capitalize %></th>
+<main class="page">
+  <div class="page-head">
+    <div>
+      <h1>Projects</h1>
+      <p class="page-head__sub">Counts from each repo’s Default Branch, latest scan per artifact.</p>
+    </div>
+    <div class="filter-group">
+      <%= form_with url: root_path, method: :get, role: "search", class: "search" do %>
+        <%= hidden_field_tag :visibility, @visibility if @visibility %>
+        <%= label_tag :q, "Filter projects", class: "visually-hidden" %>
+        <%= icon(:search) %>
+        <%= search_field_tag :q, @query, placeholder: "Filter projects" %>
       <% end %>
-    </tr>
-  </thead>
-  <tbody>
-    <% @projects.each do |project| %>
-      <tr id="<%= dom_id(project) %>">
-        <td><%= link_to project.name, project %></td>
-        <td><%= project.owner.display_name %></td>
-        <% Finding::TYPES.each do |finding_type| %>
-          <td class="<%= finding_type %>"><%= severity_counts(@counts.dig(project.id, finding_type)) %></td>
+      <div class="segmented" role="group" aria-label="Visibility">
+        <% [ nil, *Project.visibilities.keys ].each do |visibility| %>
+          <%= link_to visibility || "all", root_path(q: @query.presence, visibility:), aria: { current: (visibility == @visibility).to_s } %>
         <% end %>
-      </tr>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel table-scroll">
+    <table class="table projects">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>Owner</th>
+          <% Finding::TYPES.each do |finding_type| %>
+            <th><%= finding_type.pluralize.capitalize %></th>
+          <% end %>
+          <th class="num">Last scan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @projects.each do |project| %>
+          <tr id="<%= dom_id(project) %>">
+            <td class="nowrap">
+              <span class="with-icon"><%= icon(:repo) %><strong><%= link_to project.name, project %></strong></span>
+              <span class="note"><%= pluralize(@repo_counts.fetch(project.id, 0), "repo") %></span>
+            </td>
+            <td class="nowrap"><%= owner_label(project.owner) %></td>
+            <% Finding::TYPES.each do |finding_type| %>
+              <td class="<%= finding_type %>"><%= severity_counts(@counts.dig(project.id, finding_type)) %></td>
+            <% end %>
+            <td class="num muted">
+              <% if (last_scan = @last_scans[project.id]) %>
+                <time datetime="<%= last_scan.iso8601 %>" title="<%= last_scan.to_fs(:db) %>"><%= time_ago_in_words(last_scan) %> ago</time>
+              <% else %>
+                never
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @projects.empty? %>
+      <p class="empty muted">No projects match.</p>
     <% end %>
-  </tbody>
-</table>
+  </div>
+  <p class="note">Zero counts are hidden; “–” means no findings of that type.</p>
+</main>
