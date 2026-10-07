@@ -15,6 +15,7 @@ Rails 8 / PostgreSQL app that collects Trivy reports from CI and shows the findi
 - Authorization goes through scopes: `Project.visible_to` / `manageable_by`, nested records through their own `visible_to`. Records outside the scope answer 404.
 - Trivy data enters only through the `TrivyReport` allowlist (ADR 0003); logs and error messages carry generic text, report content stays out of them.
 - Failures surface: explicit status codes and exceptions; DB constraints and counters stay strict instead of being clamped.
+- UI and styling (views, CSS, helpers that render markup): follow `docs/design-system.md`.
 - Integration tests sign in with `sign_in(sub:, groups:)` from `test/test_helper.rb` (OmniAuth test mode) and build on `test/fixtures`.
 
 ## Gotchas
