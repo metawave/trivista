@@ -8,3 +8,45 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+:root {
+  --text: #1f2328;
+  --muted: #656d76;
+  --border: #d0d7de;
+  --critical: #a40e26;
+  --high: #d1242f;
+  --medium: #bc4c00;
+  --low: #9a6700;
+  --unknown: #656d76;
+}
+
+body {
+  margin: 2rem auto;
+  max-width: 72rem;
+  padding: 0 1rem;
+  font-family: system-ui, sans-serif;
+  color: var(--text);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.severity {
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.severity-critical { color: var(--critical); }
+.severity-high { color: var(--high); }
+.severity-medium { color: var(--medium); }
+.severity-low { color: var(--low); }
+.severity-unknown { color: var(--unknown); }

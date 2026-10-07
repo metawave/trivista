@@ -2,6 +2,7 @@ Rails.application.configure do
   config.x.upload_rate_limit = Integer(ENV.fetch("UPLOAD_RATE_LIMIT_PER_HOUR", 60))
   config.x.occurrence_quota = Integer(ENV.fetch("OCCURRENCE_QUOTA", 5_000_000))
   config.x.session_max_age = Integer(ENV.fetch("SESSION_MAX_AGE_HOURS", 8)).hours
+  config.x.artifact_activity_window = Integer(ENV.fetch("ARTIFACT_ACTIVITY_DAYS", 30)).days
 
   config.x.oidc.issuer = ENV["OIDC_ISSUER"]
   config.x.oidc.groups_claim = ENV.fetch("OIDC_GROUPS_CLAIM", "groups")

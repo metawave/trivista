@@ -6,4 +6,8 @@ class Owner < ApplicationRecord
   def user?
     user_id.present?
   end
+
+  def display_name
+    user? ? user.name || user.sub : group_name
+  end
 end
