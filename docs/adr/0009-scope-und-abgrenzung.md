@@ -11,6 +11,8 @@ Trivista ist bewusst schmal: Es sammelt Trivy-Reports per Push und zeigt sie an.
 - Vergleich beliebiger Scans; der Diff gilt nur zum Predecessor.
 - Speichern des Package-Inventars.
 - `trivy k8s`-Reports im MVP (Phase 2, siehe ADR 0008).
+- Owner-Transfer von Projects (Phase 2). Ein Owner-Wechsel geschieht im MVP durch Uploads in den neuen Namensraum; die Historie bleibt beim alten Project. Team-Projects überleben Austritte über Group-Service-Accounts.
+- Speicherquoten pro Owner (gemeinsam mit Retention). Im MVP begrenzen Pflicht-Ablauf der Tokens, Rate-Limits und Disk-Monitoring den Schaden.
 
 ## Consequences
 

@@ -31,7 +31,7 @@ Die von Trivy erzeugte JSON-Datei, die hochgeladen wird.
 _Avoid_: Result, Output
 
 **Scan**:
-Ein hochgeladener Trivy-Report für einen Branch zu einem Commit, oder für einen Cluster.
+Ein hochgeladener Trivy-Report für einen Branch zu einem Commit, oder für einen Cluster. Tag- und PR-Scans gehören zum Branch, aus dem getaggt wurde bzw. zum Source-Branch.
 _Avoid_: Run, Report
 
 **Commit**:
@@ -57,7 +57,7 @@ Ein einzelner Trivy-Befund vom Typ Vulnerability, Misconfiguration, Secret oder 
 _Avoid_: Issue, Alert, Package
 
 **Occurrence**:
-Ein Auftreten eines Findings in einem Scan und Artifact, mit installierter Version und Severity zum Scan-Zeitpunkt.
+Ein Auftreten eines Findings in einem Scan und Artifact, mit den dort beobachteten Werten wie installierter Version, Fundort und Severity.
 _Avoid_: Instance, Hit
 
 **Severity**:
