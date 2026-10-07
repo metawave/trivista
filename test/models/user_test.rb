@@ -11,11 +11,25 @@ class UserTest < ActiveSupport::TestCase
     assert User.create!(iss: "https://other-idp.example.com", sub: users(:alice).sub, name: "Other")
   end
 
-  test "deactivated reflects deactivated_at" do
+  test "deactivation revokes tokens of own service accounts and tokens the user created" do
+    users(:alice).deactivate!
+
+    assert upload_tokens(:alice_ci_token).reload.revoked_at
+    assert upload_tokens(:shop_ci_token).reload.revoked_at
+  end
+
+  test "reactivation does not restore tokens" do
+    users(:alice).deactivate!
+    users(:alice).reactivate!
+
     assert_not users(:alice).deactivated?
+    assert upload_tokens(:alice_ci_token).reload.revoked_at
+  end
 
-    users(:alice).update!(deactivated_at: Time.current)
+  test "break-glass admins cannot be deactivated" do
+    break_glass = User.create!(iss: "https://idp.example.com", sub: "break-glass-sub")
 
-    assert users(:alice).deactivated?
+    assert_raises(User::NotDeactivatable) { break_glass.deactivate! }
+    assert_not break_glass.reload.deactivated?
   end
 end

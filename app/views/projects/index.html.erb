@@ -1,0 +1,2 @@
+<p>Signed in as <%= Current.user.name || Current.user.sub %>.</p>
+<%= button_to "Sign out", logout_path, method: :delete %>

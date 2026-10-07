@@ -128,7 +128,7 @@ class ApiScansTest < ActionDispatch::IntegrationTest
     upload
     get scan_path(Scan.last), headers: { "Authorization" => "Bearer #{SHOP_TOKEN}" }
 
-    assert_response :unauthorized
+    assert_redirected_to login_path
   end
 
   test "leaves no multipart tempfiles behind" do

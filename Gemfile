@@ -53,3 +53,6 @@ group :test do
 end
 
 gem "solid_cache", "~> 1.0"
+
+gem "omniauth_openid_connect", "~> 0.8.0"
+gem "omniauth-rails_csrf_protection", "~> 2.0"

@@ -8,8 +8,20 @@ class ApplicationController < ActionController::Base
   before_action :require_login
 
   private
-    # Until the OIDC login exists (plan step 5), every page is closed.
     def require_login
-      head :unauthorized
+      Current.user = authenticated_user
+      return if Current.user
+
+      reset_session
+      redirect_to login_path
+    end
+
+    # Sessions end after the maximum age and on deactivation (ADR 0006).
+    def authenticated_user
+      authenticated_at = session[:authenticated_at]
+      return unless session[:user_id] && authenticated_at
+      return if Time.zone.at(authenticated_at) < Rails.configuration.x.session_max_age.ago
+
+      User.find_by(id: session[:user_id])&.then { it unless it.deactivated? }
     end
 end
