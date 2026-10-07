@@ -1,0 +1,6 @@
+# Test fixtures and their generator contain fake secrets on purpose.
+scan:
+  skip-dirs:
+    - test/fixtures/files/trivy
+  skip-files:
+    - script/generate_trivy_fixtures
