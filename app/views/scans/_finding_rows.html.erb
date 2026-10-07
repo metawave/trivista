@@ -1,0 +1,11 @@
+<% rows.each do |row| %>
+  <tr id="<%= dom_id(row.finding) %>">
+    <td class="severity"><span class="severity severity-<%= row.severity.downcase %>"><%= row.severity %></span></td>
+    <td><%= row.finding.finding_type %></td>
+    <td class="identifier"><%= report_link(row.finding.identifier, row.finding.primary_url) %></td>
+    <td><%= finding_location(row.finding) %></td>
+    <td class="versions"><%= row.installed_versions.join(", ") %></td>
+    <td class="fixed"><%= row.fixed_versions.join(", ") %></td>
+    <td><%= row.finding.title %><% if new_finding_ids&.include?(row.finding.id) %> <mark>new</mark><% end %></td>
+  </tr>
+<% end %>

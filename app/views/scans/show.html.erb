@@ -1,2 +1,49 @@
-<h1><%= link_to @scan.branch.name, @scan.branch %> / <%= @scan.commit_sha.first(8) %></h1>
-<p><%= @scan.artifact.name %> (<%= @scan.reported_artifact_type %>)</p>
+<% branch = @scan.branch %>
+<h1>
+  <%= link_to branch.repo.project.name, branch.repo.project %> /
+  <%= link_to branch.repo.name, branch.repo %> /
+  <%= link_to branch.name, branch %> /
+  <%= @scan.commit_sha.first(8) %>
+</h1>
+
+<dl class="scan-meta">
+  <dt>Artifact</dt><dd><%= @scan.artifact.name %> (<%= @scan.reported_artifact_type %>)</dd>
+  <dt>Commit</dt><dd><%= @scan.commit_sha %></dd>
+  <% if @scan.tag %><dt>Tag</dt><dd><%= @scan.tag %></dd><% end %>
+  <dt>Trigger</dt><dd><%= @scan.trigger %></dd>
+  <dt>Uploaded</dt><dd><%= @scan.created_at.to_fs(:db) %></dd>
+  <dt>Uploaded by</dt><dd><%= @scan.service_account.name %> (<%= @scan.service_account.owner.display_name %>)</dd>
+  <% if @scan.trivy_version %><dt>Trivy</dt><dd><%= @scan.trivy_version %></dd><% end %>
+  <dt>Compared to</dt>
+  <dd><%= @diff.predecessor ? link_to("#{@diff.predecessor.created_at.to_fs(:db)} #{@diff.predecessor.commit_sha.first(8)}", @diff.predecessor) : "first scan" %></dd>
+</dl>
+
+<%= form_with url: scan_path(@scan), method: :get, class: "filters" do %>
+  <%= select_tag :type, options_for_select([ [ "All types", "" ] ] + Finding::TYPES.map { [ it.pluralize.capitalize, it ] }, @finding_type.to_s) %>
+  <%= select_tag :severity, options_for_select([ [ "All severities", "" ] ] + Occurrence::SEVERITIES.map { [ it, it ] }, @severity.to_s) %>
+  <label><%= check_box_tag :only_new, "1", @only_new %> only new</label>
+  <%= submit_tag "Apply", name: nil %>
+<% end %>
+
+<h2>Findings (<%= @row_count %>)</h2>
+<% if @row_count > @rows.size %>
+  <p>Showing the first <%= @rows.size %>. Narrow the filters to see the rest.</p>
+<% end %>
+<table class="findings">
+  <thead>
+    <tr><th>Severity</th><th>Type</th><th>ID</th><th>Package / Target</th><th>Installed</th><th>Fixed in</th><th>Title</th></tr>
+  </thead>
+  <tbody class="current">
+    <%= render "finding_rows", rows: @rows, new_finding_ids: @new_finding_ids %>
+  </tbody>
+</table>
+
+<% if @no_longer_reported.any? %>
+  <h2>No longer reported (<%= @no_longer_reported.size %>)</h2>
+  <p>Not reported compared to the previous scan. This does not necessarily mean fixed; the scan configuration may have changed.</p>
+  <table class="findings">
+    <tbody class="no-longer-reported">
+      <%= render "finding_rows", rows: @no_longer_reported, new_finding_ids: nil %>
+    </tbody>
+  </table>
+<% end %>
