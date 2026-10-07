@@ -89,6 +89,16 @@ class ApiScansTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
   end
 
+  test "rejects reports with an identifying value over the text limit without storing anything" do
+    report = JSON.parse(file_fixture("trivy/fs.json").read)
+    report["Results"].first["Target"] = "a" * 1_001
+
+    assert_no_difference [ "Scan.count", "Project.count", "Finding.count" ] do
+      upload(params: upload_params.merge(project: "new-project", report: report_file(report.to_json)))
+    end
+    assert_response :unprocessable_content
+  end
+
   test "rejects uploads above the occurrence quota without storing anything" do
     with_config(occurrence_quota: 1) do
       assert_no_difference [ "Scan.count", "Project.count", "Occurrence.count" ] do

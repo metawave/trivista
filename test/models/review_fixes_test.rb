@@ -53,15 +53,17 @@ class ReviewFixesTest < ActiveSupport::TestCase
   end
 
   test "identifying values over the text limit reject the report" do
-    long = "a" * 1_001
-    documents = [ report_with(vulnerability).merge("ArtifactName" => long), report_with(vulnerability("PkgName" => long)),
-      report_with(vulnerability("PkgPath" => long)), report_with(vulnerability("InstalledVersion" => long)),
-      report_with(vulnerability).tap { it["Results"].first["Target"] = long } ]
-
-    documents.each do |document|
-      assert_raises(TrivyReport::UnsupportedReport) { TrivyReport.parse(document.to_json) }
+    identifying_documents("a" * 1_001).each do |field, document|
+      assert_raises(TrivyReport::UnsupportedReport, field) { TrivyReport.parse(document.to_json) }
     end
-    assert TrivyReport.parse(report_with(vulnerability("PkgPath" => "a" * 1_000)).to_json)
+  end
+
+  test "identifying values at the text limit keep their full identity" do
+    first, second = identifying_documents("#{"a" * 999}b"), identifying_documents("#{"a" * 999}c")
+
+    first.except("Class").each_key do |field|
+      assert_not_equal identity_of(first[field]), identity_of(second[field]), field
+    end
   end
 
   test "reports with too many findings are rejected" do
@@ -98,6 +100,33 @@ class ReviewFixesTest < ActiveSupport::TestCase
   end
 
   private
+    def identifying_documents(value)
+      { "ArtifactName" => report_with(vulnerability).merge("ArtifactName" => value),
+        "Target" => report_with(vulnerability).tap { it["Results"].first["Target"] = value },
+        "Class" => report_with(vulnerability).tap { it["Results"].first["Class"] = value },
+        "Type" => report_with(vulnerability).tap { it["Results"].first.merge!("Class" => "os-pkgs", "Type" => value) } }
+        .merge(%w[VulnerabilityID PkgName PkgPath InstalledVersion].index_with { report_with(vulnerability(it => value)) })
+        .merge(%w[ID Namespace Resource].index_with { result_with("Misconfigurations" => [ misconfiguration(it => value) ]) })
+        .merge("RuleID" => result_with("Secrets" => [ { "RuleID" => value, "StartLine" => 1 } ]))
+        .merge(%w[Name FilePath].index_with { result_with("Licenses" => [ { "Name" => "MIT", "FilePath" => "LICENSE", it => value } ]) })
+        .merge("License PkgName" => result_with("Licenses" => [ { "Name" => "MIT", "PkgName" => value } ]))
+    end
+
+    def identity_of(document)
+      report = TrivyReport.parse(document.to_json)
+      [ report.artifact_name, report.findings.map(&:occurrence_key) ]
+    end
+
+    def misconfiguration(overrides)
+      resource = overrides.delete("Resource") || "aws_s3_bucket.logs"
+      { "ID" => "CUSTOM-1", "Namespace" => "user.custom", "Status" => "FAIL", "CauseMetadata" => { "Resource" => resource } }.merge(overrides)
+    end
+
+    def result_with(entries)
+      { "SchemaVersion" => 2, "ArtifactName" => ".", "ArtifactType" => "filesystem",
+        "Results" => [ { "Target" => "main.tf", "Class" => "config", "Type" => "terraform" }.merge(entries) ] }
+    end
+
     def report_with(*vulnerabilities)
       { "SchemaVersion" => 2, "ArtifactName" => ".", "ArtifactType" => "filesystem",
         "Results" => [ { "Target" => "Gemfile.lock", "Class" => "lang-pkgs", "Type" => "bundler", "Vulnerabilities" => vulnerabilities } ] }
