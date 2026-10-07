@@ -3,3 +3,4 @@ alice:
 
 team_a:
   group_name: team-a
+  occurrence_count: 1

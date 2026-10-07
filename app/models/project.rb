@@ -7,9 +7,7 @@ class Project < ApplicationRecord
   enum :visibility, { user: "user", group: "group", public: "public" }, prefix: :visible_to, validate: true
 
   # Owner user, members of the owner group and admins manage a project (ADR 0007).
-  scope :manageable_by, ->(user) {
-    user.admin? ? all : where(owner: Owner.where(user:).or(Owner.where(group_name: user.groups)))
-  }
+  scope :manageable_by, ->(user) { user.admin? ? all : where(owner: Owner.managed_by(user)) }
   scope :visible_to, ->(user) {
     manageable_by(user).or(where(visibility: "group", visibility_group: user.groups)).or(where(visibility: "public"))
   }
@@ -31,6 +29,8 @@ class Project < ApplicationRecord
       end
     end
   end
+
+  before_validation { self.visibility_group = nil if owner&.user? && !visible_to_group? }
 
   validate :user_visibility_requires_user_owner
   validate :visibility_group_allowed

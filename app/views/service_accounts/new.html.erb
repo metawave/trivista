@@ -1,0 +1,16 @@
+<h1>New service account</h1>
+
+<%= form_with model: @service_account do |form| %>
+  <% @service_account.errors.full_messages.each do |message| %>
+    <p class="flash flash-alert"><%= message %></p>
+  <% end %>
+  <p>
+    <%= form.label :name %>
+    <%= form.text_field :name, required: true %>
+  </p>
+  <p>
+    <%= form.label :owner %>
+    <%= form.select :owner, [ [ "Me", "user" ] ] + Current.user.groups.map { [ it, "group:#{it}" ] }, selected: params.dig(:service_account, :owner) %>
+  </p>
+  <%= form.submit "Create" %>
+<% end %>

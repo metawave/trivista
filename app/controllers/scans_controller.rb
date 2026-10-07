@@ -18,4 +18,10 @@ class ScansController < ApplicationController
       ScanFindings.new(@diff.predecessor, finding_ids: @diff.no_longer_reported_finding_ids)
         .rows(finding_type: @finding_type, severity: @severity).first(ROW_LIMIT) : []
   end
+
+  def destroy
+    scan = Scan.where(branch: Branch.where(repo: Repo.where(project: manageable_projects))).find(params[:id])
+    Purge.new(scan).call
+    redirect_to scan.branch, notice: "Scan deleted."
+  end
 end

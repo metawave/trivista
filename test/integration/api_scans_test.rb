@@ -97,13 +97,13 @@ class ApiScansTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :insufficient_storage
-    assert_equal 0, owners(:team_a).reload.occurrence_count
+    assert_equal 1, owners(:team_a).reload.occurrence_count
   end
 
   test "counts stored occurrences against the owner quota" do
     upload
 
-    assert_equal Scan.last.occurrences.count, owners(:team_a).reload.occurrence_count
+    assert_equal 1 + Scan.last.occurrences.count, owners(:team_a).reload.occurrence_count
   end
 
   test "resolves projects only in the namespace of the token owner" do

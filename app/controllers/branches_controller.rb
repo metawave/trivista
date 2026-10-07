@@ -9,4 +9,13 @@ class BranchesController < ApplicationController
     @trigger = Scan::TRIGGERS.include?(params[:trigger]) ? params[:trigger] : nil
     @series = Trend.new(@branch, finding_type: @finding_type, since: RANGES[@range]&.ago, trigger: @trigger).series
   end
+
+  def destroy
+    branch = Branch.where(repo: Repo.where(project: manageable_projects)).find(params[:id])
+    project = branch.repo.project
+    return redirect_to(edit_project_path(project), alert: "Type the branch name to confirm.") unless confirmed?(branch.name)
+
+    Purge.new(branch).call
+    redirect_to edit_project_path(project), notice: "Branch #{branch.name} deleted."
+  end
 end

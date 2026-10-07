@@ -50,3 +50,23 @@ th, td {
 .severity-medium { color: var(--medium); }
 .severity-low { color: var(--low); }
 .severity-unknown { color: var(--unknown); }
+
+.main-nav {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.main-nav .user {
+  margin-left: auto;
+  color: var(--muted);
+}
+
+form.inline, .inline form {
+  display: inline;
+}
+
+.flash-alert { color: var(--high); }
+.flash-notice { color: var(--muted); }

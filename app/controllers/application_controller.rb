@@ -7,7 +7,21 @@ class ApplicationController < ActionController::Base
 
   before_action :require_login
 
+  helper_method :manageable?
+
   private
+    def manageable?(project)
+      Project.manageable_by(Current.user).exists?(project.id)
+    end
+
+    def manageable_projects
+      Project.manageable_by(Current.user)
+    end
+
+    def confirmed?(name)
+      params[:confirmation] == name
+    end
+
     def require_login
       Current.user = authenticated_user
       return if Current.user

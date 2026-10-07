@@ -18,6 +18,10 @@
   <dd><%= @diff.predecessor ? link_to("#{@diff.predecessor.created_at.to_fs(:db)} #{@diff.predecessor.commit_sha.first(8)}", @diff.predecessor) : "first scan" %></dd>
 </dl>
 
+<% if manageable?(branch.repo.project) %>
+  <%= button_to "Delete scan", scan_path(@scan), method: :delete, data: { turbo_confirm: "Delete this scan?" } %>
+<% end %>
+
 <%= form_with url: scan_path(@scan), method: :get, class: "filters" do %>
   <%= select_tag :type, options_for_select([ [ "All types", "" ] ] + Finding::TYPES.map { [ it.pluralize.capitalize, it ] }, @finding_type.to_s) %>
   <%= select_tag :severity, options_for_select([ [ "All severities", "" ] ] + Occurrence::SEVERITIES.map { [ it, it ] }, @severity.to_s) %>

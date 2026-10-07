@@ -1,0 +1,28 @@
+<h1><%= @service_account.name %> <small>(<%= @service_account.owner.display_name %>)</small></h1>
+
+<h2>Upload tokens</h2>
+<table>
+  <thead><tr><th>Created by</th><th>Created</th><th>Expires</th><th>Last used</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+    <% @service_account.upload_tokens.includes(:created_by).order(created_at: :desc).each do |token| %>
+      <tr>
+        <td><%= token.created_by.name || token.created_by.sub %></td>
+        <td><%= token.created_at.to_date %></td>
+        <td><%= token.expires_at.to_date %></td>
+        <td><%= token.last_used_at&.to_fs(:db) || "never" %></td>
+        <td><%= token.revoked_at ? "revoked" : (token.expires_at.past? ? "expired" : "active") %></td>
+        <td><% unless token.revoked_at %><%= button_to "Revoke", upload_token_path(token), method: :delete %><% end %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>New token</h2>
+<%= form_with model: @upload_token, url: service_account_upload_tokens_path(@service_account), data: { turbo: false } do |form| %>
+  <% @upload_token.errors.full_messages.each do |message| %>
+    <p class="flash flash-alert"><%= message %></p>
+  <% end %>
+  <%= form.label :expires_on, "Expires on" %>
+  <%= form.date_field :expires_on, required: true, min: Date.tomorrow, max: Rails.configuration.x.token_max_lifetime.from_now.to_date %>
+  <%= form.submit "Create token" %>
+<% end %>

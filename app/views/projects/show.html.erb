@@ -1,4 +1,5 @@
 <h1><%= @project.name %></h1>
+<p>Owner: <%= @project.owner.display_name %> · Visibility: <%= @project.visibility %><% if manageable?(@project) %> · <%= link_to "Settings", edit_project_path(@project) %><% end %></p>
 <ul>
   <% @project.repos.order(:name).each do |repo| %>
     <li><%= link_to repo.name, repo %></li>

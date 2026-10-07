@@ -1,0 +1,14 @@
+<h1>Service accounts</h1>
+<p><%= link_to "New service account", new_service_account_path %></p>
+
+<table>
+  <thead><tr><th>Name</th><th>Owner</th></tr></thead>
+  <tbody>
+    <% @service_accounts.each do |service_account| %>
+      <tr>
+        <td><%= link_to service_account.name, service_account %></td>
+        <td><%= service_account.owner.display_name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

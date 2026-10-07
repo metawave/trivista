@@ -1,0 +1,21 @@
+<h1>Users</h1>
+<table>
+  <thead><tr><th>Name</th><th>Groups</th><th>Admin</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name || user.sub %></td>
+        <td><%= user.groups.join(", ") %></td>
+        <td><%= user.admin? ? "yes" : "" %></td>
+        <td><%= user.deactivated? ? "deactivated" : "active" %></td>
+        <td>
+          <% if user.deactivated? %>
+            <%= button_to "Reactivate", reactivate_admin_user_path(user), method: :patch %>
+          <% elsif !user.break_glass? %>
+            <%= button_to "Deactivate", deactivate_admin_user_path(user), method: :patch %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

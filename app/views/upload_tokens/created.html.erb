@@ -1,0 +1,5 @@
+<h1>Token created</h1>
+<p>Copy the token now. It is shown only once.</p>
+<p><code class="token-secret"><%= @secret %></code></p>
+<p>Expires on <%= @upload_token.expires_at.to_date %>.</p>
+<p><%= link_to "Back to #{@service_account.name}", @service_account %></p>
