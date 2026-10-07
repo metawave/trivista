@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= content_for(:title) || "Trivista" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -25,16 +25,29 @@
 
   <body>
     <% if Current.user %>
-      <nav class="main-nav">
-        <%= link_to "Projects", root_path %>
-        <%= link_to "Service accounts", service_accounts_path %>
-        <% if Current.user.admin? %><%= link_to "Users", admin_users_path %><% end %>
-        <span class="user"><%= Current.user.name || Current.user.sub %></span>
-        <%= button_to "Sign out", logout_path, method: :delete, form_class: "inline" %>
-      </nav>
+      <header class="app-header">
+        <div class="app-header__inner">
+          <div class="app-header__start">
+            <%= link_to root_path, class: "brand" do %><%= logo %>Trivista<% end %>
+            <nav class="main-nav" aria-label="Main">
+              <%= nav_link "Projects", root_path, active: controller_name.in?(%w[projects repos branches scans]) %>
+              <%= nav_link "Service accounts", service_accounts_path, active: controller_name.in?(%w[service_accounts upload_tokens]) %>
+              <% if Current.user.admin? %><%= nav_link "Users", admin_users_path, active: controller_name == "users" %><% end %>
+            </nav>
+          </div>
+          <div class="app-header__end">
+            <span class="user"><%= Current.user.name || Current.user.sub %></span>
+            <%= button_to "Sign out", logout_path, method: :delete, class: "btn btn--small" %>
+          </div>
+        </div>
+      </header>
     <% end %>
-    <% flash.each do |type, message| %>
-      <p class="flash flash-<%= type %>"><%= message %></p>
+    <% if flash.any? %>
+      <div class="flash-area">
+        <% flash.each do |type, message| %>
+          <p class="flash flash--<%= type %>" role="<%= type == "alert" ? "alert" : "status" %>"><%= icon(type == "alert" ? :alert : :notice) %><%= message %></p>
+        <% end %>
+      </div>
     <% end %>
     <%= yield %>
   </body>

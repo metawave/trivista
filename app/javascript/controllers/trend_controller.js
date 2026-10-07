@@ -16,11 +16,17 @@ export default class extends Controller {
         datasets: this.severitiesValue.map((severity) => ({
           label: severity,
           data: this.pointsValue.map((point) => point.counts[severity] || 0),
-          backgroundColor: styles.getPropertyValue(`--${severity.toLowerCase()}`).trim()
+          backgroundColor: styles.getPropertyValue(`--sev-${severity.toLowerCase()}`).trim(),
+          maxBarThickness: 44
         }))
       },
       options: {
-        scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } } }
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { stacked: true, grid: { display: false }, ticks: { font: { family: "IBM Plex Mono", size: 11 } } },
+          y: { stacked: true, beginAtZero: true, border: { display: false }, ticks: { precision: 0, font: { family: "IBM Plex Mono", size: 11 } } }
+        }
       }
     })
   }
