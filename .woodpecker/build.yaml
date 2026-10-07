@@ -1,0 +1,24 @@
+depends_on:
+  - ci
+
+when:
+  - event: [push, manual]
+    branch: main
+
+steps:
+  - name: build-and-push
+    image: woodpeckerci/plugin-docker-buildx:6.1.1
+    settings:
+      repo: registry.metawave.ch/metawave/trivista
+      tags:
+        - "main-${CI_PIPELINE_CREATED}-${CI_COMMIT_SHA:0:8}"
+        - latest
+      dockerfile: Dockerfile
+      pull_image: true
+      cache_images:
+        - registry.metawave.ch/metawave/trivista:cache
+      registry: registry.metawave.ch
+      username:
+        from_secret: registry_username
+      password:
+        from_secret: registry_password

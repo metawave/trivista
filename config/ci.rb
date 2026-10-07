@@ -2,6 +2,7 @@
 
 CI.run do
   step "Setup", "bin/setup --skip-server"
+  step "Setup: Test database", "env RAILS_ENV=test bin/rails db:prepare"
 
   step "Style: Ruby", "bin/rubocop"
 

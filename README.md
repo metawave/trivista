@@ -125,3 +125,5 @@ mise exec -- bin/ci
 `mise.toml` provides Ruby, Trivy and the development environment variables; put personal overrides into `mise.local.toml`. `bin/ci` runs setup, RuboCop, the audits, Brakeman and the tests. Notes for AI coding agents are in `AGENTS.md`.
 
 `script/generate_trivy_fixtures` regenerates the Trivy report fixtures from throwaway sources with fake secrets; it needs Docker and Trivy. `trivy.yaml` excludes these fake secrets when Trivy scans this repository.
+
+Woodpecker (`.woodpecker/`) runs `bin/ci` on every push and pull request in the `trivista-ci` image (`Dockerfile.ci`) and, on `main`, pushes `registry.metawave.ch/metawave/trivista` tagged `main-<created>-<sha>` and `latest`. It needs the secrets `registry_username` and `registry_password` and `woodpeckerci/plugin-docker-buildx` in `WOODPECKER_PLUGINS_PRIVILEGED`. The `ci-image` workflow rebuilds `trivista-ci` when `Gemfile`, `Gemfile.lock` or `Dockerfile.ci` change; run it manually once before the first pipeline.

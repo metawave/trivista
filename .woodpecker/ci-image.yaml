@@ -1,0 +1,23 @@
+when:
+  - event: [push, manual]
+    branch: main
+    path:
+      - Gemfile
+      - Gemfile.lock
+      - Dockerfile.ci
+
+steps:
+  - name: build-ci-image
+    image: woodpeckerci/plugin-docker-buildx:6.1.1
+    settings:
+      repo: registry.metawave.ch/metawave/trivista-ci
+      tags: latest
+      dockerfile: Dockerfile.ci
+      pull_image: true
+      cache_images:
+        - registry.metawave.ch/metawave/trivista-ci:cache
+      registry: registry.metawave.ch
+      username:
+        from_secret: registry_username
+      password:
+        from_secret: registry_password
