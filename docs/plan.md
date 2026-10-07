@@ -1,5 +1,7 @@
 # Umsetzungsplan MVP
 
+> Abgeschlossen mit dem MVP und seitdem nicht mehr nachgeführt. Massgeblich sind `CONTEXT.md`, `docs/adr/`, `docs/design-system.md` und die README.
+
 Vertical Slices, jeder Schritt endet mit grünem Linter (`rubocop-rails-omakase`, Default-Config) und grünen Tests (Minitest). TDD für Importer, Upload-API, Login und Autorisierung. Autorisierung über Model-Scopes, ohne zusätzliches Gem. Grundlage: `CONTEXT.md` und `docs/adr/`. Jeder konfigurierbare Wert aus den ADRs wird als Umgebungsvariable mit Default im Schritt eingeführt, der ihn braucht, und getestet.
 
 | # | Schritt | Verify |
