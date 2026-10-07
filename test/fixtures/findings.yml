@@ -1,0 +1,7 @@
+openssl_cve:
+  project: shop
+  finding_type: vulnerability
+  fingerprint: <%= Digest::SHA256.hexdigest("vulnerability|CVE-2024-0001|openssl|os-pkgs|debian") %>
+  identifier: CVE-2024-0001
+  pkg_name: openssl
+  title: openssl flaw

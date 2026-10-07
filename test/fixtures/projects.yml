@@ -1,0 +1,9 @@
+shop:
+  owner: team_a
+  name: shop
+  visibility: group
+
+alice_tools:
+  owner: alice
+  name: tools
+  visibility: user

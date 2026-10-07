@@ -1,0 +1,5 @@
+shop_ci_token:
+  service_account: shop_ci
+  token_digest: <%= Digest::SHA256.hexdigest("shop-ci-secret") %>
+  expires_at: <%= 30.days.from_now.to_fs(:db) %>
+  created_by: alice

@@ -1,0 +1,4 @@
+shop_image:
+  project: shop
+  category: container_image
+  name: registry.example.com/shop

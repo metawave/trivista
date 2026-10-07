@@ -1,0 +1,11 @@
+alice:
+  iss: https://idp.example.com
+  sub: alice-sub
+  name: Alice
+  groups: ["team-a", "trivista-users"]
+
+bob:
+  iss: https://idp.example.com
+  sub: bob-sub
+  name: Bob
+  groups: ["trivista-users"]

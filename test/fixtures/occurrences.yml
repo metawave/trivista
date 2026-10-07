@@ -1,0 +1,5 @@
+openssl_in_first:
+  scan: shop_main_first
+  finding: openssl_cve
+  installed_version: 3.0.1
+  severity: HIGH
