@@ -117,13 +117,11 @@ Map the CI event to a `trigger` value (`push`, `tag`, `schedule`, `manual`, `pr`
 ## Development
 
 ```sh
-mise install                       # Trivy version of the project; Ruby as in .ruby-version
+mise install
 docker run -d --name trivista-postgres -e POSTGRES_PASSWORD=postgres -p 127.0.0.1:55432:5432 postgres:18
-export DATABASE_URL=postgres://postgres:postgres@127.0.0.1:55432
-export OIDC_LOGIN_GROUP=trivista_users
-bin/rails db:prepare
-bin/rails test
-bin/rubocop && bin/brakeman && bin/bundler-audit
+mise exec -- bin/ci
 ```
+
+`mise.toml` provides Ruby, Trivy and the development environment variables; put personal overrides into `mise.local.toml`. `bin/ci` runs setup, RuboCop, the audits, Brakeman and the tests. Notes for AI coding agents are in `AGENTS.md`.
 
 `script/generate_trivy_fixtures` regenerates the Trivy report fixtures from throwaway sources with fake secrets; it needs Docker and Trivy. `trivy.yaml` excludes these fake secrets when Trivy scans this repository.

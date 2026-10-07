@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bin/ci)",
+      "Bash(bin/rails test *)",
+      "Bash(bin/rubocop *)",
+      "Bash(bin/brakeman *)",
+      "Bash(bin/bundler-audit *)",
+      "Bash(mise exec -- bin/ci)",
+      "Bash(mise exec -- bin/rails test *)",
+      "Bash(mise exec -- bin/rubocop *)",
+      "Bash(mise exec -- bin/brakeman *)",
+      "Bash(mise exec -- trivy *)"
+    ]
+  }
+}

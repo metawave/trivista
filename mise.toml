@@ -1,2 +1,8 @@
 [tools]
+ruby = "4.0.7"
 trivy = "0.75.0"
+
+# Local development defaults; override in mise.local.toml.
+[env]
+DATABASE_URL = "postgres://postgres:postgres@127.0.0.1:55432"
+OIDC_LOGIN_GROUP = "trivista_users"

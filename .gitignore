@@ -26,3 +26,6 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+
+# Personal mise overrides
+/mise.local.toml
