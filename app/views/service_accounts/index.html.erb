@@ -1,14 +1,25 @@
-<h1>Service accounts</h1>
-<p><%= link_to "New service account", new_service_account_path %></p>
+<% content_for :title, "Service accounts" %>
+<main class="page page--narrow">
+  <div class="page-head">
+    <div>
+      <h1>Service accounts</h1>
+      <p class="page-head__sub">Identities for CI pipelines. Their Upload Tokens can only upload scans.</p>
+    </div>
+    <%= link_to new_service_account_path, class: "btn btn--primary" do %><%= icon(:plus) %>New service account<% end %>
+  </div>
 
-<table>
-  <thead><tr><th>Name</th><th>Owner</th></tr></thead>
-  <tbody>
-    <% @service_accounts.each do |service_account| %>
-      <tr>
-        <td><%= link_to service_account.name, service_account %></td>
-        <td><%= service_account.owner.display_name %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <div class="panel table-scroll">
+    <table class="table">
+      <thead><tr><th>Name</th><th>Owner</th></tr></thead>
+      <tbody>
+        <% @service_accounts.each do |service_account| %>
+          <tr>
+            <td><strong><%= link_to service_account.name, service_account, class: "mono" %></strong></td>
+            <td class="muted"><%= owner_label(service_account.owner) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @service_accounts.empty? %><p class="empty muted">No service accounts yet.</p><% end %>
+  </div>
+</main>

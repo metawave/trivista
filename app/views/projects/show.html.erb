@@ -1,7 +1,33 @@
-<h1><%= @project.name %></h1>
-<p>Owner: <%= @project.owner.display_name %> · Visibility: <%= @project.visibility %><% if manageable?(@project) %> · <%= link_to "Settings", edit_project_path(@project) %><% end %></p>
-<ul>
-  <% @project.repos.order(:name).each do |repo| %>
-    <li><%= link_to repo.name, repo %></li>
-  <% end %>
-</ul>
+<% content_for :title, @project.name %>
+<main class="page">
+  <div class="page-head">
+    <div>
+      <h1><%= @project.name %></h1>
+      <p class="page-head__sub">
+        <span>Owner <strong><%= @project.owner.display_name %></strong></span>
+        <%= visibility_label(@project) %>
+      </p>
+    </div>
+    <% if manageable?(@project) %>
+      <%= link_to edit_project_path(@project), class: "btn" do %><%= icon(:settings) %>Settings<% end %>
+    <% end %>
+  </div>
+
+  <section class="panel">
+    <div class="panel__head"><h2 class="with-icon">Repos <span class="count"><%= @repos.size %></span></h2></div>
+    <ul class="list">
+      <% @repos.each do |repo| %>
+        <li>
+          <span class="with-icon"><%= icon(:repo) %><%= link_to repo.name, repo, class: "mono" %></span>
+          <span class="meta-line">
+            <% if repo.default_branch %>
+              <%= link_to repo.default_branch, class: "chip chip--fill" do %><%= icon(:branch, size: 12) %><%= repo.default_branch.name %><% end %>
+            <% end %>
+            <%= pluralize(@branch_counts.fetch(repo.id, 0), "branch") %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+    <% if @repos.empty? %><p class="empty muted">No repos yet. They appear with the first upload.</p><% end %>
+  </section>
+</main>

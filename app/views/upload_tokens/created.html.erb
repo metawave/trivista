@@ -1,5 +1,22 @@
-<h1>Token created</h1>
-<p>Copy the token now. It is shown only once.</p>
-<p><code class="token-secret"><%= @secret %></code></p>
-<p>Expires on <%= @upload_token.expires_at.to_date %>.</p>
-<p><%= link_to "Back to #{@service_account.name}", @service_account %></p>
+<% content_for :title, "Token created" %>
+<main class="page page--slim">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <%= link_to "Service accounts", service_accounts_path %><span aria-hidden="true">/</span>
+    <%= link_to @service_account.name, @service_account, class: "mono" %><span aria-hidden="true">/</span>
+    <span aria-current="page">Token created</span>
+  </nav>
+  <h1>Token created</h1>
+
+  <section class="panel panel--padded form">
+    <p class="flash flash--warning" role="alert"><%= icon(:warning) %>Copy the token now. It is shown only once.</p>
+    <div class="field">
+      <span class="field__label">Upload Token</span>
+      <div class="form-row">
+        <code class="token-secret"><%= @secret %></code>
+        <button type="button" class="btn btn--primary" data-controller="clipboard" data-clipboard-text-value="<%= @secret %>" data-action="clipboard#copy"><%= icon(:copy) %>Copy</button>
+      </div>
+      <span class="note">Expires on <span class="mono"><%= @upload_token.expires_at.to_date %></span>. Allows scan uploads only.</span>
+    </div>
+  </section>
+  <p><%= link_to "← Back to #{@service_account.name}", @service_account %></p>
+</main>

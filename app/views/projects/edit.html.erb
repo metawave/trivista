@@ -1,48 +1,83 @@
-<h1><%= link_to @project.name, @project %> settings</h1>
+<% content_for :title, "Settings · #{@project.name}" %>
+<main class="page page--narrow">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <%= link_to @project.name, @project %><span aria-hidden="true">/</span><span aria-current="page">Settings</span>
+  </nav>
+  <h1>Settings</h1>
 
-<h2>Visibility</h2>
-<%= form_with model: @project do |form| %>
-  <% @project.errors.full_messages.each do |message| %>
-    <p class="flash flash-alert"><%= message %></p>
-  <% end %>
-  <% options = (@project.owner.user? ? [ [ "Only me", "user" ] ] : []) + [ [ "Group", "group" ], [ "All signed-in users", "public" ] ] %>
-  <%= form.select :visibility, options %>
-  <% if @project.owner.user? %>
-    <%= form.select :visibility_group, Current.user == @project.owner.user ? @project.owner.user.groups : [ @project.visibility_group ].compact, include_blank: "(group)" %>
-  <% end %>
-  <%= form.submit "Save" %>
-<% end %>
-
-<h2>Repos</h2>
-<% @project.repos.includes(:branches).order(:name).each do |repo| %>
-  <section>
-    <h3><%= repo.name %></h3>
-    <%= form_with model: repo do |form| %>
-      <%= form.label :default_branch_id, "Default branch" %>
-      <%= form.select :default_branch_id, repo.branches.sort_by(&:name).map { [ it.name, it.id ] } %>
-      <%= form.submit "Set" %>
-    <% end %>
-    <ul>
-      <% repo.branches.sort_by(&:name).each do |branch| %>
-        <li>
-          <%= branch.name %>
-          <%= form_with url: branch_path(branch), method: :delete, class: "inline" do %>
-            <%= text_field_tag :confirmation, nil, placeholder: "type #{branch.name}" %>
-            <%= submit_tag "Delete branch" %>
-          <% end %>
-        </li>
+  <section class="panel panel--padded section-split">
+    <div class="section-split__intro">
+      <h2>Visibility</h2>
+      <span class="note">Who can see this project and its findings.</span>
+    </div>
+    <%= form_with model: @project, class: "section-split__body form" do |form| %>
+      <% @project.errors.full_messages.each do |message| %>
+        <p class="flash flash--alert" role="alert"><%= icon(:alert) %><%= message %></p>
       <% end %>
-    </ul>
-    <%= form_with url: repo_path(repo), method: :delete do %>
-      <%= text_field_tag :confirmation, nil, placeholder: "type #{repo.name}" %>
-      <%= submit_tag "Delete repo" %>
+      <div class="form-row">
+        <% options = (@project.owner.user? ? [ [ "Only me", "user" ] ] : []) + [ [ "Group", "group" ], [ "All signed-in users", "public" ] ] %>
+        <div class="field">
+          <%= form.label :visibility %>
+          <%= form.select :visibility, options %>
+        </div>
+        <% if @project.owner.user? %>
+          <div class="field">
+            <%= form.label :visibility_group, "Group" %>
+            <%= form.select :visibility_group, Current.user == @project.owner.user ? @project.owner.user.groups : [ @project.visibility_group ].compact, { include_blank: "(group)" }, class: "mono" %>
+          </div>
+        <% end %>
+        <%= form.submit "Save", class: "btn btn--primary" %>
+      </div>
     <% end %>
   </section>
-<% end %>
 
-<h2>Delete project</h2>
-<p>Deletes all repos, branches, scans and findings of this project.</p>
-<%= form_with url: project_path(@project), method: :delete do %>
-  <%= text_field_tag :confirmation, nil, placeholder: "type #{@project.name}" %>
-  <%= submit_tag "Delete project" %>
-<% end %>
+  <section class="form">
+    <h2>Repos</h2>
+    <% @project.repos.includes(:branches).order(:name).each do |repo| %>
+      <article class="panel">
+        <div class="panel__head">
+          <h3 class="mono"><%= repo.name %></h3>
+          <%= form_with model: repo, class: "form-row" do |form| %>
+            <div class="field">
+              <%= form.label :default_branch_id, "Default branch" %>
+              <%= form.select :default_branch_id, repo.branches.sort_by(&:name).map { [ it.name, it.id ] }, {}, class: "mono" %>
+            </div>
+            <%= form.submit "Set", class: "btn" %>
+          <% end %>
+        </div>
+        <ul class="list">
+          <% repo.branches.sort_by(&:name).each do |branch| %>
+            <li>
+              <span class="with-icon mono"><%= branch.name %><% if repo.default_branch_id == branch.id %><span class="chip chip--fill chip--plain">Default</span><% end %></span>
+              <%= form_with url: branch_path(branch), method: :delete, class: "inline-form" do %>
+                <%= label_tag "confirmation_branch_#{branch.id}", "Type #{branch.name} to confirm", class: "visually-hidden" %>
+                <%= text_field_tag :confirmation, nil, id: "confirmation_branch_#{branch.id}", placeholder: "type #{branch.name}", class: "mono small" %>
+                <%= submit_tag "Delete branch", class: "btn btn--small btn--danger" %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+        <div class="danger-row">
+          <span class="note">Delete repo with all branches, scans and findings.</span>
+          <%= form_with url: repo_path(repo), method: :delete, class: "inline-form" do %>
+            <%= label_tag "confirmation_repo_#{repo.id}", "Type #{repo.name} to confirm", class: "visually-hidden" %>
+            <%= text_field_tag :confirmation, nil, id: "confirmation_repo_#{repo.id}", placeholder: "type #{repo.name}", class: "mono small" %>
+            <%= submit_tag "Delete repo", class: "btn btn--small btn--danger" %>
+          <% end %>
+        </div>
+      </article>
+    <% end %>
+  </section>
+
+  <section class="panel panel--padded panel--danger section-split">
+    <div class="section-split__intro">
+      <h2 class="title-danger">Delete project</h2>
+      <span class="note">Deletes all repos, branches, scans and findings of this project.</span>
+    </div>
+    <%= form_with url: project_path(@project), method: :delete, class: "inline-form" do %>
+      <%= label_tag :confirmation_project, "Type #{@project.name} to confirm", class: "visually-hidden" %>
+      <%= text_field_tag :confirmation, nil, id: "confirmation_project", placeholder: "type #{@project.name}", class: "mono" %>
+      <%= submit_tag "Delete project", class: "btn btn--danger" %>
+    <% end %>
+  </section>
+</main>

@@ -12,6 +12,8 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.visible_to(Current.user).find(params[:id])
+    @repos = @project.repos.includes(:default_branch).order(:name)
+    @branch_counts = Branch.where(repo: @repos).group(:repo_id).count
   end
 
   def edit

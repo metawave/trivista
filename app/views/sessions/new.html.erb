@@ -1,2 +1,12 @@
-<h1>Trivista</h1>
-<%= button_to "Sign in", "/auth/openid_connect", data: { turbo: false } %>
+<main class="sign-in">
+  <div class="sign-in__box">
+    <div class="sign-in__brand"><%= logo(size: 36) %><h1>Trivista</h1></div>
+    <section class="sign-in__card">
+      <div>
+        <h2>Sign in</h2>
+        <p class="note">Trivy findings across your projects, read-only.</p>
+      </div>
+      <%= button_to "/auth/openid_connect", class: "btn btn--primary", data: { turbo: false } do %><%= icon(:sign_in) %>Sign in<% end %>
+    </section>
+  </div>
+</main>

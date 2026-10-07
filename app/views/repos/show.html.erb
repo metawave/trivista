@@ -1,6 +1,20 @@
-<h1><%= link_to @repo.project.name, @repo.project %> / <%= @repo.name %></h1>
-<ul>
-  <% @repo.branches.order(:name).each do |branch| %>
-    <li><%= link_to branch.name, branch %></li>
-  <% end %>
-</ul>
+<% content_for :title, @repo.name %>
+<main class="page">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <%= link_to @repo.project.name, @repo.project %><span aria-hidden="true">/</span>
+    <span class="mono" aria-current="page"><%= @repo.name %></span>
+  </nav>
+  <h1 class="page-title--mono"><%= @repo.name %></h1>
+
+  <section class="panel">
+    <div class="panel__head"><h2>Branches</h2></div>
+    <ul class="list">
+      <% @repo.branches.order(:name).each do |branch| %>
+        <li>
+          <span class="with-icon"><%= icon(:branch) %><%= link_to branch.name, branch, class: "mono" %></span>
+          <% if @repo.default_branch_id == branch.id %><span class="chip chip--fill chip--plain">Default Branch</span><% end %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+</main>

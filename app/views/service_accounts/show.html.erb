@@ -1,28 +1,53 @@
-<h1><%= @service_account.name %> <small>(<%= @service_account.owner.display_name %>)</small></h1>
+<% content_for :title, @service_account.name %>
+<main class="page page--narrow">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <%= link_to "Service accounts", service_accounts_path %><span aria-hidden="true">/</span>
+    <span class="mono" aria-current="page"><%= @service_account.name %></span>
+  </nav>
+  <div>
+    <h1 class="page-title--mono"><%= @service_account.name %></h1>
+    <p class="page-head__sub">Owned by <%= owner_label(@service_account.owner) %></p>
+  </div>
 
-<h2>Upload tokens</h2>
-<table>
-  <thead><tr><th>Created by</th><th>Created</th><th>Expires</th><th>Last used</th><th>Status</th><th></th></tr></thead>
-  <tbody>
-    <% @service_account.upload_tokens.includes(:created_by).order(created_at: :desc).each do |token| %>
-      <tr>
-        <td><%= token.created_by.name || token.created_by.sub %></td>
-        <td><%= token.created_at.to_date %></td>
-        <td><%= token.expires_at.to_date %></td>
-        <td><%= token.last_used_at&.to_fs(:db) || "never" %></td>
-        <td><%= token.revoked_at ? "revoked" : (token.expires_at.past? ? "expired" : "active") %></td>
-        <td><% unless token.revoked_at %><%= button_to "Revoke", upload_token_path(token), method: :delete %><% end %></td>
-      </tr>
+  <section class="panel">
+    <div class="panel__head"><h2>Upload tokens</h2></div>
+    <div class="table-scroll">
+      <table class="table">
+        <thead><tr><th>Created by</th><th>Created</th><th>Expires</th><th>Last used</th><th>Status</th><th><span class="visually-hidden">Actions</span></th></tr></thead>
+        <tbody>
+          <% @service_account.upload_tokens.includes(:created_by).order(created_at: :desc).each do |token| %>
+            <% status = token.revoked_at ? "revoked" : (token.expires_at.past? ? "expired" : "active") %>
+            <tr class="<%= "muted" unless status == "active" %>">
+              <td><%= token.created_by.name || token.created_by.sub %></td>
+              <td class="mono"><%= token.created_at.to_date %></td>
+              <td class="mono"><%= token.expires_at.to_date %></td>
+              <td class="mono"><%= token.last_used_at&.to_fs(:db) || "never" %></td>
+              <td><span class="status <%= "status--off" unless status == "active" %>"><%= status %></span></td>
+              <td class="num"><% unless token.revoked_at %><%= button_to "Revoke", upload_token_path(token), method: :delete, class: "btn btn--small btn--danger" %><% end %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% if @service_account.upload_tokens.none? %><p class="empty muted">No tokens yet.</p><% end %>
+  </section>
+
+  <section class="panel panel--padded section-split">
+    <div class="section-split__intro">
+      <h2>New token</h2>
+      <span class="note">The secret is shown once after creation.</span>
+    </div>
+    <%= form_with model: @upload_token, url: service_account_upload_tokens_path(@service_account), class: "section-split__body form", data: { turbo: false } do |form| %>
+      <% @upload_token.errors.full_messages.each do |message| %>
+        <p class="flash flash--alert" role="alert"><%= icon(:alert) %><%= message %></p>
+      <% end %>
+      <div class="form-row">
+        <div class="field">
+          <%= form.label :expires_on, "Expires on" %>
+          <%= form.date_field :expires_on, required: true, min: Date.tomorrow, max: Rails.configuration.x.token_max_lifetime.from_now.to_date, class: "mono" %>
+        </div>
+        <%= form.submit "Create token", class: "btn btn--primary" %>
+      </div>
     <% end %>
-  </tbody>
-</table>
-
-<h2>New token</h2>
-<%= form_with model: @upload_token, url: service_account_upload_tokens_path(@service_account), data: { turbo: false } do |form| %>
-  <% @upload_token.errors.full_messages.each do |message| %>
-    <p class="flash flash-alert"><%= message %></p>
-  <% end %>
-  <%= form.label :expires_on, "Expires on" %>
-  <%= form.date_field :expires_on, required: true, min: Date.tomorrow, max: Rails.configuration.x.token_max_lifetime.from_now.to_date %>
-  <%= form.submit "Create token" %>
-<% end %>
+  </section>
+</main>
