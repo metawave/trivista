@@ -17,6 +17,10 @@ Trivy-Reports können Secrets an vielen Stellen im Klartext enthalten: in den Ko
 
 Vor der Projektion liegt der unbereinigte Report kurzzeitig in Tempfiles von Puma und Rack. Diese liegen auf flüchtigem Speicher (`emptyDir`) und werden nach dem Request gelöscht. Der Upload-Pfad schreibt weder Request-Body noch Parser-Meldungen in Logs oder Error-Tracker; ungültiges JSON ergibt eine generische `400` ohne Exception-Text, weil Parser-Fehler Ausschnitte des Inputs enthalten.
 
+## URLs aus Reports
+
+`PrimaryURL`, `References` und `Link` stammen von externen Uploadern. Sie werden ohne Userinfo gespeichert und nur als Link dargestellt, wenn sie absolute `http`- oder `https`-URLs sind; alles andere erscheint als Text, damit z. B. `javascript:`-URLs keinen Code im Browser eines Lesers ausführen.
+
 ## Considered Options
 
 - Unbereinigt speichern und nur über die Anwendung nicht ausliefern: verworfen, Backups, Dumps und DB-Zugriff legen die Secrets offen.

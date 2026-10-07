@@ -31,7 +31,7 @@ Die von Trivy erzeugte JSON-Datei, die hochgeladen wird.
 _Avoid_: Result, Output
 
 **Scan**:
-Ein hochgeladener Trivy-Report für einen Branch zu einem Commit, oder für einen Cluster. Tag- und PR-Scans gehören zum Branch, aus dem getaggt wurde bzw. zum Source-Branch.
+Ein hochgeladener Trivy-Report für einen Branch zu einem Commit, oder für einen Cluster. Tag-Scans gehören zum Default Branch, PR-Scans zum Source-Branch.
 _Avoid_: Run, Report
 
 **Commit**:
@@ -47,7 +47,7 @@ Optionaler Auslöser eines Scans (`push`, `tag`, `schedule`, `manual`, `pr`), so
 _Avoid_: Source, Event
 
 **Artifact**:
-Ein von Trivy gescanntes Objekt, z. B. ein Image, ein Filesystem oder eine Kubernetes-Resource; identifiziert durch Typ und Name ohne Tag oder Digest.
+Ein von Trivy gescanntes Objekt, z. B. ein Image, ein Filesystem oder eine Kubernetes-Resource; identifiziert durch Kategorie und Name ohne Tag oder Digest.
 _Avoid_: Target
 
 ### Findings
@@ -69,7 +69,7 @@ Stabile Identität eines Findings innerhalb eines Projects über Scans hinweg.
 _Avoid_: Hash, Key
 
 **Predecessor**:
-Der letzte verarbeitete Scan desselben Branches bzw. Cluster-Projects und Artifacts vor einem Scan.
+Der letzte Scan desselben Branches bzw. Cluster-Projects und Artifacts vor einem Scan.
 _Avoid_: Previous, Baseline
 
 **Diff**:

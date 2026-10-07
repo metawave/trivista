@@ -7,7 +7,7 @@ Ein Finding wird einmal pro Fingerprint und Project gespeichert; jedes Auftreten
 | Typ | Fingerprint |
 |---|---|
 | Vulnerability | `VulnerabilityID` + `PkgName` + `Target`; bei `Class=os-pkgs` statt `Target`: `Class` + `Type` (OS-Familie) |
-| Misconfiguration | `ID` + `Target` + `CauseMetadata.Resource`, bei leerem `Resource` stattdessen `CauseMetadata.StartLine`; nur `Status=FAIL`. Fehlen beide, fallen Treffer derselben Regel im selben Target bewusst zu einem Finding zusammen |
+| Misconfiguration | `ID` + `Target` + `CauseMetadata.Resource`, bei leerem `Resource` stattdessen `CauseMetadata.StartLine`; nur `Status=FAIL`. Fehlen beide, fallen Treffer derselben Regel im selben Target bewusst zu einem Finding zusammen. `ID` wird normalisiert (Präfix `AVD-` entfernen, Nummer vierstellig mit Bindestrich, `DS005` → `DS-0005`), weil Trivy das ID-Format geändert hat |
 | Secret | `RuleID` + `Target` + `StartLine` |
 | License | `Name` + `Target` + (`PkgName` oder `FilePath`) |
 
@@ -18,4 +18,4 @@ Das Finding trägt nur Identität und Beschreibung (`Title`, `Description`, `Ref
 ## Consequences
 
 - Trivys `Packages` (Inventar) werden nicht gespeichert.
-- Zähler werden pro Scan und Artifact vorberechnet und bleiben dauerhaft. Roh-JSON und Occurrences sollen später per Retention (Default 90 Tage) löschbar sein; danach gibt es für alte Scans keinen Diff und kein Detail mehr, nur noch den Trend. Retention ist im MVP nicht umgesetzt.
+- Zähler werden pro Scan vorberechnet und bleiben dauerhaft. Roh-JSON und Occurrences sollen später per Retention (Default 90 Tage) löschbar sein; danach gibt es für alte Scans keinen Diff und kein Detail mehr, nur noch den Trend. Retention ist im MVP nicht umgesetzt.
