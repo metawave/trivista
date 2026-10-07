@@ -4,4 +4,12 @@ class ApplicationController < ActionController::Base
 
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
+
+  before_action :require_login
+
+  private
+    # Until the OIDC login exists (plan step 5), every page is closed.
+    def require_login
+      head :unauthorized
+    end
 end

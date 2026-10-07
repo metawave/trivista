@@ -3,3 +3,22 @@ shop_ci_token:
   token_digest: <%= Digest::SHA256.hexdigest("shop-ci-secret") %>
   expires_at: <%= 30.days.from_now.to_fs(:db) %>
   created_by: alice
+
+alice_ci_token:
+  service_account: alice_ci
+  token_digest: <%= Digest::SHA256.hexdigest("alice-ci-secret") %>
+  expires_at: <%= 30.days.from_now.to_fs(:db) %>
+  created_by: alice
+
+expired_token:
+  service_account: shop_ci
+  token_digest: <%= Digest::SHA256.hexdigest("expired-secret") %>
+  expires_at: <%= 1.day.ago.to_fs(:db) %>
+  created_by: alice
+
+revoked_token:
+  service_account: shop_ci
+  token_digest: <%= Digest::SHA256.hexdigest("revoked-secret") %>
+  expires_at: <%= 30.days.from_now.to_fs(:db) %>
+  revoked_at: <%= 1.day.ago.to_fs(:db) %>
+  created_by: alice

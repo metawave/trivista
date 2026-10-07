@@ -22,6 +22,6 @@ Der teure Teil eines Uploads, das Parsen des Trivy-Reports und das Lesen der All
 
 ## Consequences
 
-- Parsen und Import belegen einen Puma-Thread für die Dauer des Requests und brauchen pro gleichzeitigem Upload ein Vielfaches der Report-Größe an Speicher. Dauer und Speicher werden mit echten Reports gemessen; dauert der Import über etwa 10 Sekunden, wird Asynchronität neu bewertet, reicht der Speicher nicht, wird das Upload-Limit gesenkt, als letzte Stufe ein Streaming-Parser eingeführt. Die README empfiehlt `--list-all-pkgs=false`.
+- Parsen und Import belegen einen Puma-Thread für die Dauer des Requests und brauchen ein Vielfaches der Report-Größe an Speicher. Gemessen mit einem echten 49,6-MB-Report (`node:18-bullseye`, 11.210 Vulnerabilities): 4 Sekunden, Spitze rund 450 MB. Deshalb parst und importiert pro Prozess immer nur ein Upload gleichzeitig; weitere warten. Dauert der Import über etwa 10 Sekunden, wird Asynchronität neu bewertet; reicht der Speicher nicht, wird das Upload-Limit gesenkt, als letzte Stufe ein Streaming-Parser eingeführt. Die README empfiehlt `--list-all-pkgs=false`.
 - Ingress bzw. Gateway vor Trivista müssen Request-Bodies bis zum Upload-Limit und die Request-Dauer zulassen, sollen das Limit zusätzlich selbst durchsetzen und Uploads pro IP rate- und connection-limitieren, weil Puma auch unauthentifizierte Bodies vor der Token-Prüfung puffert.
 - Der Pod braucht ein `ephemeral-storage`-Limit für die Tempfiles.
