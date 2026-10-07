@@ -55,6 +55,7 @@ Trivista does not learn about offboarding in the identity provider. When someone
 - **Ingress**: allow request bodies up to `UPLOAD_MAX_BYTES` and the upload duration, enforce the limit there as well, and rate and connection limit uploads per IP. Puma buffers bodies before the token is checked.
 - **Temporary files**: uploads are buffered unsanitized before the allowlist is applied. Mount an ephemeral volume (`emptyDir`, ideally `medium: Memory`) at `/tmp` and set an `ephemeral-storage` limit.
 - **Memory**: one import runs per process at a time. A 50 MB report peaks at roughly 450 MB; plan about 1 GB per pod.
+- **Health**: use `GET /up` for liveness and readiness probes. The image has no Docker `HEALTHCHECK`, Kubernetes ignores it anyway.
 - **Database**: one database for app and cache. The database user needs `CREATEDB` only if the database does not exist yet.
 
 ## Uploading scans

@@ -1,0 +1,2 @@
+# Kubernetes liveness and readiness probes on /up replace a Dockerfile HEALTHCHECK (see README, Operations).
+DS-0026
