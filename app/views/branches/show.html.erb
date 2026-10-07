@@ -1,6 +1,6 @@
 <% repo = @branch.repo %>
 <% content_for :title, "#{@branch.name} · #{repo.name}" %>
-<% filter_params = { type: @finding_type, range: @range, trigger: @trigger } %>
+<% filter_params = { type: @finding_type, range: @range } %>
 <main class="page">
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <%= link_to repo.project.name, repo.project %><span aria-hidden="true">/</span>
@@ -25,12 +25,6 @@
         <% BranchesController::RANGES.each_key do |range| %>
           <%= link_to (range == "all" ? "All" : "#{range}d"), branch_path(@branch, filter_params.merge(range:)),
             aria: { current: (range == @range).to_s } %>
-        <% end %>
-      </div>
-      <div class="filter-group" role="group" aria-label="Trigger">
-        <%= link_to "all", branch_path(@branch, filter_params.merge(trigger: nil)), class: "toggle toggle--accent", aria: { current: @trigger.nil?.to_s } %>
-        <% Scan::TRIGGERS.each do |trigger| %>
-          <%= link_to trigger, branch_path(@branch, filter_params.merge(trigger:)), class: "toggle toggle--accent", aria: { current: (trigger == @trigger).to_s } %>
         <% end %>
       </div>
     </div>

@@ -23,19 +23,18 @@ class BranchTrendTest < ActionDispatch::IntegrationTest
   end
 
   test "rejects unknown filter values" do
-    get branch_path(branches(:shop_backend_main), type: "package", range: "1000", trigger: "nightly")
+    get branch_path(branches(:shop_backend_main), type: "package", range: "1000")
 
     assert_response :success
     assert_select ".tab[aria-current=page]", text: "Vulnerabilities"
     assert_select ".segmented a[aria-current=true]", text: "90d"
-    assert_select ".toggle[aria-current=true]", text: "all"
   end
 
   test "filter links keep the other filters" do
-    get branch_path(branches(:shop_backend_main), type: "secret", range: "7", trigger: "tag")
+    get branch_path(branches(:shop_backend_main), type: "secret", range: "7")
 
-    assert_select ".segmented a[href=?]", branch_path(branches(:shop_backend_main), type: "secret", range: "30", trigger: "tag")
-    assert_select ".toggle[href=?]", branch_path(branches(:shop_backend_main), type: "secret", range: "7"), text: "all"
+    assert_select ".segmented a[href=?]", branch_path(branches(:shop_backend_main), type: "secret", range: "30")
+    assert_select ".tab[href=?]", branch_path(branches(:shop_backend_main), type: "vulnerability", range: "7")
   end
 
   test "lists the scans with trigger and diff" do

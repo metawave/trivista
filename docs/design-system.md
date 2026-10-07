@@ -25,7 +25,7 @@ Filters are links, one query param each, preserving the other params; no `<selec
 
 - Finding type: `.tabs` with `.tab[aria-current=page]` and a `.count`.
 - Single choice (range, visibility): `.segmented` links with `aria-current="true"`.
-- Toggles (severity, trigger, only new): `.toggle` links with `aria-current="true"|"false"`; several severities travel as one comma list (`?severity=HIGH,LOW`).
+- Toggles (severity, only new): `.toggle` links with `aria-current="true"|"false"`; several severities travel as one comma list (`?severity=HIGH,LOW`).
 
 Forms that change data (settings, tokens, service accounts) keep regular fields in `.field` with a visible label.
 

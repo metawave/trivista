@@ -8,8 +8,7 @@ class BranchesController < ApplicationController
     @branch = Branch.visible_to(Current.user).find(params[:id])
     @finding_type = Finding::TYPES.include?(params[:type]) ? params[:type] : "vulnerability"
     @range = RANGES.key?(params[:range]) ? params[:range] : DEFAULT_RANGE
-    @trigger = Scan::TRIGGERS.include?(params[:trigger]) ? params[:trigger] : nil
-    @series = Trend.new(@branch, finding_type: @finding_type, since: RANGES[@range]&.ago, trigger: @trigger).series
+    @series = Trend.new(@branch, finding_type: @finding_type, since: RANGES[@range]&.ago).series
     listed_ids = @series.flat_map { it.points.last(LISTED_SCANS).map(&:scan_id) }
     @diffs = Scan.where(id: listed_ids).to_h { [ it.id, ScanDiff.new(it) ] }
   end

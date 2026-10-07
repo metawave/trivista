@@ -30,14 +30,13 @@ class TrendTest < ActiveSupport::TestCase
     assert_equal({ "CRITICAL" => 1 }, point.counts)
   end
 
-  test "filters by time range and trigger" do
-    scan(@image, {}, 40.days.ago, trigger: "push")
-    recent_push = scan(@image, {}, 1.day.ago, trigger: "push")
-    scan(@image, {}, 1.day.ago, trigger: "schedule")
+  test "filters by time range" do
+    scan(@image, {}, 40.days.ago)
+    recent = scan(@image, {}, 1.day.ago)
 
-    series = Trend.new(@branch, finding_type: "vulnerability", since: 30.days.ago, trigger: "push").series
+    series = Trend.new(@branch, finding_type: "vulnerability", since: 30.days.ago).series
 
-    assert_equal [ recent_push.id ], series.sole.points.map(&:scan_id)
+    assert_equal [ recent.id ], series.sole.points.map(&:scan_id)
   end
 
   private
