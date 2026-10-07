@@ -9,7 +9,7 @@ Der teure Teil eines Uploads, das Parsen des Trivy-Reports und das Lesen der All
 3. Mehr als 60 Uploads pro Stunde pro Token (Rails `rate_limit`, konfigurierbar): `429`. Das Limit gilt näherungsweise; parallele erste Requests können es knapp überschreiten. Ist der Cache nicht erreichbar, bricht der Upload mit `503` ab, statt ungebremst durchzulassen.
 4. Kein `multipart/form-data`: `415`. Der Trivy-Report kommt als Dateipart und landet als Tempfile statt als Params im Speicher.
 5. Dateipart fehlt, ungültiges JSON, Pflichtfelder `project`, `repo`, `branch`, `commit` fehlen oder ungültiger `trigger`: `400`. Die Felder werden nicht aus Trivys `Metadata` abgeleitet.
-6. `trivy k8s`-Report (Top-Level-Key `ClusterName`) oder `SchemaVersion` ungleich 2: `422` mit Meldung.
+6. `trivy k8s`-Report (Top-Level-Key `ClusterName`), `SchemaVersion` ungleich 2, mehr Findings als `MAX_FINDINGS_PER_REPORT` oder ein identifizierender Wert über 1000 Zeichen (ADR 0003): `422` mit Meldung.
 7. Allowlist-Felder lesen (ADR 0003) und in einer Transaktion importieren: `201` mit `Location` auf den Scan. Die Transaktion sperrt den Owner und prüft die Quote: Würden die Occurrences des Owners die Quote überschreiten (Default 5 Mio., konfigurierbar), wird nichts gespeichert und die Antwort ist `507`. Die Postgres-Instanz ist geteilt; eine volle Disk träfe alle Owner. Ausweg ist das Löschen von Scans (ADR 0007). Fehlendes oder leeres `Results` ist ein gültiger Scan ohne Findings. Scheitert der Import, wird nichts gespeichert und die Antwort nennt den Fehler; kein Fehler verschwindet still.
 
 ## Branch bei Tag- und PR-Scans

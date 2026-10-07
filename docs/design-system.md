@@ -11,7 +11,7 @@ Dense, read-only developer UI: severity first, structure through borders. Three 
 - Severity owns the warm colors. Fills and on-colors come from `--sev-<level>` / `--sev-<level>-on`; the scale runs dark (CRITICAL) to light (UNKNOWN) so it reads in grayscale, and every severity mark carries its label or letter.
 - One accent (`--accent`) for links, primary actions, focus, selection and "new".
 - "No longer reported" stays neutral gray: it is not proof of a fix (CONTEXT.md: Diff), so it never borrows a success color.
-- Destructive actions are text-colored buttons (`btn--danger`) behind a typed-name confirmation (`confirmed?`), keeping red fills for severity.
+- Destructive actions are text-colored buttons (`btn--danger`), keeping red fills for severity. Deleting a project, repo or branch also asks for the typed name (`confirmed?`, ADR 0007).
 
 ## Type and layout
 

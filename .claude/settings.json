@@ -10,7 +10,8 @@
       "Bash(mise exec -- bin/rails test *)",
       "Bash(mise exec -- bin/rubocop *)",
       "Bash(mise exec -- bin/brakeman *)",
-      "Bash(mise exec -- trivy *)"
+      "Bash(mise exec -- trivy fs *)",
+      "Bash(mise exec -- trivy image *)"
     ]
   }
 }

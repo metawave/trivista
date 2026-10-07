@@ -13,13 +13,17 @@ Trivy-Reports können Secrets an vielen Stellen im Klartext enthalten: in den Ko
 | Secret | `RuleID`, `Category`, `Severity`, `Title`, `StartLine`, `EndLine` |
 | License | `Name`, `Category`, `Severity`, `PkgName`, `FilePath`, `Confidence`, `Link` |
 
+## Längen
+
+Texte werden auf 1000 Zeichen gekürzt, `Description` und `Resolution` auf 10000, `References` auf 50 Einträge, damit ein einzelnes Finding die Quote (ADR 0004) nicht mit riesigen Texten umgeht. Werte, die ein Artifact, Finding oder eine Occurrence identifizieren (ADR 0002 und 0008: `ArtifactName`, `Target`, `Class`, `Type`, die IDs, `PkgName`, `PkgPath`, `InstalledVersion`, `Namespace`, `CauseMetadata.Resource`, `FilePath`), werden nie gekürzt: Ab 1001 Zeichen wird der Report mit `422` abgelehnt, weil zwei lange Pfade mit gleichem Anfang sonst still zu einem Finding verschmölzen.
+
 ## Flüchtige Kopien
 
 Vor der Projektion liegt der unbereinigte Report kurzzeitig in Tempfiles von Puma und Rack. Diese liegen auf flüchtigem Speicher (`emptyDir`) und werden nach dem Request gelöscht. Der Upload-Pfad schreibt weder Request-Body noch Parser-Meldungen in Logs oder Error-Tracker; ungültiges JSON ergibt eine generische `400` ohne Exception-Text, weil Parser-Fehler Ausschnitte des Inputs enthalten.
 
 ## URLs aus Reports
 
-`PrimaryURL`, `References` und `Link` stammen von externen Uploadern. Sie werden wie `ArtifactName` nur als `scheme://host/path` gespeichert, ohne Userinfo, Query und Fragment, und nur als Link dargestellt, wenn sie absolute `http`- oder `https`-URLs sind; alles andere erscheint als Text, damit z. B. `javascript:`-URLs keinen Code im Browser eines Lesers ausführen.
+`PrimaryURL`, `References` und `Link` stammen von externen Uploadern. Sie werden wie `ArtifactName` nur als `scheme://host/path` gespeichert, ohne Userinfo, Query und Fragment; bereinigt wird vor dem Kürzen, damit eine lange Userinfo nicht als Host stehen bleibt. Dargestellt werden sie nur als Link, wenn sie absolute `http`- oder `https`-URLs sind; alles andere erscheint als Text, damit z. B. `javascript:`-URLs keinen Code im Browser eines Lesers ausführen.
 
 ## Considered Options
 

@@ -57,7 +57,7 @@ class TrivyReport
       @schema_version = document["SchemaVersion"]
       @reported_artifact_type = string(document["ArtifactType"])
       @artifact_category = ARTIFACT_CATEGORIES.fetch(reported_artifact_type) { raise UnsupportedReport, "unsupported ArtifactType" }
-      @reported_artifact_name = sanitize_url(string(document["ArtifactName"]) || raise(InvalidReport, "ArtifactName is missing"))
+      @reported_artifact_name = key(sanitize_url(text(document["ArtifactName"]) || raise(InvalidReport, "ArtifactName is missing")))
       @artifact_name = image? ? strip_image_tag(reported_artifact_name) : reported_artifact_name
       @report_created_at = time(document["CreatedAt"])
       @trivy_version = string(object(document["Trivy"])["Version"])
@@ -67,7 +67,7 @@ class TrivyReport
     end
 
     def findings_of(result)
-      context = { target: normalize_target(string(result["Target"])), result_class: string(result["Class"]), result_type: string(result["Type"]) }
+      context = { target: normalize_target(key(result["Target"])), result_class: key(result["Class"]), result_type: key(result["Type"]) }
 
       list(result["Vulnerabilities"]).map { vulnerability(it, **context) } +
         list(result["Misconfigurations"]).select { it["Status"] == "FAIL" }.map { misconfiguration(it, **context) } +
@@ -76,25 +76,25 @@ class TrivyReport
     end
 
     def vulnerability(entry, target:, result_class:, result_type:)
-      identifier = required_string(entry["VulnerabilityID"])
-      pkg_name = string(entry["PkgName"])
+      identifier = required_key(entry["VulnerabilityID"])
+      pkg_name = key(entry["PkgName"])
       location_key = result_class == "os-pkgs" ? "os-pkgs:#{result_type}" : target
 
       build("vulnerability", [ identifier, pkg_name, location_key ],
         attributes: { identifier:, pkg_name:, target:, title: string(entry["Title"]), description: string(entry["Description"], limit: LONG_TEXT_LIMIT),
           primary_url: sanitized_string(entry["PrimaryURL"]), references: sanitized_list(entry["References"]),
           published_at: time(entry["PublishedDate"]), last_modified_at: time(entry["LastModifiedDate"]) },
-        observation: { installed_version: string(entry["InstalledVersion"]), location: string(entry["PkgPath"]),
+        observation: { installed_version: key(entry["InstalledVersion"]), location: key(entry["PkgPath"]),
           fixed_version: string(entry["FixedVersion"]), status: string(entry["Status"]), severity: severity(entry) })
     end
 
     def misconfiguration(entry, target:, **)
-      namespace = string(entry["Namespace"])
+      namespace = key(entry["Namespace"])
       builtin = namespace.to_s.start_with?("builtin.")
-      raw_identifier = required_string(entry["ID"])
+      raw_identifier = required_key(entry["ID"])
       identifier = builtin ? normalize_builtin_id(raw_identifier) : raw_identifier
       cause = object(entry["CauseMetadata"])
-      resource = string(cause["Resource"])
+      resource = key(cause["Resource"])
       start_line = integer(cause["StartLine"])
       position = resource || ("line:#{start_line}" if start_line)
 
@@ -108,7 +108,7 @@ class TrivyReport
     end
 
     def secret(entry, target:, **)
-      identifier = required_string(entry["RuleID"])
+      identifier = required_key(entry["RuleID"])
       start_line = integer(entry["StartLine"])
 
       build("secret", [ identifier, target, start_line ],
@@ -117,9 +117,9 @@ class TrivyReport
     end
 
     def license(entry, target:, **)
-      identifier = required_string(entry["Name"])
-      pkg_name = string(entry["PkgName"])
-      file_path = string(entry["FilePath"])
+      identifier = required_key(entry["Name"])
+      pkg_name = key(entry["PkgName"])
+      file_path = key(entry["FilePath"])
 
       build("license", [ identifier, target, pkg_name || file_path ],
         attributes: { identifier:, pkg_name:, target:, category: string(entry["Category"]),
@@ -162,7 +162,7 @@ class TrivyReport
     end
 
     def sanitized_string(value)
-      string(value)&.then { sanitize_url(it) }
+      text(value)&.then { sanitize_url(it).truncate(TEXT_LIMIT, omission: "…") }
     end
 
     def sanitized_list(value)
@@ -193,14 +193,26 @@ class TrivyReport
 
     # Long values are cut, so a single finding cannot bypass the occurrence quota with huge texts.
     def string(value, limit: TEXT_LIMIT)
+      text(value)&.truncate(limit, omission: "…")
+    end
+
+    # Identifying values are never cut: two long paths with a common prefix would merge into one finding.
+    def key(value)
+      value = text(value)
+      raise UnsupportedReport, "report contains an identifying value longer than #{TEXT_LIMIT} characters" if value && value.length > TEXT_LIMIT
+
+      value
+    end
+
+    def required_key(value)
+      key(value) || raise(InvalidReport, "unexpected Trivy report structure")
+    end
+
+    def text(value)
       return if value.nil? || value == ""
       raise InvalidReport, "unexpected Trivy report structure" unless value.is_a?(String)
 
-      value.truncate(limit, omission: "…")
-    end
-
-    def required_string(value)
-      string(value) || raise(InvalidReport, "unexpected Trivy report structure")
+      value
     end
 
     def integer(value)

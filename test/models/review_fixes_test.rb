@@ -41,6 +41,29 @@ class ReviewFixesTest < ActiveSupport::TestCase
     assert_equal 50, attributes[:references].size
   end
 
+  test "userinfo is removed from URLs before long values are cut" do
+    url = "https://#{"secret" * 300}@github.com/org/repo"
+    document = report_with(vulnerability("PrimaryURL" => url, "References" => [ url ]))
+    report = TrivyReport.parse(document.merge("ArtifactName" => url, "ArtifactType" => "repository").to_json)
+    attributes = report.findings.sole.attributes
+
+    assert_equal "https://github.com/org/repo", report.artifact_name
+    assert_equal "https://github.com/org/repo", attributes[:primary_url]
+    assert_equal [ "https://github.com/org/repo" ], attributes[:references]
+  end
+
+  test "identifying values over the text limit reject the report" do
+    long = "a" * 1_001
+    documents = [ report_with(vulnerability).merge("ArtifactName" => long), report_with(vulnerability("PkgName" => long)),
+      report_with(vulnerability("PkgPath" => long)), report_with(vulnerability("InstalledVersion" => long)),
+      report_with(vulnerability).tap { it["Results"].first["Target"] = long } ]
+
+    documents.each do |document|
+      assert_raises(TrivyReport::UnsupportedReport) { TrivyReport.parse(document.to_json) }
+    end
+    assert TrivyReport.parse(report_with(vulnerability("PkgPath" => "a" * 1_000)).to_json)
+  end
+
   test "reports with too many findings are rejected" do
     Rails.configuration.x.max_findings_per_report = 2
     vulnerabilities = Array.new(3) { vulnerability("VulnerabilityID" => "CVE-#{it}") }
