@@ -11,6 +11,7 @@ module ApplicationHelper
     notice: '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/>',
     alert: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5"/><path d="M12 16.5v.5"/>',
     warning: '<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4"/><path d="M12 17.5v.5"/>',
+    copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
     sign_in: '<path d="M14 4h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-5"/><path d="M10 16l4-4-4-4"/><path d="M14 12H4"/>'
   }.transform_values(&:html_safe).freeze
 
@@ -27,6 +28,11 @@ module ApplicationHelper
         tag.rect(x: 6, y: 18, width: 7, height: 3, rx: 1, fill: "#f0c94a")
       ])
     end
+  end
+
+  def copy_button(text, label:)
+    tag.button(icon(:copy, size: 13), type: "button", class: "btn btn--icon", aria: { label: },
+      data: { controller: "clipboard", clipboard_text_value: text, action: "clipboard#copy" })
   end
 
   def nav_link(name, path, active:)

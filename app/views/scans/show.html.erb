@@ -1,53 +1,112 @@
 <% branch = @scan.branch %>
-<h1>
-  <%= link_to branch.repo.project.name, branch.repo.project %> /
-  <%= link_to branch.repo.name, branch.repo %> /
-  <%= link_to branch.name, branch %> /
-  <%= @scan.commit_sha.first(8) %>
-</h1>
+<% content_for :title, "#{@scan.commit_sha.first(8)} · #{branch.name}" %>
+<% filter_params = { type: @finding_type, severity: @severities.join(",").presence, only_new: ("1" if @only_new) } %>
+<main class="page">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <%= link_to branch.repo.project.name, branch.repo.project %><span aria-hidden="true">/</span>
+    <%= link_to branch.repo.name, branch.repo %><span aria-hidden="true">/</span>
+    <%= link_to branch.name, branch, class: "mono" %><span aria-hidden="true">/</span>
+    <span class="mono" aria-current="page"><%= @scan.commit_sha.first(8) %></span>
+  </nav>
 
-<dl class="scan-meta">
-  <dt>Artifact</dt><dd><%= @scan.artifact.name %> (<%= @scan.reported_artifact_type %>)</dd>
-  <dt>Commit</dt><dd><%= @scan.commit_sha %></dd>
-  <% if @scan.tag %><dt>Tag</dt><dd><%= @scan.tag %></dd><% end %>
-  <dt>Trigger</dt><dd><%= @scan.trigger %></dd>
-  <dt>Uploaded</dt><dd><%= @scan.created_at.to_fs(:db) %></dd>
-  <dt>Uploaded by</dt><dd><%= @scan.service_account.name %> (<%= @scan.service_account.owner.display_name %>)</dd>
-  <% if @scan.trivy_version %><dt>Trivy</dt><dd><%= @scan.trivy_version %></dd><% end %>
-  <dt>Compared to</dt>
-  <dd><%= @diff.predecessor ? link_to("#{@diff.predecessor.created_at.to_fs(:db)} #{@diff.predecessor.commit_sha.first(8)}", @diff.predecessor) : "first scan" %></dd>
-</dl>
+  <div class="page-head">
+    <div class="page-head__title">
+      <h1 class="page-title--mono"><%= @scan.commit_sha.first(8) %></h1>
+      <% if @scan.tag %><span class="chip"><%= @scan.tag %></span><% end %>
+      <span class="chip"><%= @scan.trigger %></span>
+    </div>
+    <% if manageable?(branch.repo.project) %>
+      <%= button_to "Delete scan", scan_path(@scan), method: :delete, class: "btn btn--danger", data: { turbo_confirm: "Delete this scan?" } %>
+    <% end %>
+  </div>
 
-<% if manageable?(branch.repo.project) %>
-  <%= button_to "Delete scan", scan_path(@scan), method: :delete, data: { turbo_confirm: "Delete this scan?" } %>
-<% end %>
+  <div class="summary-row">
+    <dl class="panel meta-grid scan-meta">
+      <div><dt>Artifact</dt><dd><span class="mono"><%= @scan.artifact.name %></span> <span class="muted"><%= @scan.reported_artifact_type %></span></dd></div>
+      <div><dt>Commit</dt><dd class="with-icon"><span class="mono"><%= @scan.commit_sha %></span><%= copy_button(@scan.commit_sha, label: "Copy commit") %></dd></div>
+      <div><dt>Uploaded</dt><dd class="mono"><%= @scan.created_at.to_fs(:db) %></dd></div>
+      <div><dt>Uploaded by</dt><dd><span class="mono"><%= @scan.service_account.name %></span> <span class="muted"><%= @scan.service_account.owner.display_name %></span></dd></div>
+      <% if @scan.trivy_version %><div><dt>Trivy</dt><dd class="mono"><%= @scan.trivy_version %></dd></div><% end %>
+      <div>
+        <dt>Compared to</dt>
+        <dd class="mono">
+          <% if @diff.predecessor %>
+            <span class="muted"><%= @diff.predecessor.created_at.to_fs(:db) %></span> <%= link_to @diff.predecessor.commit_sha.first(8), @diff.predecessor %>
+          <% else %>
+            <span class="muted">first scan</span>
+          <% end %>
+        </dd>
+      </div>
+    </dl>
 
-<%= form_with url: scan_path(@scan), method: :get, class: "filters" do %>
-  <%= select_tag :type, options_for_select([ [ "All types", "" ] ] + Finding::TYPES.map { [ it.pluralize.capitalize, it ] }, @finding_type.to_s) %>
-  <%= select_tag :severity, options_for_select([ [ "All severities", "" ] ] + Occurrence::SEVERITIES.map { [ it, it ] }, @severity.to_s) %>
-  <label><%= check_box_tag :only_new, "1", @only_new %> only new</label>
-  <%= submit_tag "Apply", name: nil %>
-<% end %>
+    <% if @diff.predecessor %>
+      <section class="panel diff-summary" aria-label="Diff">
+        <div class="diff-summary__values">
+          <div class="is-new"><b>+<%= @diff.new_finding_ids.size %></b>new</div>
+          <div><b>−<%= @diff.no_longer_reported_finding_ids.size %></b>no longer reported</div>
+        </div>
+        <span class="note">vs. predecessor <%= @diff.predecessor.commit_sha.first(8) %></span>
+      </section>
+    <% end %>
+  </div>
 
-<h2>Findings (<%= @row_count %>)</h2>
-<% if @row_count > @rows.size %>
-  <p>Showing the first <%= @rows.size %>. Narrow the filters to see the rest.</p>
-<% end %>
-<table class="findings">
-  <thead>
-    <tr><th>Severity</th><th>Type</th><th>ID</th><th>Package / Target</th><th>Installed</th><th>Fixed in</th><th>Title</th></tr>
-  </thead>
-  <tbody class="current">
-    <%= render "finding_rows", rows: @rows, new_finding_ids: @new_finding_ids %>
-  </tbody>
-</table>
+  <section class="panel">
+    <h2 class="visually-hidden">Findings</h2>
+    <nav class="tabs" aria-label="Finding type">
+      <% Finding::TYPES.each do |finding_type| %>
+        <%= link_to scan_path(@scan, filter_params.merge(type: finding_type)), class: "tab", aria: { current: ("page" if finding_type == @finding_type) } do %>
+          <%= finding_type.pluralize.capitalize %> <span class="count"><%= type_count(@scan.counts, finding_type) %></span>
+        <% end %>
+      <% end %>
+    </nav>
+    <div class="filters">
+      <div class="filter-group" role="group" aria-label="Severity">
+        <% shown = shown_severities(@severities) %>
+        <% Occurrence::SEVERITIES.each do |severity| %>
+          <%= link_to scan_path(@scan, filter_params.merge(severity: severity_toggle_param(@severities, severity))), class: "toggle", aria: { current: shown.include?(severity).to_s } do %>
+            <span class="swatch swatch--<%= severity.downcase %>"></span><%= severity %> <%= @scan.counts.dig(@finding_type, severity).to_i %>
+          <% end %>
+        <% end %>
+      </div>
+      <% if @diff.predecessor %>
+        <%= link_to scan_path(@scan, filter_params.merge(only_new: (@only_new ? nil : "1"))), class: "toggle toggle--accent", aria: { current: @only_new.to_s } do %>
+          Only new
+        <% end %>
+      <% end %>
+    </div>
 
-<% if @no_longer_reported.any? %>
-  <h2>No longer reported (<%= @no_longer_reported.size %>)</h2>
-  <p>Not reported compared to the previous scan. This does not necessarily mean fixed; the scan configuration may have changed.</p>
-  <table class="findings">
-    <tbody class="no-longer-reported">
-      <%= render "finding_rows", rows: @no_longer_reported, new_finding_ids: nil %>
-    </tbody>
-  </table>
-<% end %>
+    <% if @rows.any? %>
+      <div class="table-scroll">
+        <table class="table findings">
+          <thead>
+            <tr><th>Severity</th><th>ID</th><th>Package / Target</th><th>Installed</th><th>Fixed in</th><th>Title</th></tr>
+          </thead>
+          <tbody class="current">
+            <%= render "finding_rows", rows: @rows, new_finding_ids: @new_finding_ids, gone: false %>
+          </tbody>
+        </table>
+      </div>
+      <% if @row_count > @rows.size %>
+        <div class="panel__foot">Showing the first <%= @rows.size %> of <%= @row_count %>. Narrow the filters to see the rest.</div>
+      <% end %>
+    <% else %>
+      <p class="empty muted">No findings match these filters.</p>
+    <% end %>
+  </section>
+
+  <% if @no_longer_reported.any? %>
+    <section class="panel panel--dashed">
+      <div class="panel__head panel__head--stack">
+        <h2 class="with-icon title-muted">No longer reported <span class="count"><%= @no_longer_reported.size %></span></h2>
+        <span class="note">Not reported compared to the previous scan. This does not necessarily mean fixed; the scan configuration may have changed.</span>
+      </div>
+      <div class="table-scroll">
+        <table class="table table--muted findings">
+          <tbody class="no-longer-reported">
+            <%= render "finding_rows", rows: @no_longer_reported, new_finding_ids: nil, gone: true %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  <% end %>
+</main>

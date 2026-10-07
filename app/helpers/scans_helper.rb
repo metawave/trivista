@@ -12,4 +12,23 @@ module ScansHelper
   def finding_location(finding)
     [ finding.pkg_name, finding.target ].compact_blank.join(" · ")
   end
+
+  def severity_badge(severity, outline: false)
+    tag.span(severity, class: [ "badge", "badge--#{severity.downcase}", ("badge--outline" if outline) ])
+  end
+
+  def type_count(counts, finding_type)
+    counts.fetch(finding_type, {}).values.sum
+  end
+
+  # An empty selection shows all severities; a chip toggles its severity in the shown set.
+  def shown_severities(selected)
+    selected.presence || Occurrence::SEVERITIES
+  end
+
+  def severity_toggle_param(selected, severity)
+    shown = shown_severities(selected)
+    toggled = Occurrence::SEVERITIES & (shown.include?(severity) ? shown - [ severity ] : shown + [ severity ])
+    toggled.empty? || toggled == Occurrence::SEVERITIES ? nil : toggled.join(",")
+  end
 end

@@ -1,11 +1,10 @@
 <% rows.each do |row| %>
   <tr id="<%= dom_id(row.finding) %>">
-    <td class="severity"><span class="severity severity-<%= row.severity.downcase %>"><%= row.severity %></span></td>
-    <td><%= row.finding.finding_type %></td>
-    <td class="identifier"><%= report_link(row.finding.identifier, row.finding.primary_url) %></td>
-    <td><%= finding_location(row.finding) %></td>
-    <td class="versions"><%= row.installed_versions.join(", ") %></td>
-    <td class="fixed"><%= row.fixed_versions.join(", ") %></td>
-    <td><%= row.finding.title %><% if new_finding_ids&.include?(row.finding.id) %> <mark>new</mark><% end %></td>
+    <td class="severity"><%= severity_badge(row.severity, outline: gone) %></td>
+    <td class="identifier mono nowrap"><%= report_link(row.finding.identifier, row.finding.primary_url) %><% if new_finding_ids&.include?(row.finding.id) %><span class="marker">NEW</span><% end %></td>
+    <td class="mono"><%= finding_location(row.finding) %></td>
+    <td class="versions mono"><%= row.installed_versions.join(", ") %></td>
+    <td class="fixed mono"><%= row.fixed_versions.join(", ") %></td>
+    <td class="truncate" title="<%= row.finding.title %>"><%= row.finding.title %></td>
   </tr>
 <% end %>

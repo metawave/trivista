@@ -13,8 +13,8 @@ class ScanFindings
     @finding_ids = finding_ids
   end
 
-  def page(limit:, finding_type: nil, severity: nil)
-    aggregated = aggregate(finding_type, severity)
+  def page(limit:, finding_type: nil, severities: nil)
+    aggregated = aggregate(finding_type, severities)
     total = Occurrence.connection.select_value("SELECT COUNT(*) FROM (#{aggregated.to_sql}) AS finding_groups")
     records = aggregated.order(Arel.sql("severity_rank, findings.identifier, occurrences.finding_id")).limit(limit).to_a
     findings = Finding.where(id: records.map(&:finding_id)).index_by(&:id)
@@ -25,7 +25,7 @@ class ScanFindings
   private
     attr_reader :scan, :finding_ids
 
-    def aggregate(finding_type, severity)
+    def aggregate(finding_type, severities)
       scope = scan.occurrences.joins(:finding)
       scope = scope.where(finding_id: finding_ids) if finding_ids
       scope = scope.where(findings: { finding_type: }) if finding_type
@@ -35,7 +35,7 @@ class ScanFindings
         "array_remove(array_agg(DISTINCT occurrences.installed_version), NULL) AS installed_versions",
         "array_remove(array_agg(DISTINCT occurrences.location), NULL) AS locations",
         "array_remove(array_agg(DISTINCT occurrences.fixed_version), NULL) AS fixed_versions")
-      severity ? scope.having("MIN(#{SEVERITY_RANK}) = ?", Occurrence::SEVERITIES.index(severity)) : scope
+      severities ? scope.having("MIN(#{SEVERITY_RANK}) IN (?)", severities.map { Occurrence::SEVERITIES.index(it) }) : scope
     end
 
     def row(finding, record)

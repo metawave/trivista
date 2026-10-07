@@ -19,8 +19,8 @@ class ScanDetailTest < ActionDispatch::IntegrationTest
     get scan_path(@scan)
 
     assert_response :success
-    assert_select "dd", text: "ci (team-a)"
-    assert_select "dd", text: @scan.commit_sha
+    assert_select "dd", text: /\Aci\s+team-a\z/
+    assert_select "dd", text: /\A\s*#{@scan.commit_sha}\s*\z/
   end
 
   test "lists one row per finding with the highest severity and all versions" do
@@ -59,10 +59,32 @@ class ScanDetailTest < ActionDispatch::IntegrationTest
 
     get scan_path(@scan, only_new: "1")
 
-    assert_select "tbody.current tr#finding_#{@unsafe.id}"
-    assert_select "tbody.current tr#finding_#{@secret.id}"
+    assert_select "tbody.current tr#finding_#{@unsafe.id} .marker", text: "NEW"
     assert_select "tr#finding_#{@critical.id}", 0
     assert_select "tbody.no-longer-reported tr#finding_#{gone.id}"
+
+    get scan_path(@scan, only_new: "1", type: "secret")
+    assert_select "tbody.current tr#finding_#{@secret.id}"
+  end
+
+  test "shows one tab per finding type and opens the first type with findings" do
+    @scan.update!(counts: { "secret" => { "CRITICAL" => 1 }, "license" => { "LOW" => 2, "HIGH" => 1 } })
+
+    get scan_path(@scan)
+
+    assert_select ".tab[aria-current=page]", text: /Secrets\s*1/
+    assert_select ".tab", text: /Licenses\s*3/
+    assert_select "tbody.current tr#finding_#{@secret.id}"
+  end
+
+  test "severity chips filter by several severities and toggle one at a time" do
+    get scan_path(@scan, severity: "MEDIUM,CRITICAL,bogus")
+
+    assert_select "tbody.current tr", 2
+    assert_select ".toggle[aria-current=true]", text: /CRITICAL/
+    assert_select ".toggle[aria-current=false]", text: /HIGH/
+    assert_select "a.toggle[href=?]", scan_path(@scan, type: "vulnerability", severity: "CRITICAL,HIGH,MEDIUM")
+    assert_select "a.toggle[href=?]", scan_path(@scan, type: "vulnerability", severity: "CRITICAL")
   end
 
   private
