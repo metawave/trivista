@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# Regenerates the Trivy report fixtures in test/fixtures/files/trivy from throwaway sources.
+# All secrets below are fake test values.
+set -euo pipefail
+
+out_dir="$(cd "$(dirname "$0")/.." && pwd)/test/fixtures/files/trivy"
+work_dir="$(mktemp -d)"
+trap 'rm -rf "$work_dir"; docker rmi -f trivista-fixture:1.0.0 >/dev/null 2>&1 || true' EXIT
+mkdir -p "$out_dir"
+
+source_dir="$work_dir/source"
+mkdir -p "$source_dir/node_modules/gpl-lib" "$source_dir/config"
+
+cat > "$source_dir/package-lock.json" <<'JSON'
+{
+  "name": "fixture",
+  "lockfileVersion": 3,
+  "packages": {
+    "": { "name": "fixture", "dependencies": { "lodash": "4.17.20", "legacy": "1.0.0" } },
+    "node_modules/lodash": { "version": "4.17.20" },
+    "node_modules/legacy/node_modules/lodash": { "version": "4.17.15" },
+    "node_modules/legacy": { "version": "1.0.0", "dependencies": { "lodash": "4.17.15" } },
+    "node_modules/gpl-lib": { "version": "1.0.0", "license": "GPL-3.0" }
+  }
+}
+JSON
+
+cat > "$source_dir/node_modules/gpl-lib/package.json" <<'JSON'
+{ "name": "gpl-lib", "version": "1.0.0", "license": "GPL-3.0" }
+JSON
+
+cat > "$source_dir/Dockerfile" <<'DOCKERFILE'
+FROM alpine:3.18.0
+RUN export GITHUB_TOKEN=ghp_FAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKE1234 && apk add curl
+ADD app.tar.gz /app
+DOCKERFILE
+
+cat > "$source_dir/config/settings.env" <<'ENV'
+DATABASE_HOST=db.internal
+DATABASE_PASSWORD=context-line-password-not-masked
+AWS_ACCESS_KEY_ID=AKIAZZZZZZZZZZZZZZZZ
+AWS_SECRET_ACCESS_KEY=FakeFakeFakeFakeFakeFakeFakeFakeFakeFake
+ENV
+
+cat > "$source_dir/.trivyignore" <<'IGNORE'
+CVE-2021-23337
+aws-access-key-id
+IGNORE
+
+(cd "$source_dir" && trivy fs --quiet --format json --scanners vuln,misconfig,secret,license --list-all-pkgs \
+  --show-suppressed --include-non-failures --trace \
+  --output "$out_dir/fs.json" .)
+
+cat > "$work_dir/Dockerfile.image" <<'DOCKERFILE'
+FROM alpine:3.18.0
+ENV AWS_SECRET_ACCESS_KEY=FakeImageEnvSecretFakeImageEnvSecret1234
+RUN echo "token ghp_FAKEIMAGELAYERFAKEIMAGELAYERFAKE1234" > /dev/null
+DOCKERFILE
+docker build -q -t trivista-fixture:1.0.0 -f "$work_dir/Dockerfile.image" "$work_dir" >/dev/null
+
+trivy image --quiet --format json --scanners vuln,misconfig,secret,license \
+  --image-config-scanners misconfig,secret --list-all-pkgs \
+  --output "$out_dir/image.json" trivista-fixture:1.0.0
+
+echo "Fixtures written to $out_dir"
