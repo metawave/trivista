@@ -3,7 +3,15 @@ class TrivyReport
   class InvalidReport < StandardError; end
   class UnsupportedReport < StandardError; end
 
-  Finding = Data.define(:finding_type, :fingerprint, :attributes, :observation)
+  Finding = Data.define(:finding_type, :fingerprint, :attributes, :observation) do
+    def occurrence_key
+      [ fingerprint, observation[:installed_version], observation[:location] ]
+    end
+  end
+
+  TEXT_LIMIT = 1_000
+  LONG_TEXT_LIMIT = 10_000
+  REFERENCE_LIMIT = 50
 
   ARTIFACT_CATEGORIES = {
     "container_image" => "container_image", "filesystem" => "source", "repository" => "source",
@@ -27,10 +35,24 @@ class TrivyReport
     raise UnsupportedReport, "only Trivy reports with SchemaVersion 2 are supported" unless document["SchemaVersion"] == 2
 
     read_metadata(document)
-    @findings = list(document["Results"]).flat_map { findings_of(it) }
+    results = list(document["Results"])
+    reject_oversized(results)
+    @findings = results.flat_map { findings_of(it) }
+  end
+
+  def occurrence_count
+    findings.map(&:occurrence_key).uniq.size
   end
 
   private
+    # Bounds memory before findings are projected; many tiny entries fit into a small upload (ADR 0004).
+    def reject_oversized(results)
+      count = results.sum { |result| %w[Vulnerabilities Misconfigurations Secrets Licenses].sum { list(result[it]).size } }
+      return if count <= Rails.configuration.x.max_findings_per_report
+
+      raise UnsupportedReport, "report has more than #{Rails.configuration.x.max_findings_per_report} findings"
+    end
+
     def read_metadata(document)
       @schema_version = document["SchemaVersion"]
       @reported_artifact_type = string(document["ArtifactType"])
@@ -59,7 +81,7 @@ class TrivyReport
       location_key = result_class == "os-pkgs" ? "os-pkgs:#{result_type}" : target
 
       build("vulnerability", [ identifier, pkg_name, location_key ],
-        attributes: { identifier:, pkg_name:, target:, title: string(entry["Title"]), description: string(entry["Description"]),
+        attributes: { identifier:, pkg_name:, target:, title: string(entry["Title"]), description: string(entry["Description"], limit: LONG_TEXT_LIMIT),
           primary_url: sanitized_string(entry["PrimaryURL"]), references: sanitized_list(entry["References"]),
           published_at: time(entry["PublishedDate"]), last_modified_at: time(entry["LastModifiedDate"]) },
         observation: { installed_version: string(entry["InstalledVersion"]), location: string(entry["PkgPath"]),
@@ -79,7 +101,8 @@ class TrivyReport
       build("misconfiguration", [ identifier, builtin ? "builtin" : namespace, target, position ],
         attributes: { identifier:, namespace:, misconfiguration_type: string(entry["Type"]), target:, resource:,
           provider: string(cause["Provider"]), service: string(cause["Service"]), title: string(entry["Title"]),
-          description: string(entry["Description"]), resolution: string(entry["Resolution"]),
+          description: string(entry["Description"], limit: LONG_TEXT_LIMIT),
+          resolution: string(entry["Resolution"], limit: LONG_TEXT_LIMIT),
           primary_url: sanitized_string(entry["PrimaryURL"]), references: sanitized_list(entry["References"]) },
         observation: { severity: severity(entry), start_line:, end_line: integer(cause["EndLine"]) })
     end
@@ -146,7 +169,7 @@ class TrivyReport
       return [] if value.nil?
       raise InvalidReport, "unexpected Trivy report structure" unless value.is_a?(Array)
 
-      value.filter_map { sanitized_string(it) }
+      value.first(REFERENCE_LIMIT).filter_map { sanitized_string(it) }
     end
 
     def severity(entry)
@@ -168,11 +191,12 @@ class TrivyReport
       value
     end
 
-    def string(value)
+    # Long values are cut, so a single finding cannot bypass the occurrence quota with huge texts.
+    def string(value, limit: TEXT_LIMIT)
       return if value.nil? || value == ""
       raise InvalidReport, "unexpected Trivy report structure" unless value.is_a?(String)
 
-      value
+      value.truncate(limit, omission: "…")
     end
 
     def required_string(value)

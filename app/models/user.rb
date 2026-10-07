@@ -19,6 +19,7 @@ class User < ApplicationRecord
     raise NotDeactivatable, "break-glass admins cannot be deactivated" if break_glass?
 
     transaction do
+      lock!
       update!(deactivated_at: Time.current)
       revocable_tokens.update_all(revoked_at: Time.current)
     end

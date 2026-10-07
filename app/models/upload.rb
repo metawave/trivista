@@ -18,10 +18,10 @@ class Upload
   def import
     Scan.transaction do
       owner = service_account.owner.lock!
-      scan = ScanImporter.new(branch: branch_of(owner), service_account:, commit_sha: commit, tag:, trigger:).import(report)
-      occurrence_count = owner.occurrence_count + scan.occurrences.count
+      occurrence_count = owner.occurrence_count + report.occurrence_count
       raise QuotaExceeded if occurrence_count > occurrence_quota
 
+      scan = ScanImporter.new(branch: branch_of(owner), service_account:, commit_sha: commit, tag:, trigger:).import(report)
       owner.update!(occurrence_count:)
       scan
     end

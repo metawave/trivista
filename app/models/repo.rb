@@ -11,9 +11,11 @@ class Repo < ApplicationRecord
 
   # main, then master, then the first uploaded branch, unless set manually (ADR 0008).
   def apply_default_branch_rule!
-    return if default_branch_manual?
+    with_lock do
+      next if default_branch_manual?
 
-    update!(default_branch: branches.find_by(name: "main") || branches.find_by(name: "master") ||
-      branches.order(:created_at, :id).first)
+      update!(default_branch: branches.find_by(name: "main") || branches.find_by(name: "master") ||
+        branches.order(:created_at, :id).first)
+    end
   end
 end

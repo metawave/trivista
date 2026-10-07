@@ -54,7 +54,7 @@ class ScanImporter
 
     def insert_occurrences(scan, findings, finding_ids)
       rows = findings
-        .group_by { [ it.fingerprint, it.observation[:installed_version], it.observation[:location] ] }
+        .group_by(&:occurrence_key)
         .map { |_, same| most_severe(same) }
         .map do |finding|
           OCCURRENCE_COLUMNS.index_with { nil }.merge(finding.observation)

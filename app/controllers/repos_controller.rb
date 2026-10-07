@@ -5,8 +5,8 @@ class ReposController < ApplicationController
 
   def update
     repo = manageable_repo
-    repo.update!(default_branch: repo.branches.find(params.expect(repo: [ :default_branch_id ])[:default_branch_id]),
-      default_branch_manual: true)
+    branch = repo.branches.find(params.expect(repo: [ :default_branch_id ])[:default_branch_id])
+    repo.with_lock { repo.update!(default_branch: branch, default_branch_manual: true) }
     redirect_to edit_project_path(repo.project), notice: "Default branch updated."
   end
 

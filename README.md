@@ -40,6 +40,7 @@ The app expects TLS to be terminated in front of it (`assume_ssl`).
 | `UPLOAD_RATE_LIMIT_PER_HOUR` | `60` | Uploads per token and hour (429) |
 | `OCCURRENCE_QUOTA` | `5000000` | Stored occurrences per owner (507) |
 | `TOKEN_MAX_LIFETIME_DAYS` | `365` | Upper bound for token expiry |
+| `MAX_FINDINGS_PER_REPORT` | `50000` | Larger reports are rejected (422) before they are processed |
 | `ARTIFACT_ACTIVITY_DAYS` | `30` | Artifacts without a scan in this window drop out of the project list counts |
 | `RAILS_MAX_THREADS` | `3` | Puma threads |
 | `RAILS_LOG_LEVEL` | `info` | |

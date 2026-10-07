@@ -18,6 +18,16 @@ class UploadToken < ApplicationRecord
     [ create!(service_account:, created_by:, expires_at:, token_digest: digest(secret)), secret ]
   end
 
+  # Rechecks rights under a lock on the user, so a concurrent deactivation or group loss cannot be outrun (ADR 0005).
+  def self.issue_for!(user:, service_account:, expires_at:)
+    user.transaction do
+      user.lock!
+      raise ActiveRecord::RecordNotFound if user.deactivated?
+
+      issue!(service_account: ServiceAccount.manageable_by(user).find(service_account.id), created_by: user, expires_at:)
+    end
+  end
+
   def revoke!
     update!(revoked_at: Time.current) unless revoked_at
   end

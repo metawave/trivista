@@ -1,7 +1,7 @@
 class UploadTokensController < ApplicationController
   def create
     @service_account = ServiceAccount.manageable_by(Current.user).find(params[:service_account_id])
-    @upload_token, @secret = UploadToken.issue!(service_account: @service_account, created_by: Current.user, expires_at:)
+    @upload_token, @secret = UploadToken.issue_for!(user: Current.user, service_account: @service_account, expires_at:)
     response.headers["Cache-Control"] = "no-store"
     render :created
   rescue ActiveRecord::RecordInvalid => error

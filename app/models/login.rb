@@ -19,8 +19,10 @@ class Login
     end
     raise Rejected, "user is deactivated" if user.deactivated?
 
-    user.revoke_tokens_created_for_groups!(user.groups - groups) if user.persisted?
-    user.update!(name:, groups:, admin: groups.include?(oidc.admin_group))
+    user.with_lock do
+      user.revoke_tokens_created_for_groups!(user.groups - groups) if user.persisted?
+      user.update!(name:, groups:, admin: groups.include?(oidc.admin_group))
+    end
     user
   end
 
