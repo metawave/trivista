@@ -1,6 +1,28 @@
-<h1><%= link_to @branch.repo.name, @branch.repo %> / <%= @branch.name %></h1>
-<ul>
-  <% @branch.scans.order(created_at: :desc, id: :desc).each do |scan| %>
-    <li><%= link_to "#{scan.created_at.to_fs(:db)} #{scan.commit_sha.first(8)}", scan %></li>
-  <% end %>
-</ul>
+<h1><%= link_to @branch.repo.project.name, @branch.repo.project %> / <%= link_to @branch.repo.name, @branch.repo %> / <%= @branch.name %></h1>
+
+<%= form_with url: branch_path(@branch), method: :get, class: "filters" do %>
+  <%= select_tag :type, options_for_select(Finding::TYPES.map { [ it.pluralize.capitalize, it ] }, @finding_type) %>
+  <%= select_tag :range, options_for_select([ [ "7 days", "7" ], [ "30 days", "30" ], [ "90 days", "90" ], [ "All", "all" ] ], @range) %>
+  <%= select_tag :trigger, options_for_select([ [ "All triggers", "" ] ] + Scan::TRIGGERS.map { [ it, it ] }, @trigger.to_s) %>
+  <%= submit_tag "Apply", name: nil %>
+<% end %>
+
+<% if @series.empty? %>
+  <p>No scans in this range.</p>
+<% end %>
+
+<% @series.each do |series| %>
+  <section class="trend">
+    <h2><%= series.artifact.name %> <small>(<%= series.artifact.category %>)</small></h2>
+    <div data-controller="trend"
+         data-trend-points-value="<%= series.points.map { { scan_id: it.scan_id, label: "#{it.uploaded_at.to_fs(:db)} #{it.commit_sha.first(8)}", counts: it.counts } }.to_json %>"
+         data-trend-severities-value="<%= Occurrence::SEVERITIES.to_json %>">
+      <canvas data-trend-target="canvas"></canvas>
+    </div>
+    <ul>
+      <% series.points.reverse_each do |point| %>
+        <li><%= link_to "#{point.uploaded_at.to_fs(:db)} #{point.commit_sha.first(8)}", scan_path(point.scan_id) %></li>
+      <% end %>
+    </ul>
+  </section>
+<% end %>
