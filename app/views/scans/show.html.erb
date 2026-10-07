@@ -1,0 +1,2 @@
+<h1><%= link_to @scan.branch.name, @scan.branch %> / <%= @scan.commit_sha.first(8) %></h1>
+<p><%= @scan.artifact.name %> (<%= @scan.reported_artifact_type %>)</p>

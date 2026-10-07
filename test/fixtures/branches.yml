@@ -1,3 +1,7 @@
 shop_backend_main:
   repo: shop_backend
   name: main
+
+alice_tools_cli_main:
+  repo: alice_tools_cli
+  name: main

@@ -1,3 +1,7 @@
 shop_backend:
   project: shop
   name: backend
+
+alice_tools_cli:
+  project: alice_tools
+  name: cli

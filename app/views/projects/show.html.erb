@@ -1,0 +1,6 @@
+<h1><%= @project.name %></h1>
+<ul>
+  <% @project.repos.order(:name).each do |repo| %>
+    <li><%= link_to repo.name, repo %></li>
+  <% end %>
+</ul>

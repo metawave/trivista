@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     resources :scans, only: :create
   end
 
-  resources :scans, only: :show
+  resources :projects, :repos, :branches, :scans, only: :show
 
   root "projects#index"
 end

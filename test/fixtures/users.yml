@@ -9,3 +9,16 @@ bob:
   sub: bob-sub
   name: Bob
   groups: ["trivista-users"]
+
+root:
+  iss: https://idp.example.com
+  sub: root-sub
+  name: Root
+  groups: ["trivista-users", "trivista-admins"]
+  admin: true
+
+dave:
+  iss: https://idp.example.com
+  sub: dave-sub
+  name: Dave
+  groups: ["team-a", "trivista-users"]

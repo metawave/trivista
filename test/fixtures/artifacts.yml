@@ -2,3 +2,8 @@ shop_image:
   project: shop
   category: container_image
   name: registry.example.com/shop
+
+alice_tools_source:
+  project: alice_tools
+  category: source
+  name: .

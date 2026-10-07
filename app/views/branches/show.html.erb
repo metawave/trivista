@@ -1,0 +1,6 @@
+<h1><%= link_to @branch.repo.name, @branch.repo %> / <%= @branch.name %></h1>
+<ul>
+  <% @branch.scans.order(created_at: :desc, id: :desc).each do |scan| %>
+    <li><%= link_to "#{scan.created_at.to_fs(:db)} #{scan.commit_sha.first(8)}", scan %></li>
+  <% end %>
+</ul>

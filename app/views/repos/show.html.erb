@@ -1,0 +1,6 @@
+<h1><%= link_to @repo.project.name, @repo.project %> / <%= @repo.name %></h1>
+<ul>
+  <% @repo.branches.order(:name).each do |branch| %>
+    <li><%= link_to branch.name, branch %></li>
+  <% end %>
+</ul>

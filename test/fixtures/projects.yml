@@ -7,3 +7,19 @@ alice_tools:
   owner: alice
   name: tools
   visibility: user
+
+alice_shared:
+  owner: alice
+  name: shared
+  visibility: group
+  visibility_group: team-a
+
+alice_public:
+  owner: alice
+  name: public
+  visibility: public
+
+team_a_public:
+  owner: team_a
+  name: open
+  visibility: public
