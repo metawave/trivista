@@ -29,7 +29,7 @@ export default class extends Controller {
         },
         plugins: { legend: { display: false } },
         scales: {
-          x: { stacked: true, grid: { display: false }, ticks: { font } },
+          x: { stacked: true, grid: { display: false }, ticks: { font, maxRotation: 0, autoSkipPadding: 16 } },
           y: { stacked: true, beginAtZero: true, border: { display: false }, ticks: { precision: 0, font } }
         }
       }

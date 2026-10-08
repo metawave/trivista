@@ -239,7 +239,7 @@ code, .mono { font-family: var(--font-mono); }
 .table th:first-child, .table td:first-child { padding-left: 20px; }
 .table th:last-child, .table td:last-child { padding-right: 20px; }
 .table .num { text-align: right; white-space: nowrap; }
-.table .nowrap { white-space: nowrap; }
+.table .nowrap, .table .versions, .table .fixed { white-space: nowrap; }
 .table .truncate { max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .table--muted { color: var(--text-3); }
 .table--muted a { color: var(--text-2); }
@@ -401,7 +401,7 @@ form.button_to { display: inline; }
 .tab-bar > .filter-group { gap: 16px; padding-bottom: 8px; }
 
 .filters { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px; border-bottom: 1px solid var(--line); }
-.filter-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.filter-group { max-width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 
 .toggle {
   height: 30px;
@@ -421,8 +421,8 @@ form.button_to { display: inline; }
 .toggle[aria-current="true"] { border-color: var(--border-strong); background: var(--surface-2); color: var(--text); }
 .toggle--accent[aria-current="true"] { border-color: var(--accent); background: var(--accent-tint); color: var(--accent-hover); }
 
-.segmented { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-m); overflow: hidden; background: var(--surface); }
-.segmented a { height: 30px; display: inline-flex; align-items: center; padding: 0 12px; color: var(--text-2); font: 12px var(--font-mono); }
+.segmented { max-width: 100%; overflow-x: auto; display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--radius-m); overflow: hidden; background: var(--surface); }
+.segmented a { flex: none; white-space: nowrap; height: 30px; display: inline-flex; align-items: center; padding: 0 12px; color: var(--text-2); font: 12px var(--font-mono); }
 .segmented a + a { border-left: 1px solid var(--border-strong); }
 .segmented a:hover { color: var(--text); text-decoration: none; }
 .segmented a[aria-current="true"] { background: var(--accent-tint); color: var(--accent-hover); font-weight: 600; }
@@ -434,6 +434,10 @@ form.button_to { display: inline; }
 .header-card__field--main { flex: 1 1 320px; gap: 2px; padding-left: 0; border-left: 0; }
 .header-card__label { color: var(--text-2); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
 .header-card__value { min-height: var(--control-height); }
+
+@media (max-width: 720px) {
+  .header-card__field { flex-basis: 100%; padding-left: 0; border-left: 0; }
+}
 
 .dropdown { position: relative; }
 .dropdown__toggle { width: 100%; justify-content: flex-start; padding: 0 10px; list-style: none; }
