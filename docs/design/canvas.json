@@ -4,7 +4,7 @@
   "boards": {
     "Main.dc.html": { "h": 1280, "title": "Foundations", "w": 1440, "x": 0, "y": 0 },
     "Components.dc.html": { "h": 1680, "title": "Components", "w": 1440, "x": 1520, "y": 0 },
-    "Projects.dc.html": { "expand": "fill", "h": 960, "title": "Screen · Projects", "w": 1440, "x": 0, "y": 2100 },
+    "Projects.dc.html": { "expand": "fill", "h": 1500, "title": "Screen · Projects", "w": 1440, "x": 0, "y": 2100 },
     "Project.dc.html": { "expand": "fill", "h": 1500, "is_interactive": true, "title": "Screen · Project (aggregated)", "w": 1440, "x": 1520, "y": 2100 },
     "Repo.dc.html": { "expand": "fill", "h": 1600, "is_interactive": true, "title": "Screen · Repo (branch switch)", "w": 1440, "x": 3040, "y": 2100 },
     "Scan.dc.html": { "expand": "fill", "h": 1560, "is_interactive": true, "title": "Screen · Scan Findings", "w": 1440, "x": 4560, "y": 2100 },

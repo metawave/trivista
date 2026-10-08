@@ -14,7 +14,7 @@ body{margin:0}
 a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:underline}
 </style>
 </helmet>
-<div style="width: 100%; min-height: 960px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45">
+<div style="width: 100%; min-height: 1500px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45">
 
 <header style="background: #15181d; color: #ffffff">
 <div style="max-width: 1360px; margin: 0 auto; padding: 0 24px; min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
@@ -52,6 +52,46 @@ a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:under
 <a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; color: #4a525e; text-decoration: none">public</a>
 </div>
 </form>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<sc-for list="{{tiles}}" as="t" hint-placeholder-count="4">
+<div style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 14px 18px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">{{t.label}}</span>
+<span style="font: 600 24px/1.1 'IBM Plex Mono', monospace">{{t.total}}</span>
+<span style="display: inline-flex; border-radius: 3px; overflow: hidden; font: 12px 'IBM Plex Mono', monospace"><sc-for list="{{t.segs}}" as="s" hint-placeholder-count="4"><span style="display: inline-flex; gap: 5px; padding: 2px 7px; background: {{s.bg}}; color: {{s.fg}}"><b>{{s.l}}</b>{{s.n}}</span></sc-for></span>
+</div>
+</sc-for>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+<section style="flex: 2 1 560px; min-width: 0; background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #e6e9ed">
+<div style="display: flex; flex-direction: column"><h2 style="margin: 0; font-size: 16px; font-weight: 600">Vulnerabilities over time</h2><span style="font-size: 12px; color: #68717d">Projects in this list, Default Branches</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; font: 12px 'IBM Plex Mono', monospace">
+<span style="display: inline-flex; border: 1px solid #c3c9d1; border-radius: 6px; overflow: hidden"><a href="#" style="height: 28px; display: inline-flex; align-items: center; padding: 0 10px; background: #e8eefc; color: #1f429f; font-weight: 600">Vulnerabilities</a><a href="#" style="height: 28px; display: inline-flex; align-items: center; padding: 0 10px; border-left: 1px solid #c3c9d1; color: #4a525e">Misconfigurations</a><a href="#" style="height: 28px; display: inline-flex; align-items: center; padding: 0 10px; border-left: 1px solid #c3c9d1; color: #4a525e">Secrets</a><a href="#" style="height: 28px; display: inline-flex; align-items: center; padding: 0 10px; border-left: 1px solid #c3c9d1; color: #4a525e">Licenses</a></span>
+<span style="display: inline-flex; border: 1px solid #c3c9d1; border-radius: 6px; overflow: hidden"><a href="#" style="height: 28px; display: inline-flex; align-items: center; padding: 0 10px; color: #4a525e">7d</a><a href="#" style="height: 28px; display: inline-flex; align-items: center; padding: 0 10px; border-left: 1px solid #c3c9d1; background: #e8eefc; color: #1f429f; font-weight: 600">30d</a><a href="#" style="height: 28px; display: inline-flex; align-items: center; padding: 0 10px; border-left: 1px solid #c3c9d1; color: #4a525e">90d</a></span>
+</div>
+</div>
+<div style="padding: 16px 20px 12px">
+<div style="height: 150px; border-bottom: 1px solid #c3c9d1; display: flex; align-items: flex-end; gap: 5px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="30"><span style="flex: 1 1 0; height: {{b.h}}; display: flex; flex-direction: column-reverse; border-radius: 2px 2px 0 0; overflow: hidden"><sc-for list="{{b.segs}}" as="s" hint-placeholder-count="4"><span style="display: block; height: {{s.h}}; background: {{s.bg}}"></span></sc-for></span></sc-for>
+</div>
+</div>
+</section>
+
+<section style="flex: 1 1 360px; min-width: 0; background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px">
+<div style="padding: 12px 20px; border-bottom: 1px solid #e6e9ed; display: flex; flex-direction: column"><h2 style="margin: 0; font-size: 16px; font-weight: 600">Most widespread vulnerabilities</h2><span style="font-size: 12px; color: #68717d">Current findings, by number of projects</span></div>
+<ol style="list-style: none; margin: 0; padding: 0">
+<sc-for list="{{widespread}}" as="w" hint-placeholder-count="6">
+<li style="display: flex; align-items: center; gap: 10px; padding: 8px 20px; border-top: 1px solid #f0f2f5">
+<span style="width: 20px; height: 20px; flex: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; background: {{w.bg}}; color: {{w.fg}}; font: 600 11px 'IBM Plex Mono', monospace" title="{{w.sev}}">{{w.l}}</span>
+<span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><a href="#" style="font: 500 13px 'IBM Plex Mono', monospace">{{w.id}}</a><span style="font: 12px 'IBM Plex Mono', monospace; color: #68717d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{w.pkg}}</span></span>
+<span style="flex: none; font-size: 12px; color: #4a525e; text-align: right"><b style="font: 600 13px 'IBM Plex Mono', monospace; color: #15181d">{{w.projects}}</b> projects</span>
+</li>
+</sc-for>
+</ol>
+</section>
 </div>
 
 <div style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; overflow-x: auto">
@@ -103,7 +143,7 @@ a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:under
 </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":960}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
 class Component extends DCLogic {
   renderVals() {
     const sev = {
@@ -121,7 +161,28 @@ class Component extends DCLogic {
       name, meta, owner, cluster, repo: !cluster, last,
       types: [cell(v), cell(m), cell(s), cell(l)]
     });
+    const order = ['C', 'H', 'M', 'L', 'U'];
+    const tile = (label, counts) => {
+      const segs = order.filter((l) => counts[l]).map((l) => ({ l, n: counts[l], ...sev[l] }));
+      return { label, segs, total: segs.reduce((a, s) => a + s.n, 0) };
+    };
+    const bars = Array.from({ length: 30 }, (_, i) => {
+      const c = [7, 61 - Math.round(i / 3), 149 - Math.round(i / 2), 100 - Math.round(i / 4), 3];
+      const total = c.reduce((a, b) => a + b, 0);
+      return { h: (total / 340 * 150) + 'px', segs: order.map((l, j) => ({ h: (c[j] / 340 * 150) + 'px', bg: sev[l].bg })) };
+    });
+    const w = (l, id, pkg, projects) => ({ l, sev: sev[l].title, bg: sev[l].bg, fg: sev[l].fg, id, pkg, projects });
     return {
+      tiles: [tile('Vulnerabilities', { C: 6, H: 50, M: 120, L: 80, U: 3 }), tile('Misconfigurations', { C: 1, H: 16, M: 37 }), tile('Secrets', { H: 1, C: 1 }), tile('Licenses', { M: 4, L: 1, U: 2 })],
+      bars,
+      widespread: [
+        w('H', 'CVE-2023-39325', 'golang.org/x/net', 5),
+        w('C', 'CVE-2024-45337', 'golang.org/x/crypto', 4),
+        w('M', 'CVE-2024-6104', 'go-retryablehttp', 4),
+        w('H', 'CVE-2024-21538', 'cross-spawn', 3),
+        w('M', 'CVE-2024-4067', 'micromatch', 3),
+        w('L', 'CVE-2024-24791', 'stdlib', 2)
+      ],
       projects: [
         row('acme-platform', '4 repos', 'team-platform', false, { C: 2, H: 14, M: 31, L: 8 }, { H: 3, M: 5 }, {}, { U: 2 }, '2 h ago'),
         row('billing', '2 repos', 'team-billing', false, { H: 6, M: 12, L: 19 }, { M: 2 }, { H: 1 }, {}, '5 h ago'),
