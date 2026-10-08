@@ -18,6 +18,13 @@ class Scan < ApplicationRecord
     where(id: latest)
   end
 
+  # Counts per finding type and severity, summed over the given scans.
+  def self.sum_counts(scans)
+    scans.each_with_object(Hash.new { |hash, key| hash[key] = Hash.new(0) }) do |scan, totals|
+      scan.counts.each { |finding_type, severities| severities.each { |severity, count| totals[finding_type][severity] += count } }
+    end
+  end
+
   # Determined on read so that the order of concurrent uploads does not matter (ADR 0008).
   def predecessor
     branch.scans.where(artifact_id:)

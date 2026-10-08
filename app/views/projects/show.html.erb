@@ -1,33 +1,32 @@
 <% content_for :title, @project.name %>
 <main class="page">
-  <div class="page-head">
-    <div>
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <%= link_to "Projects", root_path %><span aria-hidden="true">/</span><span aria-current="page"><%= @project.name %></span>
+  </nav>
+
+  <section class="panel header-card">
+    <div class="header-card__field header-card__field--main">
+      <span class="header-card__label">Project</span>
       <h1><%= @project.name %></h1>
-      <p class="page-head__sub">
+      <span class="meta-line">
         <span>Owner <strong><%= @project.owner.display_name %></strong></span>
         <%= visibility_label(@project) %>
-      </p>
+        <span><%= pluralize(@repos.size, "repo") %><% if (last = @last_scans.values.max) %> · last scan <%= time_ago_in_words(last) %> ago<% end %></span>
+      </span>
     </div>
     <% if manageable?(@project) %>
       <%= link_to edit_project_path(@project), class: "btn" do %><%= icon(:settings) %>Settings<% end %>
     <% end %>
-  </div>
-
-  <section class="panel">
-    <div class="panel__head"><h2 class="with-icon">Repos <span class="count"><%= @repos.size %></span></h2></div>
-    <ul class="list">
-      <% @repos.each do |repo| %>
-        <li>
-          <span class="with-icon"><%= icon(:repo) %><%= link_to repo.name, repo, class: "mono" %></span>
-          <span class="meta-line">
-            <% if repo.default_branch %>
-              <%= link_to repo.default_branch, class: "chip chip--fill" do %><%= icon(:branch, size: 12) %><%= repo.default_branch.name %><% end %>
-            <% end %>
-            <%= pluralize(@branch_counts.fetch(repo.id, 0), "branch") %>
-          </span>
-        </li>
-      <% end %>
-    </ul>
-    <% if @repos.empty? %><p class="empty muted">No repos yet. They appear with the first upload.</p><% end %>
   </section>
+
+  <nav class="tabs tabs--page" aria-label="Project view">
+    <%= link_to "Overview", project_path(@project), class: "tab", aria: { current: ("page" unless @finding_type) } %>
+    <% Finding::TYPES.each do |finding_type| %>
+      <%= link_to project_path(@project, type: finding_type), class: "tab", aria: { current: ("page" if finding_type == @finding_type) } do %>
+        <%= finding_type.pluralize.capitalize %> <span class="count"><%= @current_counts[finding_type].values.sum %></span>
+      <% end %>
+    <% end %>
+  </nav>
+
+  <%= render(@finding_type ? "project_findings" : "project_overview") %>
 </main>

@@ -1,0 +1,75 @@
+<div class="tiles">
+  <% Finding::TYPES.each do |finding_type| %>
+    <%= link_to project_path(@project, type: finding_type), class: "panel tile" do %>
+      <span class="header-card__label"><%= finding_type.pluralize.capitalize %></span>
+      <span class="tile__total"><%= @current_counts[finding_type].values.sum %></span>
+      <%= severity_counts(@current_counts[finding_type]) %>
+    <% end %>
+  <% end %>
+</div>
+
+<section class="panel trend">
+  <div class="panel__head">
+    <div>
+      <h2><%= @trend_type.pluralize.capitalize %> over time</h2>
+      <span class="note">All repos, Default Branches, latest scan per artifact and day</span>
+    </div>
+    <div class="filter-group">
+      <%= render "shared/severity_legend" %>
+      <div class="segmented" role="group" aria-label="Finding type">
+        <% Finding::TYPES.each do |finding_type| %>
+          <%= link_to finding_type.pluralize.capitalize, project_path(@project, trend: finding_type, range: @range), aria: { current: (finding_type == @trend_type).to_s } %>
+        <% end %>
+      </div>
+      <div class="segmented" role="group" aria-label="Range">
+        <% ProjectsController::RANGES.each_key do |range| %>
+          <%= link_to (range == "all" ? "All" : "#{range}d"), project_path(@project, trend: @trend_type, range:), aria: { current: (range == @range).to_s } %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <% if @trend.any? %>
+    <div class="chart" data-controller="trend"
+         data-trend-points-value="<%= @trend.map { { label: it.day.strftime("%b %-d"), counts: it.counts } }.to_json %>"
+         data-trend-severities-value="<%= Occurrence::SEVERITIES.to_json %>">
+      <canvas data-trend-target="canvas" aria-label="Findings per day by severity" role="img"></canvas>
+    </div>
+  <% else %>
+    <p class="empty muted">No scans on the Default Branches yet.</p>
+  <% end %>
+</section>
+
+<section class="panel">
+  <div class="panel__head"><h2>Repos</h2></div>
+  <div class="table-scroll">
+    <table class="table repos">
+      <thead>
+        <tr>
+          <th>Repo</th>
+          <th>Default branch</th>
+          <% Finding::TYPES.each do |finding_type| %><th><%= finding_type.pluralize.capitalize %></th><% end %>
+          <th class="num">Last scan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @repos.each do |repo| %>
+          <tr id="<%= dom_id(repo) %>">
+            <td class="nowrap"><span class="with-icon"><%= icon(:repo) %><strong><%= link_to repo.name, repo, class: "mono" %></strong></span></td>
+            <td><% if repo.default_branch %><span class="chip chip--fill"><%= repo.default_branch.name %></span><% end %></td>
+            <% Finding::TYPES.each do |finding_type| %>
+              <td class="<%= finding_type %>"><%= severity_counts(@repo_counts.dig(repo.id, finding_type)) %></td>
+            <% end %>
+            <td class="num muted">
+              <% if (last_scan = @last_scans[repo.id]) %>
+                <time datetime="<%= last_scan.iso8601 %>" title="<%= last_scan.to_fs(:db) %>"><%= time_ago_in_words(last_scan) %> ago</time>
+              <% else %>
+                never
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% if @repos.empty? %><p class="empty muted">No repos yet. They appear with the first upload.</p><% end %>
+</section>

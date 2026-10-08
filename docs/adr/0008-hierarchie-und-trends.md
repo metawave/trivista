@@ -6,7 +6,7 @@ Ein Artifact ist durch Kategorie und `ArtifactName` ohne Tag oder Digest identif
 
 Predecessor ist der letzte Scan desselben Branches und Artifacts nach Upload-Zeitpunkt und ID; er wird beim Lesen bestimmt. Mehrere Scans pro Commit sind erlaubt.
 
-Jedes Repo hat einen Default Branch: `main`, sonst `master`, sonst der erste hochgeladene Branch; änderbar durch Verwaltungsberechtigte (ADR 0007). Solange er nicht manuell gesetzt ist, wird diese Regel bei jedem neuen Branch neu angewendet, ein später hochgeladener `main` übernimmt also. Wird der Default Branch gelöscht, gilt wieder die automatische Regel. Die Zähler der Projektliste summieren den letzten Scan pro Artifact auf den Default Branches, damit Findings aus Feature-Branches nicht mehrfach zählen; Artifacts ohne Scan in den letzten 30 Tagen (konfigurierbar) zählen nicht mehr.
+Jedes Repo hat einen Default Branch: `main`, sonst `master`, sonst der erste hochgeladene Branch; änderbar durch Verwaltungsberechtigte (ADR 0007). Solange er nicht manuell gesetzt ist, wird diese Regel bei jedem neuen Branch neu angewendet, ein später hochgeladener `main` übernimmt also. Wird der Default Branch gelöscht, gilt wieder die automatische Regel. Die Zähler der Projektliste summieren den letzten Scan pro Artifact auf den Default Branches, damit Findings aus Feature-Branches nicht mehrfach zählen; Artifacts ohne Scan in den letzten 30 Tagen (konfigurierbar) zählen nicht mehr. Dieselbe Regel gilt für die aktuellen Findings eines Branches und für den Trend eines Projects, der sie pro Tag anwendet; massgebend ist der heutige Default Branch.
 
 ## Phase 2: Cluster
 

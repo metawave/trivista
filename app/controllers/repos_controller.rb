@@ -52,9 +52,7 @@ class ReposController < ApplicationController
     end
 
     def current_counts
-      @current_counts ||= @current_scans.each_with_object(Hash.new { |hash, key| hash[key] = Hash.new(0) }) do |scan, totals|
-        scan.counts.each { |finding_type, severities| severities.each { |severity, count| totals[finding_type][severity] += count } }
-      end
+      @current_counts ||= Scan.sum_counts(@current_scans)
     end
     helper_method :current_counts
 

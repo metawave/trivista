@@ -12,8 +12,12 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.visible_to(Current.user).find(params[:id])
-    @repos = @project.repos.includes(:default_branch).order(:name)
-    @branch_counts = Branch.where(repo: @repos).group(:repo_id).count
+    @repos = @project.repos.includes(:default_branch).order(:name).to_a
+    @current_scans = Scan.current(@repos.filter_map(&:default_branch_id)).includes(:artifact, branch: :repo).to_a
+    @current_counts = Scan.sum_counts(@current_scans)
+    @last_scans = Scan.joins(:branch).where(branches: { repo_id: @repos }).group("branches.repo_id").maximum(:created_at)
+    @finding_type = Finding::TYPES.include?(params[:type]) ? params[:type] : nil
+    @finding_type ? load_findings : load_overview
   end
 
   def edit
@@ -29,6 +33,11 @@ class ProjectsController < ApplicationController
     end
   end
 
+  RANGES = { "7" => 7.days, "30" => 30.days, "90" => 90.days, "all" => nil }.freeze
+  DEFAULT_RANGE = "30"
+  # ponytail: rows are capped instead of paginated; paginate when projects regularly exceed the cap.
+  ROW_LIMIT = 500
+
   def destroy
     project = manageable_projects.find(params[:id])
     return redirect_to(edit_project_path(project), alert: "Type the project name to confirm.") unless confirmed?(project.name)
@@ -36,4 +45,18 @@ class ProjectsController < ApplicationController
     Purge.new(project).call
     redirect_to root_path, notice: "Project #{project.name} deleted."
   end
+
+  private
+    def load_overview
+      @range = RANGES.key?(params[:range]) ? params[:range] : DEFAULT_RANGE
+      @trend_type = Finding::TYPES.include?(params[:trend]) ? params[:trend] : Finding::TYPES.first
+      @trend = ProjectTrend.new(@project, finding_type: @trend_type, since: RANGES[@range]&.ago).points
+      @repo_counts = @current_scans.group_by { it.branch.repo_id }.transform_values { Scan.sum_counts(it) }
+    end
+
+    def load_findings
+      @severities = Occurrence::SEVERITIES & params[:severity].to_s.split(",")
+      page = ScanFindings.new(@current_scans).page(limit: ROW_LIMIT, finding_type: @finding_type, severities: @severities.presence)
+      @rows, @row_count = page.rows, page.total
+    end
 end

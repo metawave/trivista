@@ -1,0 +1,34 @@
+<% scans_by_id = @current_scans.index_by(&:id) %>
+<section class="panel">
+  <h2 class="visually-hidden"><%= @finding_type.pluralize.capitalize %></h2>
+  <div class="filters">
+    <div class="filter-group" role="group" aria-label="Severity">
+      <% shown = shown_severities(@severities) %>
+      <% Occurrence::SEVERITIES.each do |severity| %>
+        <%= link_to project_path(@project, type: @finding_type, severity: severity_toggle_param(@severities, severity)), class: "toggle", aria: { current: shown.include?(severity).to_s } do %>
+          <span class="swatch swatch--<%= severity.downcase %>"></span><%= severity %> <%= @current_counts[@finding_type][severity] %>
+        <% end %>
+      <% end %>
+    </div>
+    <span class="note">Current findings on the Default Branch of every repo</span>
+  </div>
+
+  <% if @rows.any? %>
+    <div class="table-scroll">
+      <table class="table findings">
+        <thead>
+          <tr><th>Severity</th><th>ID</th><th>Package / Target</th><th>Installed</th><th>Fixed in</th><th>Repos</th><th>Title</th></tr>
+        </thead>
+        <tbody class="current">
+          <%= render "scans/finding_rows", rows: @rows, new_finding_ids: nil, gone: false,
+            origin: ->(row) { safe_join(row.scan_ids.map { scans_by_id.fetch(it).branch.repo }.uniq.sort_by(&:name).map { link_to it.name, it, class: "chip chip--fill" }, " ") } %>
+        </tbody>
+      </table>
+    </div>
+    <% if @row_count > @rows.size %>
+      <div class="panel__foot">Showing the first <%= @rows.size %> of <%= @row_count %>. Narrow the filters to see the rest.</div>
+    <% end %>
+  <% else %>
+    <p class="empty muted">No findings match these filters.</p>
+  <% end %>
+</section>

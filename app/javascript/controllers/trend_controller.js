@@ -24,7 +24,8 @@ export default class extends Controller {
       options: {
         maintainAspectRatio: false,
         onClick: (_event, elements) => {
-          if (elements.length) Turbo.visit(this.pointsValue[elements[0].index].url)
+          const url = elements.length && this.pointsValue[elements[0].index].url
+          if (url) Turbo.visit(url)
         },
         plugins: { legend: { display: false } },
         scales: {
