@@ -1,0 +1,36 @@
+when:
+  - event: cron
+    cron: nightly-security
+  - event: manual
+
+steps:
+  - name: scan-source
+    image: aquasec/trivy:0.75.0
+    commands:
+      - trivy fs --quiet --format json --scanners vuln,misconfig,secret,license --list-all-pkgs=false --output trivy-source.json .
+
+  - name: scan-image
+    image: aquasec/trivy:0.75.0
+    environment:
+      TRIVY_USERNAME:
+        from_secret: registry_username
+      TRIVY_PASSWORD:
+        from_secret: registry_password
+    commands:
+      - trivy image --platform linux/arm64 --quiet --format json --scanners vuln,misconfig,secret,license --list-all-pkgs=false --output trivy-image.json registry.metawave.ch/metawave/trivista:latest
+
+  - name: upload
+    image: curlimages/curl:8.22.0
+    environment:
+      TRIVISTA_TOKEN:
+        from_secret: TRIVISTA_TOKEN
+    commands:
+      - |
+        trigger=manual
+        [ "${CI_PIPELINE_EVENT}" = cron ] && trigger=schedule
+        for report in trivy-source.json trivy-image.json; do
+          curl --fail-with-body -sS -X POST https://trivista.metawave.ch/api/scans \
+            -H "Authorization: Bearer $${TRIVISTA_TOKEN}" \
+            -F report=@$${report} -F project=trivista -F repo=trivista \
+            -F branch=${CI_COMMIT_BRANCH} -F commit=${CI_COMMIT_SHA} -F trigger=$${trigger}
+        done
