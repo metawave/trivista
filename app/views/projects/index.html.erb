@@ -35,8 +35,10 @@
         <% @projects.each do |project| %>
           <tr id="<%= dom_id(project) %>">
             <td class="nowrap">
-              <span class="with-icon"><%= icon(:repo) %><strong><%= link_to project.name, project %></strong></span>
-              <span class="note"><%= pluralize(@repo_counts.fetch(project.id, 0), "repo") %></span>
+              <span class="with-icon">
+                <%= icon(:repo) %><strong><%= link_to project.name, project %></strong>
+                <span class="note"><%= pluralize(@repo_counts.fetch(project.id, 0), "repo") %></span>
+              </span>
             </td>
             <td class="nowrap"><%= owner_label(project.owner) %></td>
             <% Finding::TYPES.each do |finding_type| %>
