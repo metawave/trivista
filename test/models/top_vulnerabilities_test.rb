@@ -1,6 +1,6 @@
 require "test_helper"
 
-class WidespreadVulnerabilitiesTest < ActiveSupport::TestCase
+class TopVulnerabilitiesTest < ActiveSupport::TestCase
   setup do
     @shop_branch = branches(:shop_backend_main)
     repos(:shop_backend).update!(default_branch: @shop_branch)
@@ -10,17 +10,18 @@ class WidespreadVulnerabilitiesTest < ActiveSupport::TestCase
     scans(:alice_tools_first).update!(created_at: 1.day.ago)
   end
 
-  test "ranks vulnerabilities by the number of projects they currently occur in" do
+  test "ranks critical first, then by the number of projects within a severity" do
     occur(scans(:shop_main_first), :shop, "CVE-2024-0001", "LOW")
     occur(scans(:alice_tools_first), :alice_tools, "CVE-2024-0001", "HIGH")
     occur(scans(:shop_main_first), :shop, "CVE-2024-0002", "CRITICAL")
+    occur(scans(:shop_main_first), :shop, "CVE-2024-0003", "HIGH")
     occur(scans(:shop_main_first), :shop, "aws-access-key-id", "CRITICAL", finding_type: "secret")
 
-    rows = WidespreadVulnerabilities.new(Project.where(id: [ projects(:shop).id, projects(:alice_tools).id ])).top(limit: 2)
+    rows = TopVulnerabilities.new(Project.where(id: [ projects(:shop).id, projects(:alice_tools).id ])).top(limit: 3)
 
-    assert_equal [ "CVE-2024-0001", "CVE-2024-0002" ], rows.map(&:identifier)
-    assert_equal [ 2, 1 ], rows.map(&:project_count)
-    assert_equal "HIGH", rows.first.severity
+    assert_equal [ "CVE-2024-0002", "CVE-2024-0001", "CVE-2024-0003" ], rows.map(&:identifier)
+    assert_equal [ "CRITICAL", "HIGH", "HIGH" ], rows.map(&:severity)
+    assert_equal [ 1, 2, 1 ], rows.map(&:project_count)
   end
 
   test "counts only the current scans of the default branches" do
@@ -30,7 +31,7 @@ class WidespreadVulnerabilitiesTest < ActiveSupport::TestCase
     occur(feature_scan, :alice_tools, "CVE-2024-0001", "HIGH")
     occur(scans(:shop_main_first), :shop, "CVE-2024-0001", "HIGH")
 
-    rows = WidespreadVulnerabilities.new(Project.all).top(limit: 5)
+    rows = TopVulnerabilities.new(Project.all).top(limit: 5)
 
     assert_equal 1, rows.find { it.identifier == "CVE-2024-0001" }.project_count
   end

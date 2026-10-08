@@ -1,14 +1,14 @@
-<section class="panel widespread">
+<section class="panel top-vulnerabilities">
   <div class="panel__head panel__head--stack">
-    <h2>Most widespread vulnerabilities</h2>
-    <span class="note">Current findings, by number of projects</span>
+    <h2>Top vulnerabilities</h2>
+    <span class="note">Current findings, critical first, then by number of projects</span>
   </div>
-  <% if @widespread.any? %>
+  <% if @top_vulnerabilities.any? %>
     <ol class="list">
-      <% @widespread.each do |row| %>
+      <% @top_vulnerabilities.each do |row| %>
         <li>
           <span class="badge badge--<%= row.severity.downcase %>" title="<%= row.severity %>"><%= row.severity.first %></span>
-          <span class="widespread__finding">
+          <span class="top-vulnerabilities__finding">
             <span class="mono"><%= report_link(row.identifier, row.primary_url) %></span>
             <span class="note mono"><%= row.packages.join(", ") %></span>
           </span>

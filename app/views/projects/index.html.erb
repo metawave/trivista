@@ -27,7 +27,7 @@
     <div class="overview-row">
       <%= render "shared/trend_panel", note: "Projects in this list, Default Branches", compact: true,
         path: ->(**filters) { root_path(**list_params, **filters) } %>
-      <%= render "widespread" %>
+      <%= render "top_vulnerabilities" %>
     </div>
   <% end %>
 

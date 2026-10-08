@@ -57,7 +57,7 @@ class ProjectListTest < ActionDispatch::IntegrationTest
     assert_select "tr#project_#{projects(:alice_shared).id} td.num", text: "never"
   end
 
-  test "the overview sums the listed projects and ranks the most widespread vulnerabilities" do
+  test "the overview sums the listed projects and ranks the top vulnerabilities" do
     repos(:shop_backend).update!(default_branch: branches(:shop_backend_main))
     repos(:alice_tools_cli).update!(default_branch: branches(:alice_tools_cli_main))
     scans(:shop_main_first).update!(counts: { "vulnerability" => { "HIGH" => 1 } }, created_at: 1.hour.ago)
@@ -67,7 +67,7 @@ class ProjectListTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_select ".tile", text: /Vulnerabilities\s*3/
-    assert_select ".widespread li", text: /#{findings(:openssl_cve).identifier}.*1\s*project/m
+    assert_select ".top-vulnerabilities li", text: /#{findings(:openssl_cve).identifier}.*1\s*project/m
     points = JSON.parse(css_select("[data-controller=trend]").sole["data-trend-points-value"])
     assert_equal({ "HIGH" => 3 }, points.last["counts"])
 

@@ -81,7 +81,7 @@ a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:under
 </section>
 
 <section style="flex: 1 1 360px; min-width: 0; background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px">
-<div style="padding: 12px 20px; border-bottom: 1px solid #e6e9ed; display: flex; flex-direction: column"><h2 style="margin: 0; font-size: 16px; font-weight: 600">Most widespread vulnerabilities</h2><span style="font-size: 12px; color: #68717d">Current findings, by number of projects</span></div>
+<div style="padding: 12px 20px; border-bottom: 1px solid #e6e9ed; display: flex; flex-direction: column"><h2 style="margin: 0; font-size: 16px; font-weight: 600">Top vulnerabilities</h2><span style="font-size: 12px; color: #68717d">Current findings, critical first, then by number of projects</span></div>
 <ol style="list-style: none; margin: 0; padding: 0">
 <sc-for list="{{widespread}}" as="w" hint-placeholder-count="6">
 <li style="display: flex; align-items: center; gap: 10px; padding: 8px 20px; border-top: 1px solid #f0f2f5">
@@ -176,12 +176,12 @@ class Component extends DCLogic {
       tiles: [tile('Vulnerabilities', { C: 6, H: 50, M: 120, L: 80, U: 3 }), tile('Misconfigurations', { C: 1, H: 16, M: 37 }), tile('Secrets', { H: 1, C: 1 }), tile('Licenses', { M: 4, L: 1, U: 2 })],
       bars,
       widespread: [
-        w('H', 'CVE-2023-39325', 'golang.org/x/net', 5),
         w('C', 'CVE-2024-45337', 'golang.org/x/crypto', 4),
-        w('M', 'CVE-2024-6104', 'go-retryablehttp', 4),
+        w('C', 'CVE-2024-24790', 'stdlib', 1),
+        w('H', 'CVE-2023-39325', 'golang.org/x/net', 5),
         w('H', 'CVE-2024-21538', 'cross-spawn', 3),
-        w('M', 'CVE-2024-4067', 'micromatch', 3),
-        w('L', 'CVE-2024-24791', 'stdlib', 2)
+        w('M', 'CVE-2024-6104', 'go-retryablehttp', 4),
+        w('M', 'CVE-2024-4067', 'micromatch', 3)
       ],
       projects: [
         row('acme-platform', '4 repos', 'team-platform', false, { C: 2, H: 14, M: 31, L: 8 }, { H: 3, M: 5 }, {}, { U: 2 }, '2 h ago'),

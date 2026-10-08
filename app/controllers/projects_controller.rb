@@ -10,7 +10,7 @@ class ProjectsController < ApplicationController
     @repo_counts = Repo.where(project_id: @projects.select(:id)).group(:project_id).count
     @last_scans = Scan.joins(branch: :repo).where(repos: { project_id: @projects.select(:id) }).group("repos.project_id").maximum(:created_at)
     load_trend(@projects.select(:id))
-    @widespread = WidespreadVulnerabilities.new(@projects).top(limit: WIDESPREAD_LIMIT)
+    @top_vulnerabilities = TopVulnerabilities.new(@projects).top(limit: TOP_VULNERABILITIES_LIMIT)
   end
 
   def show
@@ -40,7 +40,7 @@ class ProjectsController < ApplicationController
   DEFAULT_RANGE = "30"
   # ponytail: rows are capped instead of paginated; paginate when projects regularly exceed the cap.
   ROW_LIMIT = 500
-  WIDESPREAD_LIMIT = 6
+  TOP_VULNERABILITIES_LIMIT = 6
 
   def destroy
     project = manageable_projects.find(params[:id])

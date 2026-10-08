@@ -32,7 +32,7 @@ Forms that change data (settings, tokens, service accounts) keep regular fields 
 
 ## Building blocks
 
-Overviews (projects list, project) show `shared/count_tiles` and `shared/trend_panel`; the projects list puts the trend next to the most widespread vulnerabilities in an `.overview-row` and sums only the projects its filters show. Detail pages of projects and repos open with a `.header-card`: `.header-card__field`s with an uppercase `.header-card__label` (name, branch, last scan), followed by page-level `.tabs.tabs--page`. Current findings come first; history sits in its own tab.
+Overviews (projects list, project) show `shared/count_tiles` and `shared/trend_panel`; the projects list puts the trend next to the top vulnerabilities in an `.overview-row` and sums only the projects its filters show. Detail pages of projects and repos open with a `.header-card`: `.header-card__field`s with an uppercase `.header-card__label` (name, branch, last scan), followed by page-level `.tabs.tabs--page`. Current findings come first; history sits in its own tab.
 
 Helpers render the recurring pieces; reach for them before writing markup: `severity_counts`, `severity_badge`, `diff_chips`, `icon`, `logo`, `copy_button`, `nav_link`, `owner_label`, `visibility_label`. Inline SVG icons live in `ApplicationHelper::ICONS` (24 px stroke icons, `aria-hidden`). Icon-only buttons get an `aria-label`.
 
