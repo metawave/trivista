@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Repo</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:underline}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 1600px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45">
+
+<header style="background: #15181d; color: #ffffff">
+<div style="max-width: 1360px; margin: 0 auto; padding: 0 24px; min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 28px">
+<a href="Projects.dc.html" style="display: flex; align-items: center; gap: 10px; color: #ffffff; font-weight: 600; font-size: 16px; text-decoration: none"><svg width="24" height="24" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="#2a2f37"></rect><rect x="6" y="7" width="16" height="3" rx="1" fill="#d0362c"></rect><rect x="6" y="12.5" width="12" height="3" rx="1" fill="#e8821e"></rect><rect x="6" y="18" width="7" height="3" rx="1" fill="#f0c94a"></rect></svg>Trivista</a>
+<nav aria-label="Main" style="display: flex; gap: 4px; font-size: 14px">
+<a href="Projects.dc.html" aria-current="page" style="padding: 6px 10px; border-radius: 6px; background: #2a2f37; color: #ffffff; text-decoration: none">Projects</a>
+<a href="ServiceAccounts.dc.html" style="padding: 6px 10px; border-radius: 6px; color: #c3c9d1; text-decoration: none">Service accounts</a>
+</nav>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: #c3c9d1">
+<span>[USER NAME]</span>
+<button type="button" style="height: 32px; padding: 0 12px; border: 1px solid #4a525e; border-radius: 6px; background: transparent; color: #ffffff; font: 500 13px 'IBM Plex Sans', sans-serif; cursor: pointer">Sign out</button>
+</div>
+</div>
+</header>
+
+<main style="max-width: 1360px; margin: 0 auto; padding: 24px 24px 64px; display: flex; flex-direction: column; gap: 20px">
+<nav aria-label="Breadcrumb" style="display: flex; align-items: center; gap: 8px; color: #68717d"><a href="Projects.dc.html">Projects</a><span aria-hidden="true">/</span><a href="Project.dc.html">acme-platform</a><span aria-hidden="true">/</span><span style="color: #15181d; font-family: 'IBM Plex Mono', monospace">platform-api</span></nav>
+
+<section style="position: relative; background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 18px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px">
+<div style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Repository</span>
+<h1 style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 30px; line-height: 40px; font-weight: 600">platform-api</h1>
+</div>
+
+<div style="position: relative; flex: 0 1 300px; display: flex; flex-direction: column; gap: 4px; padding-left: 32px; border-left: 1px solid #e6e9ed">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Branch</span>
+<button type="button" aria-haspopup="true" aria-expanded="{{menuExpanded}}" onClick="{{toggleMenu}}" style="height: 36px; display: flex; align-items: center; gap: 8px; padding: 0 10px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #15181d; font: 500 14px 'IBM Plex Mono', monospace; cursor: pointer; text-align: left">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="5" r="2.5"></circle><circle cx="6" cy="19" r="2.5"></circle><circle cx="18" cy="7" r="2.5"></circle><path d="M6 7.5v9"></path><path d="M18 9.5c0 4-6 3-11.5 7"></path></svg>
+<span style="flex: 1">{{branch}}</span>
+<sc-if value="{{isDefault}}" hint-placeholder-val="{{true}}"><span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 400 12px 'IBM Plex Sans', sans-serif; color: #4a525e">Default</span></sc-if>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#68717d" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+<sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+<div role="menu" style="position: absolute; z-index: 2; top: 68px; left: 32px; width: 380px; background: #ffffff; border: 1px solid #c3c9d1; border-radius: 6px; box-shadow: 0 8px 24px rgba(21, 24, 29, 0.12); overflow: hidden">
+<div style="padding: 8px; border-bottom: 1px solid #e6e9ed"><input type="search" aria-label="Filter branches" placeholder="Filter branches" style="width: 100%; height: 32px; box-sizing: border-box; padding: 0 10px; border: 1px solid #c3c9d1; border-radius: 6px; font: 13px 'IBM Plex Mono', monospace"></div>
+<sc-for list="{{branches}}" as="b" hint-placeholder-count="5">
+<a href="#" role="menuitem" onClick="{{b.pick}}" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 12px; border-top: 1px solid #f0f2f5; background: {{b.bg}}; color: #15181d; text-decoration: none">
+<span style="display: flex; align-items: center; gap: 8px; min-width: 0"><span style="font: 13px 'IBM Plex Mono', monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{b.name}}</span><sc-if value="{{b.isDefault}}" hint-placeholder-val="{{false}}"><span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font-size: 11px; color: #4a525e">Default</span></sc-if></span>
+<span style="flex: none; font-size: 12px; color: #68717d">{{b.last}}</span>
+</a>
+</sc-for>
+</div>
+</sc-if>
+</div>
+
+<div style="flex: 0 1 300px; display: flex; flex-direction: column; gap: 4px; padding-left: 32px; border-left: 1px solid #e6e9ed">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Last scan</span>
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 36px"><a href="Scan.dc.html" style="font: 500 14px 'IBM Plex Mono', monospace">{{lastSha}}</a><span style="padding: 1px 7px; border-radius: 3px; border: 1px solid #c3c9d1; font: 12px 'IBM Plex Mono', monospace; color: #4a525e">{{lastTrigger}}</span><span style="font-size: 13px; color: #68717d">{{lastAt}}</span></span>
+</div>
+</section>
+
+<nav aria-label="Repo view" style="display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid #d9dde3">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+<a href="#" aria-current="{{t.current}}" onClick="{{t.pick}}" style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: -1px; padding: 12px 8px 10px; border-bottom: 2px solid {{t.line}}; color: {{t.ink}}; font-weight: {{t.weight}}; text-decoration: none">{{t.label}} <span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 500 12px 'IBM Plex Mono', monospace; color: #4a525e">{{t.count}}</span></a>
+</sc-for>
+</nav>
+
+<sc-if value="{{isType}}" hint-placeholder-val="{{true}}">
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #e6e9ed">
+<div role="group" aria-label="Severity" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="5"><a href="#" aria-current="true" style="height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; border-radius: 6px; border: 1px solid #c3c9d1; background: #f0f2f5; color: #15181d; font: 500 12px 'IBM Plex Mono', monospace; text-decoration: none"><span style="width: 10px; height: 10px; border-radius: 2px; background: {{c.bg}}"></span>{{c.label}} {{c.n}}</a></sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="font-size: 13px; color: #68717d">Latest scan per artifact on {{branch}}</span>
+<a href="#" aria-current="false" style="height: 30px; display: inline-flex; align-items: center; padding: 0 10px; border: 1px solid #e6e9ed; border-radius: 6px; color: #68717d; font: 500 12px 'IBM Plex Mono', monospace; text-decoration: none">Only new</a>
+</div>
+</div>
+<div style="overflow-x: auto">
+<table style="width: 100%; min-width: 1100px; border-collapse: collapse; font-size: 13px">
+<thead>
+<tr style="background: #f0f2f5; text-align: left; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">
+<th style="padding: 8px 20px; font-weight: 600">Severity</th><th style="padding: 8px 12px; font-weight: 600">ID</th><th style="padding: 8px 12px; font-weight: 600">Package / Target</th><th style="padding: 8px 12px; font-weight: 600">Installed</th><th style="padding: 8px 12px; font-weight: 600">Fixed in</th><th style="padding: 8px 12px; font-weight: 600">Artifact</th><th style="padding: 8px 20px 8px 12px; font-weight: 600">Title</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+<tr style="height: 44px">
+<td style="padding: 0 20px; border-top: 1px solid #e6e9ed"><span style="padding: 2px 6px; border-radius: 3px; background: {{r.bg}}; color: {{r.fg}}; font: 600 11px 'IBM Plex Mono', monospace; letter-spacing: 0.04em">{{r.sev}}</span></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; white-space: nowrap"><a href="#">{{r.id}}</a><sc-if value="{{r.isNew}}" hint-placeholder-val="{{false}}"><span style="margin-left: 8px; padding: 0 5px; border-radius: 3px; border: 1px solid #2b55c9; color: #2b55c9; font: 600 10px 'IBM Plex Mono', monospace">NEW</span></sc-if></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace">{{r.pkg}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; white-space: nowrap">{{r.inst}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; white-space: nowrap">{{r.fix}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font: 12px 'IBM Plex Mono', monospace; color: #4a525e; white-space: nowrap">{{r.artifact}}</td>
+<td style="padding: 0 20px 0 12px; border-top: 1px solid #e6e9ed; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{r.title}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{isScans}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div role="group" aria-label="Finding type" style="display: inline-flex; border: 1px solid #c3c9d1; border-radius: 6px; overflow: hidden; background: #ffffff; font: 12px 'IBM Plex Sans', sans-serif">
+<a href="#" aria-current="true" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; background: #e8eefc; color: #1f429f; font-weight: 600">Vulnerabilities</a>
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; color: #4a525e">Misconfigurations</a>
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; color: #4a525e">Secrets</a>
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; color: #4a525e">Licenses</a>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<div role="group" aria-label="Range" style="display: inline-flex; border: 1px solid #c3c9d1; border-radius: 6px; overflow: hidden; background: #ffffff; font: 12px 'IBM Plex Mono', monospace">
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; color: #4a525e">7d</a>
+<a href="#" aria-current="true" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; background: #e8eefc; color: #1f429f; font-weight: 600">30d</a>
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; color: #4a525e">90d</a>
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; color: #4a525e">All</a>
+</div>
+
+</div>
+</div>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #e6e9ed">
+<div style="display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600">ghcr.io/acme/platform-api</h2><span style="font-size: 13px; color: #68717d">container_image · 12 scans</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #4a525e"><sc-for list="{{legend}}" as="l" hint-placeholder-count="5"><span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 2px; background: {{l.bg}}"></span>{{l.label}}</span></sc-for></div>
+</div>
+<div style="padding: 20px 20px 14px; overflow-x: auto">
+<div style="min-width: 720px; height: 180px; border-bottom: 1px solid #c3c9d1; display: flex; align-items: flex-end; gap: 12px; padding: 0 8px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="12"><a href="Scan.dc.html" title="{{b.title}}" style="flex: 1 1 0; max-width: 48px; height: {{b.h}}; display: flex; flex-direction: column-reverse; border-radius: 2px 2px 0 0; overflow: hidden"><sc-for list="{{b.segs}}" as="s" hint-placeholder-count="4"><span style="display: block; height: {{s.h}}; background: {{s.bg}}"></span></sc-for></a></sc-for>
+</div>
+</div>
+<div style="overflow-x: auto; border-top: 1px solid #e6e9ed">
+<table style="width: 100%; min-width: 900px; border-collapse: collapse; font-size: 13px">
+<thead>
+<tr style="background: #f0f2f5; text-align: left; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e"><th style="padding: 8px 20px; font-weight: 600">Commit</th><th style="padding: 8px 12px; font-weight: 600">Tag</th><th style="padding: 8px 12px; font-weight: 600">Trigger</th><th style="padding: 8px 12px; font-weight: 600">Uploaded</th><th style="padding: 8px 12px; font-weight: 600">Diff vs. predecessor</th><th style="padding: 8px 20px 8px 12px; font-weight: 600">Vulnerabilities</th></tr>
+</thead>
+<tbody>
+<sc-for list="{{scans}}" as="r" hint-placeholder-count="4">
+<tr style="height: 44px">
+<td style="padding: 0 20px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace"><a href="Scan.dc.html">{{r.sha}}</a></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font: 12px 'IBM Plex Mono', monospace; color: #68717d">{{r.tag}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed"><span style="padding: 1px 7px; border-radius: 3px; border: 1px solid #c3c9d1; font: 12px 'IBM Plex Mono', monospace; color: #4a525e">{{r.trigger}}</span></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font: 12px 'IBM Plex Mono', monospace">{{r.at}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed"><span style="display: inline-flex; gap: 6px; font-size: 12px"><span style="padding: 1px 7px; border-radius: 3px; background: #e8eefc; color: #1f429f; font-weight: 500"><b style="font-family: 'IBM Plex Mono', monospace">+{{r.add}}</b> new</span><span style="padding: 1px 7px; border-radius: 3px; background: #f0f2f5; color: #4a525e; font-weight: 500"><b style="font-family: 'IBM Plex Mono', monospace">−{{r.gone}}</b> no longer reported</span></span></td>
+<td style="padding: 0 20px 0 12px; border-top: 1px solid #e6e9ed"><span style="display: inline-flex; border-radius: 3px; overflow: hidden; font: 12px 'IBM Plex Mono', monospace"><sc-for list="{{r.segs}}" as="s" hint-placeholder-count="4"><span style="display: inline-flex; gap: 5px; padding: 2px 7px; background: {{s.bg}}; color: {{s.fg}}"><b>{{s.l}}</b>{{s.n}}</span></sc-for></span></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</sc-if>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'Vulnerabilities', branch: 'main', menu: true };
+  }
+  renderVals() {
+    const { tab, branch, menu } = this.state;
+    const sev = [
+      { l: 'C', label: 'CRITICAL', bg: '#8E1330', fg: '#FFFFFF' },
+      { l: 'H', label: 'HIGH', bg: '#D0362C', fg: '#FFFFFF' },
+      { l: 'M', label: 'MEDIUM', bg: '#E8821E', fg: '#15181D' },
+      { l: 'L', label: 'LOW', bg: '#F0C94A', fg: '#15181D' },
+      { l: 'U', label: 'UNKNOWN', bg: '#B9C0CA', fg: '#15181D' }
+    ];
+    const segs = (c) => sev.map((s, i) => ({ ...s, n: c[i] || 0 })).filter((s) => s.n > 0);
+    const tabs = [['Vulnerabilities', 55], ['Misconfigurations', 8], ['Secrets', 2], ['Licenses', 6], ['Scans', 12]].map(([label, count]) => ({
+      label, count,
+      current: label === tab ? 'page' : 'false',
+      line: label === tab ? '#2B55C9' : 'transparent',
+      ink: label === tab ? '#15181D' : '#4A525E',
+      weight: label === tab ? 600 : 400,
+      pick: (e) => { e.preventDefault(); this.setState({ tab: label }); }
+    }));
+    const branchList = [['main', '2 h ago', true], ['release/2.4', '3 days ago', false], ['feature/oidc-groups', '5 days ago', false], ['renovate/golang-x-net', '1 week ago', false], ['develop', '3 weeks ago', false]];
+    const branches = branchList.map(([name, last, isDefault]) => ({
+      name, last, isDefault,
+      bg: name === branch ? '#E8EEFC' : '#FFFFFF',
+      pick: (e) => { e.preventDefault(); this.setState({ branch: name, menu: false }); }
+    }));
+    const row = (s, id, pkg, inst, fix, artifact, title, isNew) => ({ sev: sev[s].label, bg: sev[s].bg, fg: sev[s].fg, id, pkg, inst, fix, artifact, title, isNew: !!isNew });
+    const bars = [44, 46, 45, 45, 44, 44, 43, 42, 41, 39, 37, 33].map((total, i) => {
+      const c = [i > 9 ? 3 : 2, Math.round(total * 0.3), Math.round(total * 0.45), 0];
+      c[3] = total - c[0] - c[1] - c[2];
+      return { h: (total / 50 * 180) + 'px', title: total + ' vulnerabilities', segs: sev.map((s, j) => ({ h: ((c[j] || 0) / 50 * 180) + 'px', bg: s.bg })).filter((s) => s.h !== '0px') };
+    });
+    return {
+      tabs,
+      branch,
+      isDefault: branch === 'main',
+      menuOpen: menu,
+      menuExpanded: menu ? 'true' : 'false',
+      toggleMenu: () => this.setState({ menu: !menu }),
+      branches,
+      lastSha: branch === 'main' ? '32f1da5a' : 'b81e0d44',
+      lastTrigger: branch === 'main' ? 'push' : 'pr',
+      lastAt: branch === 'main' ? '2 h ago' : '3 days ago',
+      isType: tab !== 'Scans',
+      isScans: tab === 'Scans',
+      chips: sev.map((s, i) => ({ ...s, n: [3, 14, 27, 11, 0][i] })),
+      legend: sev.map((s) => ({ label: s.label.charAt(0) + s.label.slice(1).toLowerCase(), bg: s.bg })),
+      bars,
+      rows: [
+        row(0, 'CVE-2024-45337', 'golang.org/x/crypto', '0.21.0', '0.31.0', 'ghcr.io/acme/platform-api', 'Misuse of ServerConfig.PublicKeyCallback may cause authorization bypass', true),
+        row(0, 'CVE-2024-24790', 'stdlib', '1.21.4', '1.21.11', 'ghcr.io/acme/platform-api', 'Unexpected behavior from Is methods for IPv4-mapped IPv6 addresses'),
+        row(0, 'CVE-2024-21538', 'cross-spawn', '7.0.3', '7.0.5', 'web/ (filesystem)', 'Regular expression denial of service'),
+        row(1, 'CVE-2023-39325', 'golang.org/x/net', '0.15.0', '0.17.0', 'ghcr.io/acme/platform-api', 'HTTP/2 rapid reset can cause excessive work'),
+        row(1, 'CVE-2024-34156', 'stdlib', '1.21.4', '1.22.7', 'ghcr.io/acme/platform-api', 'Stack exhaustion in Decoder.Decode'),
+        row(2, 'CVE-2024-6104', 'go-retryablehttp', '0.7.4', '0.7.7', 'ghcr.io/acme/platform-api', 'URL may be written to log file with basic auth credentials'),
+        row(2, 'CVE-2024-4067', 'micromatch', '4.0.5', '4.0.8', 'web/ (filesystem)', 'Regular expression denial of service', true),
+        row(3, 'CVE-2024-24791', 'stdlib', '1.21.4', '1.21.12', 'ghcr.io/acme/platform-api', 'Denial of service due to improper 100-continue handling')
+      ],
+      scans: [
+        { sha: '32f1da5a', tag: '', trigger: 'push', at: '2026-10-07 12:22', add: 2, gone: 6, segs: segs([3, 10, 15, 5]) },
+        { sha: '4a651f95', tag: '', trigger: 'push', at: '2026-10-05 12:22', add: 1, gone: 3, segs: segs([2, 11, 17, 7]) },
+        { sha: '1060c76f', tag: 'v2.4.1', trigger: 'tag', at: '2026-10-03 12:22', add: 0, gone: 2, segs: segs([2, 12, 18, 7]) },
+        { sha: '33f315e5', tag: '', trigger: 'schedule', at: '2026-10-01 03:00', add: 1, gone: 1, segs: segs([2, 12, 19, 8]) }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

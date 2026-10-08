@@ -14,7 +14,7 @@ body{margin:0}
 a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:underline}
 </style>
 </helmet>
-<div style="width: 100%; min-height: 760px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45">
+<div style="width: 100%; min-height: 1500px; background: #f6f7f9; color: #15181d; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; line-height: 1.45">
 
 <header style="background: #15181d; color: #ffffff">
 <div style="max-width: 1360px; margin: 0 auto; padding: 0 24px; min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
@@ -32,50 +32,212 @@ a{color:#2b55c9;text-decoration:none}a:hover{color:#1f429f;text-decoration:under
 </div>
 </header>
 
-<main style="max-width: 1360px; margin: 0 auto; padding: 32px 24px 64px; display: flex; flex-direction: column; gap: 20px">
-<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
-<div style="display: flex; flex-direction: column; gap: 8px">
+<main style="max-width: 1360px; margin: 0 auto; padding: 24px 24px 64px; display: flex; flex-direction: column; gap: 20px">
+<nav aria-label="Breadcrumb" style="display: flex; align-items: center; gap: 8px; color: #68717d"><a href="Projects.dc.html">Projects</a><span aria-hidden="true">/</span><span style="color: #15181d">acme-platform</span></nav>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 18px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">Project</span>
 <h1 style="margin: 0; font-size: 32px; line-height: 40px; font-weight: 600; letter-spacing: -0.01em">acme-platform</h1>
-<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px; font-size: 13px; color: #4a525e">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; margin-top: 4px; font-size: 13px; color: #4a525e">
 <span>Owner <b style="font-weight: 500; color: #15181d">team-platform</b></span>
-<span style="display: inline-flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><circle cx="17" cy="9" r="2.5"></circle><path d="M2.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5"></path><path d="M16 14.5c2.6 0 4.6 1.6 5.3 4.5"></path></svg>Visible to group</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><circle cx="17" cy="9" r="2.5"></circle><path d="M2.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5"></path><path d="M16 14.5c2.6 0 4.6 1.6 5.3 4.5"></path></svg>Group team-platform</span>
+<span>4 repos · last scan 2 h ago</span>
 </div>
 </div>
 <a href="ProjectSettings.dc.html" style="height: 36px; display: inline-flex; align-items: center; gap: 8px; padding: 0 14px; border: 1px solid #c3c9d1; border-radius: 6px; background: #ffffff; color: #15181d; font-weight: 500; text-decoration: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10"></path><path d="M18 6h2"></path><circle cx="16" cy="6" r="2"></circle><path d="M4 12h2"></path><path d="M10 12h10"></path><circle cx="8" cy="12" r="2"></circle><path d="M4 18h12"></path><circle cx="18" cy="18" r="2"></circle></svg>Settings</a>
+</section>
+
+<nav aria-label="Project view" style="display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid #d9dde3">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+<a href="#" aria-current="{{t.current}}" onClick="{{t.pick}}" style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: -1px; padding: 12px 8px 10px; border-bottom: 2px solid {{t.line}}; color: {{t.ink}}; font-weight: {{t.weight}}; text-decoration: none">{{t.label}}<sc-if value="{{t.hasCount}}" hint-placeholder-val="{{true}}"><span style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 500 12px 'IBM Plex Mono', monospace; color: #4a525e">{{t.count}}</span></sc-if></a>
+</sc-for>
+</nav>
+
+<sc-if value="{{isOverview}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">
+<sc-for list="{{tiles}}" as="t" hint-placeholder-count="4">
+<a href="#" onClick="{{t.pick}}" style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; color: #15181d; text-decoration: none">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">{{t.label}}</span>
+<span style="font: 600 28px/1.1 'IBM Plex Mono', monospace">{{t.total}}</span>
+<sc-if value="{{t.any}}" hint-placeholder-val="{{true}}">
+<span style="display: inline-flex; align-self: flex-start; border-radius: 3px; overflow: hidden; font: 12px 'IBM Plex Mono', monospace"><sc-for list="{{t.segs}}" as="s" hint-placeholder-count="3"><span style="display: inline-flex; gap: 5px; padding: 2px 7px; background: {{s.bg}}; color: {{s.fg}}"><b>{{s.l}}</b>{{s.n}}</span></sc-for></span>
+</sc-if>
+<sc-if value="{{t.empty}}" hint-placeholder-val="{{false}}"><span style="font: 12px 'IBM Plex Mono', monospace; color: #68717d">–</span></sc-if>
+</a>
+</sc-for>
 </div>
 
-<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; overflow: hidden">
-<div style="padding: 14px 20px; border-bottom: 1px solid #d9dde3; display: flex; align-items: center; gap: 8px">
-<h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600">Repos</h2>
-<span style="padding: 0 7px; border-radius: 3px; background: #f0f2f5; font: 500 13px 'IBM Plex Mono', monospace; color: #4a525e">4</span>
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #e6e9ed">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600">Vulnerabilities over time</h2>
+<span style="font-size: 13px; color: #68717d">All repos, Default Branches, latest scan per artifact and day</span>
 </div>
-<ul style="list-style: none; margin: 0; padding: 0">
-<sc-for list="{{repos}}" as="r" hint-placeholder-count="4">
-<li style="min-height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 20px; border-top: 1px solid #e6e9ed">
-<div style="display: flex; align-items: center; gap: 10px">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4a525e" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"></path><path d="M9 9h6"></path><path d="M9 13h6"></path></svg>
-<a href="#" style="font-family: 'IBM Plex Mono', monospace; font-weight: 500">{{r.name}}</a>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #4a525e">
+<sc-for list="{{legend}}" as="l" hint-placeholder-count="5"><span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 2px; background: {{l.bg}}"></span>{{l.label}}</span></sc-for>
 </div>
-<div style="display: flex; align-items: center; gap: 16px; font-size: 13px; color: #4a525e">
-<span style="display: inline-flex; align-items: center; gap: 5px; padding: 1px 7px; border-radius: 3px; background: #f0f2f5; font-family: 'IBM Plex Mono', monospace; font-size: 12px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="5" r="2.5"></circle><circle cx="6" cy="19" r="2.5"></circle><circle cx="18" cy="7" r="2.5"></circle><path d="M6 7.5v9"></path><path d="M18 9.5c0 4-6 3-11.5 7"></path></svg>{{r.branch}}</span>
-<span>{{r.count}} branches</span>
+<div role="group" aria-label="Range" style="display: inline-flex; border: 1px solid #c3c9d1; border-radius: 6px; overflow: hidden; font: 12px 'IBM Plex Mono', monospace">
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; color: #4a525e">7d</a>
+<a href="#" aria-current="true" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; background: #e8eefc; color: #1f429f; font-weight: 600">30d</a>
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; color: #4a525e">90d</a>
+<a href="#" style="height: 30px; display: inline-flex; align-items: center; padding: 0 12px; border-left: 1px solid #c3c9d1; color: #4a525e">All</a>
 </div>
-</li>
+</div>
+</div>
+<div style="padding: 20px 20px 14px; overflow-x: auto">
+<div style="min-width: 720px; display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 8px">
+<div style="height: 200px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; font: 11px 'IBM Plex Mono', monospace; color: #68717d"><span>160</span><span>80</span><span>0</span></div>
+<div style="height: 200px; border-bottom: 1px solid #c3c9d1; background: linear-gradient(#e6e9ed, #e6e9ed) 0 0 / 100% 1px no-repeat, linear-gradient(#e6e9ed, #e6e9ed) 0 50% / 100% 1px no-repeat; display: flex; align-items: flex-end; gap: 6px; padding: 0 4px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="30">
+<span title="{{b.title}}" style="flex: 1 1 0; height: {{b.h}}; display: flex; flex-direction: column-reverse; border-radius: 2px 2px 0 0; overflow: hidden"><sc-for list="{{b.segs}}" as="s" hint-placeholder-count="4"><span style="display: block; height: {{s.h}}; background: {{s.bg}}"></span></sc-for></span>
 </sc-for>
-</ul>
+</div>
+<span></span>
+<div style="display: flex; justify-content: space-between; padding-top: 6px; font: 11px 'IBM Plex Mono', monospace; color: #68717d"><span>Sep 8</span><span>Sep 15</span><span>Sep 22</span><span>Sep 29</span><span>Oct 7</span></div>
+</div>
+</div>
 </section>
+
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px; overflow: hidden">
+<div style="padding: 14px 20px; border-bottom: 1px solid #d9dde3"><h2 style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 600">Repos</h2></div>
+<div style="overflow-x: auto">
+<table style="width: 100%; min-width: 1000px; border-collapse: collapse; font-size: 13px">
+<thead>
+<tr style="background: #f0f2f5; text-align: left; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">
+<th style="padding: 8px 20px; font-weight: 600">Repo</th><th style="padding: 8px 12px; font-weight: 600">Default branch</th><th style="padding: 8px 12px; font-weight: 600">Vulnerabilities</th><th style="padding: 8px 12px; font-weight: 600">Misconfigurations</th><th style="padding: 8px 12px; font-weight: 600">Secrets</th><th style="padding: 8px 12px; font-weight: 600">Licenses</th><th style="padding: 8px 20px 8px 12px; font-weight: 600; text-align: right">Last scan</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{repos}}" as="r" hint-placeholder-count="4">
+<tr style="height: 48px">
+<td style="padding: 0 20px; border-top: 1px solid #e6e9ed"><span style="display: inline-flex; align-items: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4a525e" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"></path><path d="M9 9h6"></path><path d="M9 13h6"></path></svg><a href="Repo.dc.html" style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">{{r.name}}</a></span></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed"><span style="padding: 1px 7px; border-radius: 3px; background: #f0f2f5; font: 12px 'IBM Plex Mono', monospace; color: #4a525e">{{r.branch}}</span></td>
+<sc-for list="{{r.types}}" as="t" hint-placeholder-count="4">
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed">
+<sc-if value="{{t.empty}}" hint-placeholder-val="{{false}}"><span style="font-family: 'IBM Plex Mono', monospace; color: #68717d">–</span></sc-if>
+<sc-if value="{{t.any}}" hint-placeholder-val="{{true}}"><span style="display: inline-flex; border-radius: 3px; overflow: hidden; font: 12px 'IBM Plex Mono', monospace"><sc-for list="{{t.segs}}" as="s" hint-placeholder-count="3"><span style="display: inline-flex; gap: 5px; padding: 2px 7px; background: {{s.bg}}; color: {{s.fg}}"><b>{{s.l}}</b>{{s.n}}</span></sc-for></span></sc-if>
+</td>
+</sc-for>
+<td style="padding: 0 20px 0 12px; border-top: 1px solid #e6e9ed; text-align: right; color: #68717d; white-space: nowrap">{{r.last}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{isType}}" hint-placeholder-val="{{false}}">
+<section style="background: #ffffff; border: 1px solid #d9dde3; border-radius: 6px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #e6e9ed">
+<div role="group" aria-label="Severity" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="5"><a href="#" aria-current="true" style="height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; border-radius: 6px; border: 1px solid #c3c9d1; background: #f0f2f5; color: #15181d; font: 500 12px 'IBM Plex Mono', monospace; text-decoration: none"><span style="width: 10px; height: 10px; border-radius: 2px; background: {{c.bg}}"></span>{{c.label}} {{c.n}}</a></sc-for>
+</div>
+<span style="font-size: 13px; color: #68717d">Current findings on the Default Branch of every repo</span>
+</div>
+<div style="overflow-x: auto">
+<table style="width: 100%; min-width: 1100px; border-collapse: collapse; font-size: 13px">
+<thead>
+<tr style="background: #f0f2f5; text-align: left; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #4a525e">
+<th style="padding: 8px 20px; font-weight: 600">Severity</th><th style="padding: 8px 12px; font-weight: 600">ID</th><th style="padding: 8px 12px; font-weight: 600">Package / Target</th><th style="padding: 8px 12px; font-weight: 600">Installed</th><th style="padding: 8px 12px; font-weight: 600">Fixed in</th><th style="padding: 8px 12px; font-weight: 600">Repos</th><th style="padding: 8px 20px 8px 12px; font-weight: 600">Title</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+<tr style="height: 44px">
+<td style="padding: 0 20px; border-top: 1px solid #e6e9ed"><span style="padding: 2px 6px; border-radius: 3px; background: {{r.bg}}; color: {{r.fg}}; font: 600 11px 'IBM Plex Mono', monospace; letter-spacing: 0.04em">{{r.sev}}</span></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; white-space: nowrap"><a href="#">{{r.id}}</a></td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace">{{r.pkg}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; white-space: nowrap">{{r.inst}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed; font-family: 'IBM Plex Mono', monospace; white-space: nowrap">{{r.fix}}</td>
+<td style="padding: 0 12px; border-top: 1px solid #e6e9ed"><span style="display: inline-flex; flex-wrap: wrap; gap: 4px"><sc-for list="{{r.repos}}" as="p" hint-placeholder-count="1"><a href="Repo.dc.html" style="padding: 0 6px; border-radius: 3px; background: #f0f2f5; font: 12px 'IBM Plex Mono', monospace">{{p}}</a></sc-for></span></td>
+<td style="padding: 0 20px 0 12px; border-top: 1px solid #e6e9ed; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{r.title}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div style="padding: 12px 20px; border-top: 1px solid #e6e9ed; font-size: 13px; color: #4a525e">One row per finding; a finding present in several repos lists them all.</div>
+</section>
+</sc-if>
 </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":760}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
 class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'Overview' };
+  }
   renderVals() {
+    const tab = this.state.tab;
+    const sev = [
+      { l: 'C', label: 'CRITICAL', bg: '#8E1330', fg: '#FFFFFF' },
+      { l: 'H', label: 'HIGH', bg: '#D0362C', fg: '#FFFFFF' },
+      { l: 'M', label: 'MEDIUM', bg: '#E8821E', fg: '#15181D' },
+      { l: 'L', label: 'LOW', bg: '#F0C94A', fg: '#15181D' },
+      { l: 'U', label: 'UNKNOWN', bg: '#B9C0CA', fg: '#15181D' }
+    ];
+    const cell = (c) => {
+      const segs = sev.map((s, i) => ({ ...s, n: c[i] || 0 })).filter((s) => s.n > 0);
+      return { segs, any: segs.length > 0, empty: segs.length === 0, total: segs.reduce((a, s) => a + s.n, 0) };
+    };
+    const types = [
+      { label: 'Vulnerabilities', c: [3, 22, 51, 19, 0] },
+      { label: 'Misconfigurations', c: [1, 5, 9, 2, 0] },
+      { label: 'Secrets', c: [1, 2, 0, 0, 0] },
+      { label: 'Licenses', c: [0, 3, 0, 6, 2] }
+    ].map((t) => ({ ...t, ...cell(t.c) }));
+    const pick = (label) => (e) => { e.preventDefault(); this.setState({ tab: label }); };
+    const tabs = [{ label: 'Overview', total: 0 }, ...types].map((t) => ({
+      label: t.label,
+      count: t.total,
+      hasCount: t.label !== 'Overview',
+      current: t.label === tab ? 'page' : 'false',
+      line: t.label === tab ? '#2B55C9' : 'transparent',
+      ink: t.label === tab ? '#15181D' : '#4A525E',
+      weight: t.label === tab ? 600 : 400,
+      pick: pick(t.label)
+    }));
+    const days = Array.from({ length: 30 }, (_, i) => i);
+    const bars = days.map((i) => {
+      const c = [i > 22 ? 3 : 2, 30 - Math.round(i / 4), 58 - Math.round(i / 3), 22 - Math.round(i / 10), i % 9 === 0 ? 1 : 0];
+      const total = c.reduce((a, b) => a + b, 0);
+      return {
+        h: (total / 160 * 200) + 'px',
+        title: total + ' vulnerabilities',
+        segs: sev.map((s, j) => ({ h: (c[j] / 160 * 200) + 'px', bg: s.bg })).filter((s) => s.h !== '0px')
+      };
+    });
+    const repo = (name, branch, last, v, m, s, l) => ({ name, branch, last, types: [cell(v), cell(m), cell(s), cell(l)] });
+    const row = (s, id, pkg, inst, fix, repos, title) => ({ sev: sev[s].label, bg: sev[s].bg, fg: sev[s].fg, id, pkg, inst, fix, repos, title });
     return {
+      tabs,
+      tiles: types.map((t) => ({ ...t, pick: pick(t.label) })),
+      legend: sev.map((s) => ({ label: s.label.charAt(0) + s.label.slice(1).toLowerCase(), bg: s.bg })),
+      bars,
+      isOverview: tab === 'Overview',
+      isType: tab !== 'Overview',
+      chips: sev.map((s, i) => ({ ...s, n: types[0].c[i] })),
       repos: [
-        { name: 'platform-api', branch: 'main', count: 7 },
-        { name: 'platform-gateway', branch: 'main', count: 3 },
-        { name: 'platform-worker', branch: 'develop', count: 5 },
-        { name: 'platform-infra', branch: 'main', count: 2 }
+        repo('platform-api', 'main', '2 h ago', [2, 14, 31, 8], [0, 3, 5], [1, 1], [0, 2, 0, 4]),
+        repo('platform-gateway', 'main', '1 day ago', [1, 6, 12, 7], [1, 2, 4, 2], [], [0, 1, 0, 2, 2]),
+        repo('platform-worker', 'develop', '3 days ago', [0, 2, 8, 4], [], [0, 1], []),
+        repo('platform-infra', 'main', 'never', [], [], [], [])
+      ],
+      rows: [
+        row(0, 'CVE-2024-45337', 'golang.org/x/crypto', '0.21.0', '0.31.0', ['platform-api', 'platform-gateway'], 'Misuse of ServerConfig.PublicKeyCallback may cause authorization bypass'),
+        row(0, 'CVE-2024-24790', 'stdlib', '1.21.4', '1.21.11', ['platform-api'], 'Unexpected behavior from Is methods for IPv4-mapped IPv6 addresses'),
+        row(1, 'CVE-2023-39325', 'golang.org/x/net', '0.15.0', '0.17.0', ['platform-api', 'platform-gateway', 'platform-worker'], 'HTTP/2 rapid reset can cause excessive work'),
+        row(1, 'CVE-2024-34156', 'stdlib', '1.21.4', '1.22.7', ['platform-api'], 'Stack exhaustion in Decoder.Decode'),
+        row(1, 'CVE-2024-21538', 'cross-spawn', '7.0.3', '7.0.5', ['platform-gateway'], 'Regular expression denial of service'),
+        row(2, 'CVE-2024-6104', 'go-retryablehttp', '0.7.4', '0.7.7', ['platform-api', 'platform-worker'], 'URL may be written to log file with basic auth credentials'),
+        row(2, 'CVE-2023-48795', 'golang.org/x/crypto', '0.14.0', '0.17.0', ['platform-worker'], 'Prefix truncation attack on BPP via SSH'),
+        row(3, 'CVE-2024-24791', 'stdlib', '1.21.4', '1.21.12', ['platform-api'], 'Denial of service due to improper 100-continue handling')
       ]
     };
   }
