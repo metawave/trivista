@@ -1,4 +1,4 @@
-# Trivista
+# <img src="public/icon.svg" width="32" height="32" alt=""> Trivista
 
 Collects [Trivy](https://trivy.dev) reports from CI pipelines and shows the history of findings per project: vulnerabilities, misconfigurations, secrets and licenses, as trends per branch and as a diff to the previous scan. Read-only, login via OIDC, uploads via service account tokens.
 
