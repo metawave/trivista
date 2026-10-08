@@ -41,6 +41,8 @@
     </div>
   </section>
 
+  <%= render "shared/count_tiles", counts: Scan.sum_counts([ { "vulnerability" => { "CRITICAL" => 2, "HIGH" => 9, "MEDIUM" => 28 }, "secret" => { "CRITICAL" => 1 } } ]) %>
+
   <section class="panel panel--padded form">
     <h2>Chips, markers, status</h2>
     <div class="filter-group">

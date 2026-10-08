@@ -7,17 +7,29 @@
     <div class="filter-group">
       <%= form_with url: root_path, method: :get, role: "search", class: "search" do %>
         <%= hidden_field_tag :visibility, @visibility if @visibility %>
+        <%= hidden_field_tag :trend, params[:trend] if params[:trend] == @trend_type %>
+        <%= hidden_field_tag :range, params[:range] if params[:range] == @range %>
         <%= label_tag :q, "Filter projects", class: "visually-hidden" %>
         <%= icon(:search) %>
         <%= search_field_tag :q, @query, placeholder: "Filter projects" %>
       <% end %>
       <div class="segmented" role="group" aria-label="Visibility">
         <% [ nil, *Project.visibilities.keys ].each do |visibility| %>
-          <%= link_to visibility || "all", root_path(q: @query.presence, visibility:), aria: { current: (visibility == @visibility).to_s } %>
+          <%= link_to visibility || "all", root_path(q: @query.presence, visibility:, trend: (@trend_type if params[:trend]), range: (@range if params[:range])), aria: { current: (visibility == @visibility).to_s } %>
         <% end %>
       </div>
     </div>
   </div>
+
+  <% list_params = { q: @query.presence, visibility: @visibility } %>
+  <% if @projects.any? %>
+    <%= render "shared/count_tiles", counts: @totals %>
+    <div class="overview-row">
+      <%= render "shared/trend_panel", note: "Projects in this list, Default Branches", compact: true,
+        path: ->(**filters) { root_path(**list_params, **filters) } %>
+      <%= render "widespread" %>
+    </div>
+  <% end %>
 
   <div class="panel table-scroll">
     <table class="table projects">

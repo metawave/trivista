@@ -32,6 +32,17 @@ class ProjectTrendTest < ActiveSupport::TestCase
     assert_equal [ {}, {}, {} ], points.map(&:counts)
   end
 
+  test "sums several projects" do
+    other_repo = projects(:alice_tools).repos.first
+    other_repo.update!(default_branch: branches(:alice_tools_cli_main))
+    scans(:alice_tools_first).update!(counts: { "vulnerability" => { "HIGH" => 4 } }, created_at: 1.day.ago)
+    scan(@main, @image, { "HIGH" => 1 }, 1.day.ago)
+
+    points = ProjectTrend.new(Project.where(id: [ @project.id, projects(:alice_tools).id ]), finding_type: "vulnerability", since: 1.day.ago).points
+
+    assert_equal({ "HIGH" => 5 }, points.last.counts)
+  end
+
   test "without a range it starts at the first scan" do
     scan(@main, @image, { "HIGH" => 1 }, 2.days.ago)
 

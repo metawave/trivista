@@ -18,10 +18,10 @@ class Scan < ApplicationRecord
     where(id: latest)
   end
 
-  # Counts per finding type and severity, summed over the given scans.
-  def self.sum_counts(scans)
-    scans.each_with_object(Hash.new { |hash, key| hash[key] = Hash.new(0) }) do |scan, totals|
-      scan.counts.each { |finding_type, severities| severities.each { |severity, count| totals[finding_type][severity] += count } }
+  # Sums counts hashes (finding type => severity => count) as stored in `counts`.
+  def self.sum_counts(counts_list)
+    counts_list.each_with_object(Hash.new { |hash, key| hash[key] = Hash.new(0) }) do |counts, totals|
+      counts.each { |finding_type, severities| severities.each { |severity, count| totals[finding_type][severity] += count } }
     end
   end
 

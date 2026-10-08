@@ -77,7 +77,7 @@ Neue und nicht mehr gemeldete Findings eines Scans gegenüber seinem Predecessor
 _Avoid_: Comparison, Delta
 
 **Trend**:
-Verlauf der Finding-Anzahl pro Typ und Severity über die Scans eines Branches bzw. Cluster-Projects und Artifacts. Für ein ganzes Project pro Tag summiert über den jeweils letzten Scan pro Artifact auf den Default Branches.
+Verlauf der Finding-Anzahl pro Typ und Severity über die Scans eines Branches bzw. Cluster-Projects und Artifacts. Für ein oder mehrere Projects pro Tag summiert über den jeweils letzten Scan pro Artifact auf den Default Branches.
 _Avoid_: History, Chart
 
 **Retention**:

@@ -1,0 +1,10 @@
+<%# locals: (counts:, link: nil) %>
+<div class="tiles">
+  <% Finding::TYPES.each do |finding_type| %>
+    <%= tag.public_send(link ? :a : :div, href: link&.call(finding_type), class: "panel tile") do %>
+      <span class="header-card__label"><%= finding_type.pluralize.capitalize %></span>
+      <span class="tile__total"><%= counts[finding_type].values.sum %></span>
+      <%= severity_counts(counts[finding_type]) %>
+    <% end %>
+  <% end %>
+</div>

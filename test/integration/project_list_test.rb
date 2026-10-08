@@ -56,4 +56,24 @@ class ProjectListTest < ActionDispatch::IntegrationTest
     end
     assert_select "tr#project_#{projects(:alice_shared).id} td.num", text: "never"
   end
+
+  test "the overview sums the listed projects and ranks the most widespread vulnerabilities" do
+    repos(:shop_backend).update!(default_branch: branches(:shop_backend_main))
+    repos(:alice_tools_cli).update!(default_branch: branches(:alice_tools_cli_main))
+    scans(:shop_main_first).update!(counts: { "vulnerability" => { "HIGH" => 1 } }, created_at: 1.hour.ago)
+    scans(:alice_tools_first).update!(counts: { "vulnerability" => { "HIGH" => 2 } }, created_at: 1.hour.ago)
+    sign_in(sub: "alice-sub")
+
+    get root_path
+
+    assert_select ".tile", text: /Vulnerabilities\s*3/
+    assert_select ".widespread li", text: /#{findings(:openssl_cve).identifier}.*1\s*project/m
+    points = JSON.parse(css_select("[data-controller=trend]").sole["data-trend-points-value"])
+    assert_equal({ "HIGH" => 3 }, points.last["counts"])
+
+    get root_path(q: "tools", trend: "secret")
+    assert_select ".tile", text: /Vulnerabilities\s*2/
+    assert_select ".segmented a[href=?]", root_path(q: "tools", trend: "secret", range: "7"), text: "7d"
+    assert_select ".segmented a[href=?]", root_path(q: "tools", visibility: "user", trend: "secret"), text: "user"
+  end
 end

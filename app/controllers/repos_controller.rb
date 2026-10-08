@@ -63,7 +63,7 @@ class ReposController < ApplicationController
     end
 
     def current_counts
-      @current_counts ||= Scan.sum_counts(@current_scans)
+      @current_counts ||= Scan.sum_counts(@current_scans.map(&:counts))
     end
     helper_method :current_counts
 

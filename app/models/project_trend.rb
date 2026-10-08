@@ -1,10 +1,10 @@
-# Daily finding counts of a project: per day the latest scan of each artifact on the default branches,
+# Daily finding counts of one or more projects: per day the latest scan of each artifact on the default branches,
 # without artifacts lacking a scan in the activity window (ADR 0008), summed per severity.
 class ProjectTrend
   Point = Data.define(:day, :counts)
 
-  def initialize(project, finding_type:, since: nil)
-    @project = project
+  def initialize(projects, finding_type:, since: nil)
+    @projects = projects
     @finding_type = finding_type
     @since = since
   end
@@ -27,10 +27,10 @@ class ProjectTrend
   end
 
   private
-    attr_reader :project, :finding_type, :since
+    attr_reader :projects, :finding_type, :since
 
     def scans
-      Scan.joins(branch: :repo).where(repos: { project_id: project.id }).where("repos.default_branch_id = scans.branch_id")
+      Scan.joins(branch: :repo).where(repos: { project_id: projects }).where("repos.default_branch_id = scans.branch_id")
     end
 
     def window
