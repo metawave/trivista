@@ -7,7 +7,10 @@ module Admin
     end
 
     def deactivate
-      User.find(params[:id]).deactivate!
+      user = User.find(params[:id])
+      raise User::NotDeactivatable, "you cannot deactivate yourself" if user == Current.user
+
+      user.deactivate!
       redirect_to admin_users_path, notice: "User deactivated, all tokens revoked."
     rescue User::NotDeactivatable => error
       @users = User.order(:name, :sub)

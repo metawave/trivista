@@ -21,7 +21,7 @@
             <td class="num">
               <% if user.deactivated? %>
                 <%= button_to "Reactivate", reactivate_admin_user_path(user), method: :patch, class: "btn btn--small" %>
-              <% elsif !user.break_glass? %>
+              <% elsif !user.break_glass? && user != Current.user %>
                 <%= button_to "Deactivate", deactivate_admin_user_path(user), method: :patch, class: "btn btn--small btn--danger" %>
               <% end %>
             </td>

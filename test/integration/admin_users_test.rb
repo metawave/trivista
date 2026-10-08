@@ -31,4 +31,17 @@ class AdminUsersTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
     assert_not break_glass.reload.deactivated?
   end
+
+  test "admins cannot deactivate themselves" do
+    sign_in(sub: "root-sub", groups: [ "trivista-users", "trivista-admins" ])
+    get admin_users_path
+    assert_select "tbody tr", text: /root-sub/ do
+      assert_select "button", text: "Deactivate", count: 0
+    end
+
+    patch deactivate_admin_user_path(users(:root))
+
+    assert_response :unprocessable_content
+    assert_not users(:root).reload.deactivated?
+  end
 end

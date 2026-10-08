@@ -6,6 +6,6 @@ Sessions laufen nach maximal 8 Stunden ab (konfigurierbar), damit entzogene Grou
 
 ## Consequences
 
-- Ein Admin kann User deaktivieren und reaktivieren. Deaktivierte User können sich nicht anmelden, auch nicht mit gültiger OIDC-Identität.
+- Ein Admin kann User deaktivieren und reaktivieren, sich selbst aber nicht deaktivieren, damit kein Admin sich versehentlich aussperrt. Deaktivierte User können sich nicht anmelden, auch nicht mit gültiger OIDC-Identität.
 - Keycloak lässt den Groups-Claim bei Usern ohne Group ganz weg; solche User können sich nicht anmelden, was wegen der Pflicht-Login-Group ohnehin gilt. Verliert ein User alle Groups, wird er deshalb beim nächsten Login nicht automatisch deaktiviert; das Offboarding durch einen Admin (ADR 0005) deckt das ab.
 - Ohne korrekt konfigurierten Identity Provider ist Trivista nicht nutzbar. Nicht-menschliche Uploader laufen über Service Accounts (ADR 0005).
