@@ -80,6 +80,10 @@ _Avoid_: Comparison, Delta
 Verlauf der Finding-Anzahl pro Typ und Severity über die Scans eines Branches bzw. Cluster-Projects und Artifacts. Für ein ganzes Project pro Tag summiert über den jeweils letzten Scan pro Artifact auf den Default Branches.
 _Avoid_: History, Chart
 
+**Retention**:
+Löscht die Occurrences von Scans, die älter als die Aufbewahrungsdauer sind; der Scan behält seine Zähler für den Trend, Detail und Diff entfallen. Der neueste Scan pro Branch und Artifact bleibt immer vollständig.
+_Avoid_: Cleanup, Archivierung
+
 ### Zugriff
 
 **User**:

@@ -32,6 +32,10 @@ class Scan < ApplicationRecord
       .order(created_at: :desc, id: :desc).first
   end
 
+  def occurrences_pruned?
+    occurrences_pruned_at.present?
+  end
+
   def finding_ids
     occurrences.distinct.pluck(:finding_id)
   end

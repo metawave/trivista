@@ -91,6 +91,30 @@ class ScanDetailTest < ActionDispatch::IntegrationTest
     assert_select "a.toggle[href=?]", scan_path(@scan, type: "vulnerability", severity: "CRITICAL")
   end
 
+  test "a scan whose details were removed by the retention keeps its counts and explains the missing rows" do
+    @scan.update!(counts: { "vulnerability" => { "CRITICAL" => 2 } })
+    @scan.occurrences.delete_all
+    @scan.update_columns(occurrences_pruned_at: Time.zone.parse("2026-09-01 03:00"))
+
+    get scan_path(@scan)
+
+    assert_select ".tab", text: /Vulnerabilities\s+2/
+    assert_select ".retention-note", text: /removed by the retention on 2026-09-01/
+  end
+
+  test "shows no diff against a predecessor whose details were removed" do
+    previous = Scan.create!(branch: @scan.branch, artifact: @scan.artifact, service_account: @scan.service_account,
+      commit_sha: "0ld", reported_artifact_type: "container_image", reported_artifact_name: "x", created_at: 2.days.ago,
+      occurrences_pruned_at: 1.hour.ago)
+
+    get scan_path(@scan)
+
+    assert_select "dd a[href=?]", scan_path(previous)
+    assert_select ".diff-summary", 0
+    assert_select ".marker", 0
+    assert_select "dd", text: /no diff, details were removed by the retention/
+  end
+
   private
     def finding(identifier, primary_url: nil)
       projects(:shop).findings.create!(finding_type: "vulnerability", identifier:, pkg_name: "openssl", primary_url:,

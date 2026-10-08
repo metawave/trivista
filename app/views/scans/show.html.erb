@@ -32,6 +32,7 @@
         <dd class="mono">
           <% if @diff.predecessor %>
             <span class="muted"><%= @diff.predecessor.created_at.to_fs(:db) %></span> <%= link_to @diff.predecessor.commit_sha.first(8), @diff.predecessor %>
+            <% unless @diff.available? %><span class="muted">· no diff, details were removed by the retention</span><% end %>
           <% else %>
             <span class="muted">first scan</span>
           <% end %>
@@ -39,7 +40,7 @@
       </div>
     </dl>
 
-    <% if @diff.predecessor %>
+    <% if @diff.predecessor && @diff.available? %>
       <section class="panel diff-summary" aria-label="Diff">
         <div class="diff-summary__values">
           <%= link_to scan_path(@scan, filter_params.merge(only_new: "1")), class: "is-new" do %><b>+<%= @diff.new_finding_ids.size %></b>new<% end %>
@@ -68,14 +69,16 @@
           <% end %>
         <% end %>
       </div>
-      <% if @diff.predecessor %>
+      <% if @diff.predecessor && @diff.available? %>
         <%= link_to scan_path(@scan, filter_params.merge(only_new: (@only_new ? nil : "1"))), class: "toggle toggle--accent", aria: { current: @only_new.to_s } do %>
           Only new
         <% end %>
       <% end %>
     </div>
 
-    <% if @rows.any? %>
+    <% if @scan.occurrences_pruned? %>
+      <p class="empty muted retention-note">Details were removed by the retention on <%= @scan.occurrences_pruned_at.to_date.to_fs(:db) %>; the counts remain.</p>
+    <% elsif @rows.any? %>
       <div class="table-scroll">
         <table class="table findings">
           <thead>

@@ -64,6 +64,7 @@ The app expects TLS to be terminated in front of it (`assume_ssl`).
 | `TOKEN_MAX_LIFETIME_DAYS` | `365` | Upper bound for token expiry |
 | `MAX_FINDINGS_PER_REPORT` | `50000` | Larger reports are rejected (422) before they are processed |
 | `ARTIFACT_ACTIVITY_DAYS` | `30` | Artifacts without a scan in this window drop out of the project list counts |
+| `RETENTION_DAYS` | `90` | `bin/rails trivista:retention` removes the details (occurrences) of older scans and keeps their counts for the trends; the newest scan per branch and artifact stays complete; `0` turns it off |
 | `RAILS_MAX_THREADS` | `3` | Puma threads |
 | `RAILS_LOG_LEVEL` | `info` | |
 
@@ -79,6 +80,7 @@ Trivista does not learn about offboarding in the identity provider. When someone
 - **Temporary files**: uploads are buffered unsanitized before the allowlist is applied. Mount an ephemeral volume (`emptyDir`, ideally `medium: Memory`) at `/tmp` and set an `ephemeral-storage` limit.
 - **Memory**: one import runs per process at a time. A 50 MB report peaks at roughly 450 MB; plan about 1 GB per pod.
 - **Health**: use `GET /up` for liveness and readiness probes. The image has no Docker `HEALTHCHECK`, Kubernetes ignores it anyway.
+- **Retention**: run `bin/rails trivista:retention` nightly with the app image and its environment (for example as a Kubernetes CronJob). Repeated scans of the same commit, such as nightly CI scans, store their findings again; retention keeps the occurrence quota from filling up.
 - **Database**: one database for app and cache. The database user needs `CREATEDB` only if the database does not exist yet.
 
 ## Uploading scans

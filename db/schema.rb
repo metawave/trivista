@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_07_100000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_08_065727) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -126,6 +126,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_07_100000) do
     t.jsonb "counts", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "occurrences_pruned_at"
     t.index ["artifact_id"], name: "index_scans_on_artifact_id"
     t.index ["branch_id", "artifact_id", "created_at", "id"], name: "index_scans_for_predecessor"
     t.index ["service_account_id"], name: "index_scans_on_service_account_id"
