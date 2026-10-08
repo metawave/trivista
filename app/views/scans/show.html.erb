@@ -41,8 +41,8 @@
     <% if @diff.predecessor %>
       <section class="panel diff-summary" aria-label="Diff">
         <div class="diff-summary__values">
-          <div class="is-new"><b>+<%= @diff.new_finding_ids.size %></b>new</div>
-          <div><b>−<%= @diff.no_longer_reported_finding_ids.size %></b>no longer reported</div>
+          <%= link_to scan_path(@scan, filter_params.merge(only_new: "1")), class: "is-new" do %><b>+<%= @diff.new_finding_ids.size %></b>new<% end %>
+          <%= link_to "#no-longer-reported" do %><b>−<%= @diff.no_longer_reported_finding_ids.size %></b>no longer reported<% end %>
         </div>
         <span class="note">vs. predecessor <%= @diff.predecessor.commit_sha.first(8) %></span>
       </section>
@@ -93,19 +93,7 @@
     <% end %>
   </section>
 
-  <% if @no_longer_reported.any? %>
-    <section class="panel panel--dashed">
-      <div class="panel__head panel__head--stack">
-        <h2 class="with-icon title-muted">No longer reported <span class="count"><%= @no_longer_reported.size %></span></h2>
-        <span class="note">Not reported compared to the previous scan. This does not necessarily mean fixed; the scan configuration may have changed.</span>
-      </div>
-      <div class="table-scroll">
-        <table class="table table--muted findings">
-          <tbody class="no-longer-reported">
-            <%= render "finding_rows", rows: @no_longer_reported, new_finding_ids: nil, gone: true %>
-          </tbody>
-        </table>
-      </div>
-    </section>
+  <% if @diff.no_longer_reported_finding_ids.any? %>
+    <%= render "no_longer_reported", rows: @no_longer_reported, total: @diff.no_longer_reported_finding_ids.size, type_label: @finding_type.pluralize.capitalize %>
   <% end %>
 </main>

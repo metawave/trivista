@@ -61,6 +61,18 @@ class RepoPageTest < ActionDispatch::IntegrationTest
     assert_select "tr#finding_#{fresh.id} .marker", text: "NEW"
   end
 
+  test "lists findings no longer reported per artifact" do
+    previous = Scan.create!(branch: @main, artifact: @scan.artifact, service_account: @scan.service_account, commit_sha: "0ld",
+      reported_artifact_type: "container_image", reported_artifact_name: "x", created_at: 2.days.ago)
+    gone = projects(:shop).findings.create!(finding_type: "vulnerability", identifier: "CVE-2023-0001", fingerprint: "gone")
+    previous.occurrences.create!(finding: gone, severity: "MEDIUM")
+
+    get repo_path(@repo)
+
+    assert_select "#no-longer-reported tbody.no-longer-reported tr#finding_#{gone.id} .origin", text: @scan.artifact.name
+    assert_select "tbody.current tr#finding_#{gone.id}", 0
+  end
+
   test "the scans view renders one chart per artifact and lists the scans" do
     get repo_path(@repo, view: "scans")
 

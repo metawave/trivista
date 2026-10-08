@@ -38,10 +38,21 @@ class ReposController < ApplicationController
     def load_findings
       @severities = Occurrence::SEVERITIES & params[:severity].to_s.split(",")
       @only_new = params[:only_new] == "1"
-      new_ids = @current_scans.flat_map { ScanDiff.new(it).then { |diff| diff.predecessor ? diff.new_finding_ids : [] } }.to_set
-      page = ScanFindings.new(@current_scans, finding_ids: (new_ids.to_a if @only_new))
-        .page(limit: ROW_LIMIT, finding_type: @finding_type, severities: @severities.presence)
-      @rows, @row_count, @new_finding_ids = page.rows, page.total, new_ids
+      filters = { finding_type: @finding_type, severities: @severities.presence }
+      diffs = @current_scans.map { ScanDiff.new(it) }.select(&:predecessor)
+      @new_finding_ids = diffs.flat_map(&:new_finding_ids).to_set
+      page = ScanFindings.new(@current_scans, finding_ids: (@new_finding_ids.to_a if @only_new)).page(limit: ROW_LIMIT, **filters)
+      @rows, @row_count = page.rows, page.total
+      load_no_longer_reported(diffs, filters)
+    end
+
+    # Per artifact against its predecessor; a finding is listed under the artifacts it disappeared from.
+    def load_no_longer_reported(diffs, filters)
+      @gone_by_scan = diffs.to_h { [ it.predecessor.id, it.no_longer_reported_finding_ids.to_set ] }
+      gone_ids = @gone_by_scan.values.reduce(Set.new, :|)
+      @gone_total = gone_ids.size
+      @predecessors = diffs.map(&:predecessor).index_by(&:id)
+      @no_longer_reported = gone_ids.any? ? ScanFindings.new(@predecessors.values, finding_ids: gone_ids.to_a).page(limit: ROW_LIMIT, **filters).rows : []
     end
 
     def load_scans

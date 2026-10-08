@@ -65,6 +65,10 @@ class ScanDetailTest < ActionDispatch::IntegrationTest
 
     get scan_path(@scan, only_new: "1", type: "secret")
     assert_select "tbody.current tr#finding_#{@secret.id}"
+    assert_select "#no-longer-reported", text: /Secrets not reported.*\(1 across all types\)/m
+    assert_select "#no-longer-reported .empty", text: "None with these filters."
+    assert_select ".diff-summary a[href='#no-longer-reported']", text: /−1/
+    assert_select ".diff-summary a[href=?]", scan_path(@scan, type: "secret", only_new: "1"), text: /\+3/
   end
 
   test "shows one tab per finding type and opens the first type with findings" do

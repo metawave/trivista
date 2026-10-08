@@ -36,3 +36,10 @@
     <p class="empty muted">No findings match these filters.</p>
   <% end %>
 </section>
+
+<% if @gone_total.positive? %>
+  <%= render "scans/no_longer_reported", rows: @no_longer_reported, total: @gone_total, type_label: @finding_type.pluralize.capitalize,
+    origin_header: "Artifact", origin: ->(row) {
+      safe_join(row.scan_ids.select { @gone_by_scan[it].include?(row.finding.id) }.map { tag.span(@predecessors.fetch(it).artifact.name, class: "chip chip--fill") }, " ")
+    } %>
+<% end %>
