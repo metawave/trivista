@@ -5,6 +5,7 @@ class ReadmeScreenshotsTest < ApplicationSystemTestCase
   DIRECTORY = Rails.root.join("docs/screenshots")
 
   setup do
+    travel_to Time.zone.local(2026, 10, 8, 9, 0)
     Project.find_each { Purge.new(it).call }
     @project = seed_demo_project
     sign_in
