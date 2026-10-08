@@ -4,6 +4,28 @@ Collects [Trivy](https://trivy.dev) reports from CI pipelines and shows the hist
 
 Design decisions are documented in [`docs/adr/`](docs/adr), the vocabulary in [`CONTEXT.md`](CONTEXT.md).
 
+## Screenshots
+
+**Projects** with the current counts of each project's Default Branches:
+
+![Projects](docs/screenshots/projects.png)
+
+**Project overview** summed over all repos, with the trend per day:
+
+![Project overview](docs/screenshots/project.png)
+
+**Repo** with branch switch and the current findings of the selected branch:
+
+![Repo](docs/screenshots/repo.png)
+
+**Scans** of a branch: trend per artifact and the diff of every scan to its predecessor:
+
+![Scans of a branch](docs/screenshots/repo-scans.png)
+
+**Scan** with metadata, diff summary and findings filtered by type and severity:
+
+![Scan](docs/screenshots/scan.png)
+
 ## Running
 
 Trivista is a Rails 8 app shipped as one Docker image and needs a PostgreSQL database. Migrations run on container start.
@@ -123,6 +145,8 @@ mise exec -- bin/ci
 ```
 
 `mise.toml` provides Ruby, Trivy and the development environment variables; put personal overrides into `mise.local.toml`. `bin/ci` runs setup, RuboCop, the audits, Brakeman and the tests. Notes for AI coding agents are in `AGENTS.md`.
+
+`bin/screenshots` regenerates the screenshots above from demo data built on the Trivy report fixtures; it needs Google Chrome.
 
 `script/generate_trivy_fixtures` regenerates the Trivy report fixtures from throwaway sources with fake secrets; it needs Docker and Trivy. `trivy.yaml` excludes these fake secrets when Trivy scans this repository.
 

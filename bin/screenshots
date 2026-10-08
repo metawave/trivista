@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+# Regenerates the README screenshots in docs/screenshots (needs Google Chrome).
+SE_AVOID_STATS=true exec bin/rails test test/system/readme_screenshots_test.rb "$@"

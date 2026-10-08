@@ -17,6 +17,7 @@ Rails 8 / PostgreSQL app that collects Trivy reports from CI and shows the findi
 - Trivy data enters only through the `TrivyReport` allowlist (ADR 0003); logs and error messages carry generic text, report content stays out of them.
 - Failures surface: explicit status codes and exceptions; DB constraints and counters stay strict instead of being clamped.
 - UI and styling (views, CSS, helpers that render markup): follow `docs/design-system.md`.
+- A change to UI or behavior that shows on a page also refreshes the README screenshots: run `mise exec -- bin/screenshots`, review `docs/screenshots/` and commit them with the change. A new screen worth showing gets its own capture in `test/system/readme_screenshots_test.rb` and a line in the README section.
 - Integration tests sign in with `sign_in(sub:, groups:)` from `test/test_helper.rb` (OmniAuth test mode) and build on `test/fixtures`.
 
 ## Gotchas
