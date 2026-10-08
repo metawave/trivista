@@ -1,15 +1,15 @@
-# Occurrences of a scan grouped per finding, with the highest severity per finding.
+# Occurrences of one or more scans grouped per finding, with the highest severity and the scans per finding.
 # Aggregates and limits in the database, so large scans do not load every occurrence.
 class ScanFindings
-  Row = Data.define(:finding, :severity, :installed_versions, :locations, :fixed_versions)
+  Row = Data.define(:finding, :severity, :installed_versions, :locations, :fixed_versions, :scan_ids)
   Page = Data.define(:rows, :total)
 
   # Ranks follow the order of Occurrence::SEVERITIES.
   SEVERITY_RANK = "CASE occurrences.severity WHEN 'CRITICAL' THEN 0 WHEN 'HIGH' THEN 1 WHEN 'MEDIUM' THEN 2 " \
     "WHEN 'LOW' THEN 3 WHEN 'UNKNOWN' THEN 4 END"
 
-  def initialize(scan, finding_ids: nil)
-    @scan = scan
+  def initialize(scans, finding_ids: nil)
+    @scans = scans
     @finding_ids = finding_ids
   end
 
@@ -23,10 +23,10 @@ class ScanFindings
   end
 
   private
-    attr_reader :scan, :finding_ids
+    attr_reader :scans, :finding_ids
 
     def aggregate(finding_type, severities)
-      scope = scan.occurrences.joins(:finding)
+      scope = Occurrence.where(scan: scans).joins(:finding)
       scope = scope.where(finding_id: finding_ids) if finding_ids
       scope = scope.where(findings: { finding_type: }) if finding_type
       scope = scope.group("occurrences.finding_id", "findings.identifier").select(
@@ -34,12 +34,14 @@ class ScanFindings
         "MIN(#{SEVERITY_RANK}) AS severity_rank",
         "array_remove(array_agg(DISTINCT occurrences.installed_version), NULL) AS installed_versions",
         "array_remove(array_agg(DISTINCT occurrences.location), NULL) AS locations",
-        "array_remove(array_agg(DISTINCT occurrences.fixed_version), NULL) AS fixed_versions")
+        "array_remove(array_agg(DISTINCT occurrences.fixed_version), NULL) AS fixed_versions",
+        "array_agg(DISTINCT occurrences.scan_id) AS scan_ids")
       severities ? scope.having("MIN(#{SEVERITY_RANK}) IN (?)", severities.map { Occurrence::SEVERITIES.index(it) }) : scope
     end
 
     def row(finding, record)
       Row.new(finding:, severity: Occurrence::SEVERITIES.fetch(record.severity_rank),
-        installed_versions: record.installed_versions, locations: record.locations, fixed_versions: record.fixed_versions)
+        installed_versions: record.installed_versions, locations: record.locations, fixed_versions: record.fixed_versions,
+        scan_ids: record.scan_ids)
     end
 end

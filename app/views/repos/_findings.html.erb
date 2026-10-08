@@ -1,0 +1,38 @@
+<% filter_params = base_params.merge(type: @finding_type, severity: @severities.join(",").presence, only_new: ("1" if @only_new)) %>
+<% scans_by_id = @current_scans.index_by(&:id) %>
+<section class="panel">
+  <h2 class="visually-hidden"><%= @finding_type.pluralize.capitalize %></h2>
+  <div class="filters">
+    <div class="filter-group" role="group" aria-label="Severity">
+      <% shown = shown_severities(@severities) %>
+      <% Occurrence::SEVERITIES.each do |severity| %>
+        <%= link_to repo_path(repo, filter_params.merge(severity: severity_toggle_param(@severities, severity))), class: "toggle", aria: { current: shown.include?(severity).to_s } do %>
+          <span class="swatch swatch--<%= severity.downcase %>"></span><%= severity %> <%= current_counts[@finding_type][severity] %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="filter-group">
+      <span class="note">Latest scan per artifact on <span class="mono"><%= @branch.name %></span></span>
+      <%= link_to "Only new", repo_path(repo, filter_params.merge(only_new: (@only_new ? nil : "1"))), class: "toggle toggle--accent", aria: { current: @only_new.to_s } %>
+    </div>
+  </div>
+
+  <% if @rows.any? %>
+    <div class="table-scroll">
+      <table class="table findings">
+        <thead>
+          <tr><th>Severity</th><th>ID</th><th>Package / Target</th><th>Installed</th><th>Fixed in</th><th>Artifact</th><th>Title</th></tr>
+        </thead>
+        <tbody class="current">
+          <%= render "scans/finding_rows", rows: @rows, new_finding_ids: @new_finding_ids, gone: false,
+            origin: ->(row) { safe_join(row.scan_ids.map { tag.span(scans_by_id.fetch(it).artifact.name, class: "chip chip--fill") }, " ") } %>
+        </tbody>
+      </table>
+    </div>
+    <% if @row_count > @rows.size %>
+      <div class="panel__foot">Showing the first <%= @rows.size %> of <%= @row_count %>. Narrow the filters to see the rest.</div>
+    <% end %>
+  <% else %>
+    <p class="empty muted">No findings match these filters.</p>
+  <% end %>
+</section>

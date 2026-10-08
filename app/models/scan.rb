@@ -10,6 +10,14 @@ class Scan < ApplicationRecord
 
   enum :trigger, TRIGGERS.index_by(&:itself), prefix: :triggered_by, validate: true
 
+  # Latest scan per branch and artifact, ignoring artifacts without a scan in the activity window (ADR 0008).
+  def self.current(branches)
+    latest = where(branch: branches, created_at: Rails.configuration.x.artifact_activity_window.ago..)
+      .select("DISTINCT ON (scans.branch_id, scans.artifact_id) scans.id")
+      .order(Arel.sql("scans.branch_id, scans.artifact_id, scans.created_at DESC, scans.id DESC"))
+    where(id: latest)
+  end
+
   # Determined on read so that the order of concurrent uploads does not matter (ADR 0008).
   def predecessor
     branch.scans.where(artifact_id:)

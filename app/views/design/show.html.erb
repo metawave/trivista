@@ -67,6 +67,27 @@
     </div>
   </section>
 
+  <section class="panel header-card">
+    <div class="header-card__field header-card__field--main">
+      <span class="header-card__label">Repository</span>
+      <span class="page-title--mono">platform-api</span>
+    </div>
+    <div class="header-card__field">
+      <span class="header-card__label">Branch</span>
+      <details class="dropdown" open>
+        <summary class="btn dropdown__toggle mono"><%= icon(:branch, size: 14) %><span class="dropdown__value">main</span><span class="chip chip--fill chip--plain">Default</span><%= icon(:chevron, size: 14) %></summary>
+        <ul class="dropdown__menu">
+          <li><a href="#" aria-current="true"><span class="mono">main</span><span class="chip chip--fill chip--plain">Default</span><span class="note">2 hours ago</span></a></li>
+          <li><a href="#" aria-current="false"><span class="mono">release/2.4</span><span class="note">3 days ago</span></a></li>
+        </ul>
+      </details>
+    </div>
+    <div class="header-card__field">
+      <span class="header-card__label">Last scan</span>
+      <span class="meta-line header-card__value"><a class="mono" href="#">32f1da5a</a><span class="chip">push</span><span>2 hours ago</span></span>
+    </div>
+  </section>
+
   <section class="panel">
     <nav class="tabs" aria-label="Finding type">
       <a class="tab" href="#" aria-current="page">Vulnerabilities <span class="count">55</span></a>

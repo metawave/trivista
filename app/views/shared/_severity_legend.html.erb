@@ -1,0 +1,5 @@
+<div class="legend" aria-hidden="true">
+  <% Occurrence::SEVERITIES.each do |severity| %>
+    <span><span class="swatch swatch--<%= severity.downcase %>"></span><%= severity.capitalize %></span>
+  <% end %>
+</div>

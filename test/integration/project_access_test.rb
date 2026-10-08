@@ -14,6 +14,7 @@ class ProjectAccessIntegrationTest < ActionDispatch::IntegrationTest
 
     each_path_of(projects(:alice_tools), repos(:alice_tools_cli), branches(:alice_tools_cli_main), scans(:alice_tools_first)) do |path|
       get path
+      follow_redirect! if response.redirect?
 
       assert_response :success, path
     end

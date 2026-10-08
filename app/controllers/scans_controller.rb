@@ -21,7 +21,7 @@ class ScansController < ApplicationController
   def destroy
     scan = Scan.where(branch: Branch.where(repo: Repo.where(project: manageable_projects))).find(params[:id])
     Purge.new(scan).call
-    redirect_to scan.branch, notice: "Scan deleted."
+    redirect_to repo_path(scan.branch.repo, branch: scan.branch.name), notice: "Scan deleted."
   end
 
   private

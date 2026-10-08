@@ -4,8 +4,7 @@
 <main class="page">
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <%= link_to branch.repo.project.name, branch.repo.project %><span aria-hidden="true">/</span>
-    <%= link_to branch.repo.name, branch.repo %><span aria-hidden="true">/</span>
-    <%= link_to branch.name, branch, class: "mono" %><span aria-hidden="true">/</span>
+    <%= link_to "#{branch.repo.name} @ #{branch.name}", repo_path(branch.repo, branch: branch.name), class: "mono" %><span aria-hidden="true">/</span>
     <span class="mono" aria-current="page"><%= @scan.commit_sha.first(8) %></span>
   </nav>
 

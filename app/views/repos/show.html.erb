@@ -1,20 +1,74 @@
-<% content_for :title, @repo.name %>
+<% content_for :title, [ @repo.name, @branch&.name ].compact.join(" · ") %>
+<% scans_view = params[:view] == "scans" %>
+<% base_params = { branch: (@branch.name if @branch && @branch != @repo.default_branch) } %>
 <main class="page">
   <nav class="breadcrumb" aria-label="Breadcrumb">
+    <%= link_to "Projects", root_path %><span aria-hidden="true">/</span>
     <%= link_to @repo.project.name, @repo.project %><span aria-hidden="true">/</span>
     <span class="mono" aria-current="page"><%= @repo.name %></span>
   </nav>
-  <h1 class="page-title--mono"><%= @repo.name %></h1>
 
-  <section class="panel">
-    <div class="panel__head"><h2>Branches</h2></div>
-    <ul class="list">
-      <% @repo.branches.order(:name).each do |branch| %>
-        <li>
-          <span class="with-icon"><%= icon(:branch) %><%= link_to branch.name, branch, class: "mono" %></span>
-          <% if @repo.default_branch_id == branch.id %><span class="chip chip--fill chip--plain">Default Branch</span><% end %>
-        </li>
-      <% end %>
-    </ul>
+  <section class="panel header-card">
+    <div class="header-card__field header-card__field--main">
+      <span class="header-card__label">Repository</span>
+      <h1 class="page-title--mono"><%= @repo.name %></h1>
+    </div>
+    <% if @branch %>
+      <div class="header-card__field">
+        <span class="header-card__label" id="branch-label">Branch</span>
+        <details class="dropdown">
+          <summary class="btn dropdown__toggle mono" aria-labelledby="branch-label">
+            <%= icon(:branch, size: 14) %><span class="dropdown__value"><%= @branch.name %></span>
+            <% if @branch == @repo.default_branch %><span class="chip chip--fill chip--plain">Default</span><% end %>
+            <%= icon(:chevron, size: 14) %>
+          </summary>
+          <ul class="dropdown__menu">
+            <% @branches.sort_by { [ it == @repo.default_branch ? 0 : 1, -(@last_scans[it.id]&.to_i || 0) ] }.each do |branch| %>
+              <li>
+                <%= link_to repo_path(@repo, branch: (branch.name unless branch == @repo.default_branch)), aria: { current: (branch == @branch).to_s } do %>
+                  <span class="mono"><%= branch.name %></span>
+                  <% if branch == @repo.default_branch %><span class="chip chip--fill chip--plain">Default</span><% end %>
+                  <span class="note"><%= @last_scans[branch.id] ? "#{time_ago_in_words(@last_scans[branch.id])} ago" : "no scans" %></span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </details>
+      </div>
+      <div class="header-card__field">
+        <span class="header-card__label">Last scan</span>
+        <% if @latest_scan %>
+          <span class="meta-line header-card__value">
+            <%= link_to @latest_scan.commit_sha.first(8), @latest_scan, class: "mono" %>
+            <span class="chip"><%= @latest_scan.trigger %></span>
+            <% if @latest_scan.tag %><span class="chip"><%= @latest_scan.tag %></span><% end %>
+            <span><%= time_ago_in_words(@latest_scan.created_at) %> ago</span>
+          </span>
+        <% else %>
+          <span class="header-card__value muted">no scans</span>
+        <% end %>
+      </div>
+    <% end %>
   </section>
+
+  <% if @branch.nil? %>
+    <p class="panel empty muted">No branches yet. They appear with the first upload.</p>
+  <% else %>
+    <nav class="tabs tabs--page" aria-label="Repo view">
+      <% Finding::TYPES.each do |finding_type| %>
+        <%= link_to repo_path(@repo, base_params.merge(type: finding_type)), class: "tab", aria: { current: ("page" if !scans_view && finding_type == @finding_type) } do %>
+          <%= finding_type.pluralize.capitalize %> <span class="count"><%= current_counts[finding_type].values.sum %></span>
+        <% end %>
+      <% end %>
+      <%= link_to repo_path(@repo, base_params.merge(view: "scans", type: @finding_type)), class: "tab", aria: { current: ("page" if scans_view) } do %>
+        Scans <span class="count"><%= @scan_count %></span>
+      <% end %>
+    </nav>
+
+    <% if scans_view %>
+      <%= render "scans", repo: @repo, base_params: %>
+    <% else %>
+      <%= render "findings", repo: @repo, base_params: %>
+    <% end %>
+  <% end %>
 </main>

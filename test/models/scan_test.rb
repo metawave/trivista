@@ -20,4 +20,24 @@ class ScanTest < ActiveSupport::TestCase
   test "counts start empty" do
     assert_equal({}, scans(:shop_main_first).counts)
   end
+
+  test "current scans are the latest per branch and artifact inside the activity window" do
+    main = branches(:shop_backend_main)
+    feature = repos(:shop_backend).branches.create!(name: "feature")
+    source = projects(:shop).artifacts.create!(category: "source", name: ".")
+    scans(:shop_main_first).update!(created_at: 3.days.ago)
+    latest_image = scan(main, artifacts(:shop_image), 1.day.ago)
+    stale_source = scan(main, source, 31.days.ago)
+    feature_image = scan(feature, artifacts(:shop_image), 1.hour.ago)
+
+    assert_equal [ latest_image ], Scan.current(main).to_a
+    assert_equal [ latest_image, feature_image ].sort_by(&:id), Scan.current([ main, feature ]).sort_by(&:id)
+    assert_not_includes Scan.current(main), stale_source
+  end
+
+  private
+    def scan(branch, artifact, at)
+      Scan.create!(branch:, artifact:, service_account: service_accounts(:shop_ci), commit_sha: "c0ffee",
+        reported_artifact_type: "container_image", reported_artifact_name: artifact.name, created_at: at)
+    end
 end

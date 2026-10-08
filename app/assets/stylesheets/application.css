@@ -61,6 +61,7 @@
   --radius-m: 6px;
   --control-height: 36px;
   --control-height-s: 32px;
+  --shadow-popover: 0 8px 24px rgb(21 24 29 / 12%);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -425,6 +426,46 @@ form.button_to { display: inline; }
 .segmented a + a { border-left: 1px solid var(--border-strong); }
 .segmented a:hover { color: var(--text); text-decoration: none; }
 .segmented a[aria-current="true"] { background: var(--accent-tint); color: var(--accent-hover); font-weight: 600; }
+
+/* Header card */
+
+.header-card { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; padding: 18px 24px; }
+.header-card__field { flex: 0 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-left: 32px; border-left: 1px solid var(--line); }
+.header-card__field--main { flex: 1 1 320px; gap: 2px; padding-left: 0; border-left: 0; }
+.header-card__label { color: var(--text-2); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.header-card__value { min-height: var(--control-height); }
+
+.dropdown { position: relative; }
+.dropdown__toggle { width: 100%; justify-content: flex-start; padding: 0 10px; list-style: none; }
+.dropdown__toggle::-webkit-details-marker { display: none; }
+.dropdown__value { flex: 1; overflow: hidden; text-align: left; text-overflow: ellipsis; }
+.dropdown__menu {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 4px);
+  left: 0;
+  width: max-content;
+  min-width: 100%;
+  max-width: min(420px, 90vw);
+  max-height: 360px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-popover);
+}
+.dropdown__menu li + li { border-top: 1px solid var(--surface-2); }
+.dropdown__menu a { display: flex; align-items: center; gap: 8px; padding: 9px 12px; color: var(--text); }
+.dropdown__menu a:hover { background: var(--surface-2); text-decoration: none; }
+.dropdown__menu a[aria-current="true"] { background: var(--accent-tint); }
+.dropdown__menu .note { margin-left: auto; padding-left: 16px; font-size: 12px; white-space: nowrap; }
+
+.tabs--page { padding: 0; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.origin .chip + .chip { margin-left: 4px; }
 
 /* Detail blocks */
 

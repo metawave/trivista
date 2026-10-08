@@ -1,0 +1,56 @@
+<% filter_params = base_params.merge(view: "scans", type: @finding_type, range: @range) %>
+<div class="toolbar">
+  <div class="segmented" role="group" aria-label="Finding type">
+    <% Finding::TYPES.each do |finding_type| %>
+      <%= link_to finding_type.pluralize.capitalize, repo_path(repo, filter_params.merge(type: finding_type)), aria: { current: (finding_type == @finding_type).to_s } %>
+    <% end %>
+  </div>
+  <div class="segmented" role="group" aria-label="Range">
+    <% ReposController::RANGES.each_key do |range| %>
+      <%= link_to (range == "all" ? "All" : "#{range}d"), repo_path(repo, filter_params.merge(range:)), aria: { current: (range == @range).to_s } %>
+    <% end %>
+  </div>
+</div>
+
+<% if @series.empty? %>
+  <p class="panel empty muted">No scans in this range.</p>
+<% end %>
+
+<% @series.each do |series| %>
+  <section class="panel trend">
+    <div class="panel__head">
+      <div>
+        <h2 class="mono"><%= series.artifact.name %></h2>
+        <span class="note"><%= series.artifact.category %> · <%= pluralize(series.points.size, "scan") %></span>
+      </div>
+      <%= render "shared/severity_legend" %>
+    </div>
+    <div class="chart" data-controller="trend"
+         data-trend-points-value="<%= series.points.map { { url: scan_path(it.scan_id), label: "#{it.uploaded_at.strftime("%b %-d")} #{it.commit_sha.first(8)}", counts: it.counts } }.to_json %>"
+         data-trend-severities-value="<%= Occurrence::SEVERITIES.to_json %>">
+      <canvas data-trend-target="canvas" aria-label="Findings per scan by severity" role="img"></canvas>
+    </div>
+    <div class="table-scroll">
+      <table class="table">
+        <thead>
+          <tr><th>Commit</th><th>Tag</th><th>Trigger</th><th>Uploaded</th><th>Diff vs. predecessor</th><th><%= @finding_type.pluralize.capitalize %></th></tr>
+        </thead>
+        <tbody>
+          <% series.points.last(ReposController::LISTED_SCANS).reverse_each do |point| %>
+            <tr>
+              <td class="mono"><%= link_to point.commit_sha.first(8), scan_path(point.scan_id) %></td>
+              <td class="mono muted"><%= point.tag %></td>
+              <td><span class="chip"><%= point.trigger %></span></td>
+              <td class="mono nowrap"><%= point.uploaded_at.to_fs(:db) %></td>
+              <td><%= diff_chips(@diffs.fetch(point.scan_id)) %></td>
+              <td><%= severity_counts(point.counts) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% if series.points.size > ReposController::LISTED_SCANS %>
+      <div class="panel__foot">Latest <%= ReposController::LISTED_SCANS %> of <%= series.points.size %> scans. Open a bar in the chart for older ones.</div>
+    <% end %>
+  </section>
+<% end %>

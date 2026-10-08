@@ -25,11 +25,14 @@ Filters are links, one query param each, preserving the other params; no `<selec
 
 - Finding type: `.tabs` with `.tab[aria-current=page]` and a `.count`.
 - Single choice (range, visibility): `.segmented` links with `aria-current="true"`.
+- Branch of a repo: `.dropdown` (`<details>` with a `.dropdown__menu` of links) inside the `.header-card`; the default branch carries no `branch` param.
 - Toggles (severity, only new): `.toggle` links with `aria-current="true"|"false"`; several severities travel as one comma list (`?severity=HIGH,LOW`).
 
 Forms that change data (settings, tokens, service accounts) keep regular fields in `.field` with a visible label.
 
 ## Building blocks
+
+Detail pages of projects and repos open with a `.header-card`: `.header-card__field`s with an uppercase `.header-card__label` (name, branch, last scan), followed by page-level `.tabs.tabs--page`. Current findings come first; history sits in its own tab.
 
 Helpers render the recurring pieces; reach for them before writing markup: `severity_counts`, `severity_badge`, `diff_chips`, `icon`, `logo`, `copy_button`, `nav_link`, `owner_label`, `visibility_label`. Inline SVG icons live in `ApplicationHelper::ICONS` (24 px stroke icons, `aria-hidden`). Icon-only buttons get an `aria-label`.
 

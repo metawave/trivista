@@ -5,6 +5,7 @@
     <td class="mono"><%= finding_location(row.finding) %></td>
     <td class="versions mono"><%= row.installed_versions.join(", ") %></td>
     <td class="fixed mono"><%= row.fixed_versions.join(", ") %></td>
+    <% if local_assigns[:origin] %><td class="origin"><%= origin.call(row) %></td><% end %>
     <td class="truncate" title="<%= row.finding.title %>"><%= row.finding.title %></td>
   </tr>
 <% end %>

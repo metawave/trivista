@@ -6,6 +6,7 @@ module ApplicationHelper
     repo: '<path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6"/><path d="M9 13h6"/>',
     branch: '<circle cx="6" cy="5" r="2.5"/><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="7" r="2.5"/><path d="M6 7.5v9"/><path d="M18 9.5c0 4-6 3-11.5 7"/>',
     settings: '<path d="M4 6h10"/><path d="M18 6h2"/><circle cx="16" cy="6" r="2"/><path d="M4 12h2"/><path d="M10 12h10"/><circle cx="8" cy="12" r="2"/><path d="M4 18h12"/><circle cx="18" cy="18" r="2"/>',
+    chevron: '<path d="M6 9l6 6 6-6"/>',
     plus: '<path d="M12 5v14"/><path d="M5 12h14"/>',
     search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
     notice: '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/>',
