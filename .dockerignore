@@ -32,6 +32,8 @@
 
 # Ignore development files
 /.devcontainer
+# Fixture generator with fake secrets, not needed at runtime
+/script/
 
 # Ignore Docker-related files
 /.dockerignore
