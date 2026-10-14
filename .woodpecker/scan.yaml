@@ -22,7 +22,7 @@ steps:
       - trivy image --platform linux/arm64 --quiet --format json --scanners vuln,misconfig,secret,license --list-all-pkgs=false --output trivy-image.json registry.metawave.ch/metawave/trivista:main-${CI_PIPELINE_CREATED}-${CI_COMMIT_SHA:0:8}
 
   - name: upload
-    image: curlimages/curl:8.22.0
+    image: curlimages/curl:8.23.0
     environment:
       TRIVISTA_TOKEN:
         from_secret: TRIVISTA_TOKEN
