@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   delete "logout" => "sessions#destroy"
 
   namespace :api do
-    resources :scans, only: :create
+    resources :scans, only: :create, format: false
   end
 
   resources :projects, only: %i[show edit update destroy]

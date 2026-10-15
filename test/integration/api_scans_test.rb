@@ -211,6 +211,17 @@ class ApiScansTest < ActionDispatch::IntegrationTest
     assert_equal 1, count_multipart_parses { upload }
   end
 
+  test "path variants of the upload route are guarded as well" do
+    parses = count_multipart_parses do
+      [ "/api/scans.json", "/api/scans/", "/API/scans" ].each do |path|
+        post path, params: upload_params
+        assert_includes [ 401, 404 ], response.status, path
+      end
+    end
+
+    assert_equal 0, parses
+  end
+
   test "rejects reports whose structure exceeds the parsing budget" do
     with_report_node_budget(100) do
       upload

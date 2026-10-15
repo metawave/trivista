@@ -95,7 +95,7 @@ Database backups (CNPG/barman) are kept 10 days in the object store; encrypted h
 Kept in the deployment repository (`apps/trivista` in `metawave/server`):
 
 - The ingress serves only the `websecure` entrypoint; plain HTTP is not routed.
-- `/api/scans` passes a Traefik middleware with a request body limit, in-flight and rate limits per client IP.
+- Everything below `/api` passes Traefik middlewares with a request body limit (50 MB) and in-flight and rate limits per client IP; all other paths accept bodies up to 1 MiB.
 - `PGSSLMODE=require` encrypts the connection to PostgreSQL.
 - The certificate uses an ECDSA P-256 key; the TLS option allows TLS 1.2 only with forward-secret AEAD suites.
 - Pods run with `seccompProfile: RuntimeDefault` and `automountServiceAccountToken: false`; the retention CronJob gets only the secrets it needs.

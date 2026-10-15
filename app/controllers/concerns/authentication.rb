@@ -27,7 +27,7 @@ module Authentication
     def find_session_by_cookie
       session = Session.find_by(id: cookies.signed[SESSION_COOKIE]) if cookies.signed[SESSION_COOKIE]
       return unless session
-      return session.destroy && nil if session.expired?
+      return session.destroy && nil if session.expired? || session.user.deactivated?
 
       session.touch if session.updated_at < 1.minute.ago
       session

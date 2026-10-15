@@ -33,7 +33,7 @@ class ReadmeScreenshotsTest < ApplicationSystemTestCase
       OmniAuth.config.mock_auth[:openid_connect] = OmniAuth::AuthHash.new(
         provider: "openid_connect", uid: "demo-sub", info: { name: "Dana Demo" },
         extra: { raw_info: { "iss" => "https://idp.example.com", "sub" => "demo-sub", "name" => "Dana Demo",
-          "groups" => %w[team-platform trivista-users trivista-admins] } })
+          "groups" => %w[team-platform trivista-users trivista-admins], "auth_time" => Time.current.to_i } })
       visit login_path
       click_on "Sign in"
       assert_selector "h1", text: "Projects"

@@ -7,7 +7,12 @@ class SessionsController < ApplicationController
   def create
     user = Login.new(request.env["omniauth.auth"].extra.raw_info.to_hash).user!
     reset_session
-    start_new_session_for(user)
+    # An admin may deactivate the user between the claims check and here; re-check under the lock deactivation takes.
+    user.with_lock do
+      raise Login::Rejected, "user is deactivated" if user.deactivated?
+
+      start_new_session_for(user)
+    end
     Rails.event.notify("trivista.login", user_id: user.id, admin: user.admin?, ip: request.remote_ip)
     redirect_to root_path
   rescue Login::Rejected => error

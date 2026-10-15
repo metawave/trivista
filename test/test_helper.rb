@@ -25,7 +25,8 @@ class ActionDispatch::IntegrationTest
     OmniAuth.config.mock_auth[:openid_connect] = OmniAuth::AuthHash.new(
       provider: "openid_connect", uid: sub,
       info: { name: raw_info.fetch("name", sub) },
-      extra: { raw_info: { "iss" => "https://idp.example.com", "sub" => sub, "groups" => groups }.merge(raw_info).compact })
+      extra: { raw_info: { "iss" => "https://idp.example.com", "sub" => sub, "groups" => groups, "auth_time" => Time.current.to_i }
+        .merge(raw_info).compact })
     post "/auth/openid_connect"
     follow_redirect!
   end

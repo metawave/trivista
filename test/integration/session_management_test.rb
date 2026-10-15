@@ -103,5 +103,24 @@ class SessionManagementTest < ActionDispatch::IntegrationTest
 
     get "/auth/openid_connect/callback", params: { code: "x", state: "y", nonce: "attacker" }
     assert_response :bad_request
+
+    get "/auth/openid_connect/callback/", params: { code: "x", state: "y", code_verifier: "attacker" }
+    assert_response :bad_request
+  end
+
+  test "the identity provider is asked for a recent sign-in and older ones are rejected" do
+    assert_equal Rails.configuration.x.session_max_age.to_i, OIDC_OPTIONS[:extra_authorize_params][:max_age]
+
+    sign_in("auth_time" => 9.hours.ago.to_i)
+    assert_response :forbidden
+  end
+
+  test "sessions of a deactivated user stop working even if they were not removed" do
+    sign_in
+    users(:alice).update_column(:deactivated_at, Time.current)
+
+    get root_path
+
+    assert_redirected_to login_path
   end
 end
