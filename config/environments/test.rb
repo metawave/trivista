@@ -20,8 +20,9 @@ Rails.application.configure do
 
   # Show full error reports.
   config.consider_all_requests_local = true
-  # Uploads are rate limited through the cache (ADR 0004).
-  config.cache_store = :solid_cache_store
+  # Uploads are rate limited through the cache (ADR 0004). Not Solid Cache: its expiry thread
+  # deadlocks with the connection that transactional tests share across threads.
+  config.cache_store = :memory_store
 
   # Render exception templates for rescuable exceptions and raise for other exceptions.
   config.action_dispatch.show_exceptions = :rescuable
