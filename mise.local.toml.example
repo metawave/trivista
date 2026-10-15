@@ -1,0 +1,8 @@
+# Copy to mise.local.toml (git-ignored) for signing in locally. Use the identity provider client that is meant for
+# development, with http://localhost:3000/auth/openid_connect/callback as its only callback URL (docs/security.md).
+[env]
+OIDC_ISSUER = "https://auth.metawave.ch"
+OIDC_CLIENT_ID = ""
+OIDC_CLIENT_SECRET = ""
+OIDC_REDIRECT_URI = "http://localhost:3000/auth/openid_connect/callback"
+OIDC_ADMIN_GROUP = "trivista_admins"

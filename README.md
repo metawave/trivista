@@ -147,7 +147,7 @@ docker run -d --name trivista-postgres -e POSTGRES_PASSWORD=postgres -p 127.0.0.
 mise exec -- bin/ci
 ```
 
-`mise.toml` provides Ruby, Trivy and the development environment variables; put personal overrides into `mise.local.toml`. `bin/ci` runs setup, RuboCop, the audits, Brakeman and the tests. Notes for AI coding agents are in `AGENTS.md`.
+`mise.toml` provides Ruby, Trivy and the development environment variables; put personal overrides into `mise.local.toml`; `mise.local.toml.example` lists the identity provider settings for signing in locally. `bin/ci` runs setup, RuboCop, the audits, Brakeman and the tests. Notes for AI coding agents are in `AGENTS.md`.
 
 `bin/screenshots` regenerates the screenshots above from demo data built on the Trivy report fixtures; it needs Google Chrome.
 
