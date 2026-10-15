@@ -36,7 +36,7 @@
             </nav>
           </div>
           <div class="app-header__end">
-            <span class="user"><%= Current.user.name || Current.user.sub %></span>
+            <%= link_to Current.user.name || Current.user.sub, active_sessions_path, class: "user" %>
             <%= button_to "Sign out", logout_path, method: :delete, class: "btn btn--small" %>
           </div>
         </div>

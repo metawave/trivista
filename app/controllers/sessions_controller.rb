@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  skip_before_action :require_login
+  allow_unauthenticated_access
 
   def new
   end
@@ -7,8 +7,7 @@ class SessionsController < ApplicationController
   def create
     user = Login.new(request.env["omniauth.auth"].extra.raw_info.to_hash).user!
     reset_session
-    session[:user_id] = user.id
-    session[:authenticated_at] = Time.current.to_i
+    start_new_session_for(user)
     redirect_to root_path
   rescue Login::Rejected => error
     reset_session
@@ -20,6 +19,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    terminate_session if resume_session
     reset_session
     redirect_to login_path
   end

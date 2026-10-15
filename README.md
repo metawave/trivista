@@ -57,20 +57,21 @@ The app expects TLS to be terminated in front of it (`assume_ssl`).
 | `OIDC_ADMIN_GROUP` | none | Members get the admin role |
 | `OIDC_GROUPS_CLAIM` | `groups` | Claim carrying the group list |
 | `OIDC_BREAK_GLASS_SUBJECTS` | none | Comma-separated `sub` values of the issuer that are always admin, bypass the login group and cannot be deactivated |
-| `SESSION_MAX_AGE_HOURS` | `8` | Sessions end after this; group and role changes apply at the latest then |
+| `SESSION_MAX_AGE_HOURS` | `8` | Sessions end after this; group and role changes apply at the latest then; also sent as OIDC `max_age` |
+| `SESSION_IDLE_MINUTES` | `60` | Sessions end after this long without a request |
 | `UPLOAD_MAX_BYTES` | `52428800` | Maximum request body, enforced by Puma before the app (413) |
 | `UPLOAD_RATE_LIMIT_PER_HOUR` | `60` | Uploads per token and hour (429) |
 | `OCCURRENCE_QUOTA` | `5000000` | Stored occurrences per owner (507) |
 | `TOKEN_MAX_LIFETIME_DAYS` | `365` | Upper bound for token expiry |
 | `MAX_FINDINGS_PER_REPORT` | `50000` | Larger reports are rejected (422) before they are processed |
 | `ARTIFACT_ACTIVITY_DAYS` | `30` | Artifacts without a scan in this window drop out of the project list counts |
-| `RETENTION_DAYS` | `90` | `bin/rails trivista:retention` removes the details (occurrences) of older scans and keeps their counts for the trends; the newest scan per branch and artifact stays complete; `0` turns it off |
+| `RETENTION_DAYS` | `90` | `bin/rails trivista:retention` removes expired sessions and the details (occurrences) of older scans and keeps their counts for the trends; the newest scan per branch and artifact stays complete; `0` turns it off |
 | `RAILS_MAX_THREADS` | `3` | Puma threads |
 | `RAILS_LOG_LEVEL` | `info` | |
 
 ### Identity provider
 
-Request the scopes `openid profile email groups`. The groups claim must contain stable values: IDs or names that are never reused, otherwise a new group inherits the projects and service accounts of an old one. Users are identified by issuer and subject, not by email.
+Request the scopes `openid profile groups` and sign ID tokens with RS256; Trivista asks for re-authentication via `max_age`. The groups claim must contain stable values: IDs or names that are never reused, otherwise a new group inherits the projects and service accounts of an old one. Users are identified by issuer and subject, not by email.
 
 Trivista does not learn about offboarding in the identity provider. When someone leaves, an admin deactivates the user under *Users*; this revokes all tokens of the user's service accounts and all tokens the user created.
 

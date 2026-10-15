@@ -2,6 +2,7 @@ class User < ApplicationRecord
   class NotDeactivatable < StandardError; end
 
   has_one :owner, dependent: :restrict_with_exception
+  has_many :sessions, dependent: :delete_all
   has_many :created_upload_tokens, class_name: "UploadToken", foreign_key: :created_by_id,
     inverse_of: :created_by, dependent: :restrict_with_exception
 
@@ -22,6 +23,7 @@ class User < ApplicationRecord
       lock!
       update!(deactivated_at: Time.current)
       revocable_tokens.update_all(revoked_at: Time.current)
+      sessions.delete_all
     end
   end
 

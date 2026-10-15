@@ -3,7 +3,7 @@ module Admin
     before_action { raise ActiveRecord::RecordNotFound unless Current.user.admin? }
 
     def index
-      @users = User.order(:name, :sub)
+      @users = User.includes(:sessions).order(:name, :sub)
     end
 
     def deactivate
@@ -13,9 +13,14 @@ module Admin
       user.deactivate!
       redirect_to admin_users_path, notice: "User deactivated, all tokens revoked."
     rescue User::NotDeactivatable => error
-      @users = User.order(:name, :sub)
+      @users = User.includes(:sessions).order(:name, :sub)
       flash.now[:alert] = error.message
       render :index, status: :unprocessable_content
+    end
+
+    def end_sessions
+      User.find(params[:id]).sessions.delete_all
+      redirect_to admin_users_path, notice: "Sessions ended."
     end
 
     def reactivate

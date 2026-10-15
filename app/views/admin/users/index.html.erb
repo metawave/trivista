@@ -19,6 +19,9 @@
             </td>
             <td><span class="status <%= "status--off" if user.deactivated? %>"><%= user.deactivated? ? "deactivated" : "active" %></span></td>
             <td class="num">
+              <% if user.sessions.any? %>
+                <%= button_to "End sessions", end_sessions_admin_user_path(user), method: :patch, class: "btn btn--small" %>
+              <% end %>
               <% if user.deactivated? %>
                 <%= button_to "Reactivate", reactivate_admin_user_path(user), method: :patch, class: "btn btn--small" %>
               <% elsif !user.break_glass? && user != Current.user %>

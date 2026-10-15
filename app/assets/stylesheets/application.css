@@ -126,6 +126,8 @@ code, .mono { font-family: var(--font-mono); }
 .main-nav a[aria-current="page"] { background: var(--chrome-2); color: #ffffff; }
 
 .app-header .btn { border-color: var(--text-2); background: transparent; color: #ffffff; }
+.app-header__end .user { color: inherit; }
+.app-header__end .user:hover { color: #ffffff; }
 
 .page {
   max-width: 1360px;

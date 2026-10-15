@@ -2,6 +2,7 @@ Rails.application.configure do
   config.x.upload_rate_limit = Integer(ENV.fetch("UPLOAD_RATE_LIMIT_PER_HOUR", 60))
   config.x.occurrence_quota = Integer(ENV.fetch("OCCURRENCE_QUOTA", 5_000_000))
   config.x.session_max_age = Integer(ENV.fetch("SESSION_MAX_AGE_HOURS", 8)).hours
+  config.x.session_idle_timeout = Integer(ENV.fetch("SESSION_IDLE_MINUTES", 60)).minutes
   config.x.artifact_activity_window = Integer(ENV.fetch("ARTIFACT_ACTIVITY_DAYS", 30)).days
   config.x.token_max_lifetime = Integer(ENV.fetch("TOKEN_MAX_LIFETIME_DAYS", 365)).days
   config.x.max_findings_per_report = Integer(ENV.fetch("MAX_FINDINGS_PER_REPORT", 50_000))

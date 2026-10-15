@@ -27,6 +27,9 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
+  # __Host- binds the cookie to this host, so no other subdomain can set or overwrite it (ASVS V3.3.1).
+  config.session_store :cookie_store, key: "__Host-trivista_session"
+
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 

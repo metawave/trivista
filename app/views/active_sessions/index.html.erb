@@ -1,0 +1,32 @@
+<% content_for :title, "Sessions" %>
+<main class="page page--narrow">
+  <div class="page-head">
+    <div>
+      <h1>Sessions</h1>
+      <p class="page-head__sub">Browsers signed in as you. A session ends after <%= Rails.configuration.x.session_idle_timeout.inspect %> without activity and at the latest <%= Rails.configuration.x.session_max_age.inspect %> after signing in.</p>
+    </div>
+  </div>
+
+  <div class="panel table-scroll">
+    <table class="table">
+      <thead><tr><th>Browser</th><th>IP address</th><th>Signed in</th><th>Last active</th><th><span class="visually-hidden">Actions</span></th></tr></thead>
+      <tbody>
+        <% @sessions.each do |session| %>
+          <tr>
+            <td><%= session.user_agent %></td>
+            <td class="mono"><%= session.ip_address %></td>
+            <td class="mono"><%= session.created_at.to_fs(:db) %></td>
+            <td class="mono"><%= session.updated_at.to_fs(:db) %></td>
+            <td class="num">
+              <% if session == Current.session %>
+                <span class="status">this browser</span>
+              <% else %>
+                <%= button_to "End", active_session_path(session), method: :delete, class: "btn btn--small btn--danger" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</main>

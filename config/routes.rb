@@ -18,12 +18,14 @@ Rails.application.routes.draw do
     resources :upload_tokens, only: :create, shallow: true
   end
   resources :upload_tokens, only: :destroy
+  resources :active_sessions, only: %i[index destroy], path: "sessions"
 
   namespace :admin do
     resources :users, only: :index do
       member do
         patch :deactivate
         patch :reactivate
+        patch :end_sessions
       end
     end
   end

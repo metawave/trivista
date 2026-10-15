@@ -3,5 +3,6 @@ namespace :trivista do
   task retention: :environment do
     result = Retention.new.call
     puts "Retention: removed #{result.occurrences} occurrences of #{result.scans} scans"
+    puts "Retention: removed #{Session.expired.delete_all} expired sessions"
   end
 end

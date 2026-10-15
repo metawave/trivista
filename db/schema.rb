@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_08_065727) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_15_165557) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -141,6 +141,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_08_065727) do
     t.index ["owner_id", "name"], name: "index_service_accounts_on_owner_id_and_name", unique: true
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
   create_table "solid_cache_entries", force: :cascade do |t|
     t.binary "key", null: false
     t.binary "value", null: false
@@ -191,6 +200,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_08_065727) do
   add_foreign_key "scans", "branches", on_delete: :cascade
   add_foreign_key "scans", "service_accounts"
   add_foreign_key "service_accounts", "owners"
+  add_foreign_key "sessions", "users"
   add_foreign_key "upload_tokens", "service_accounts"
   add_foreign_key "upload_tokens", "users", column: "created_by_id"
 end
