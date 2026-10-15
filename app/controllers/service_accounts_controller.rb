@@ -13,6 +13,7 @@ class ServiceAccountsController < ApplicationController
       @service_account.errors.add(:owner, "must be you or one of your groups")
       render :new, status: :unprocessable_content
     elsif @service_account.save
+      Rails.event.notify("trivista.service_account_created", service_account_id: @service_account.id, owner_id: @service_account.owner_id)
       redirect_to @service_account
     else
       render :new, status: :unprocessable_content

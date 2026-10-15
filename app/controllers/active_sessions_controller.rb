@@ -6,6 +6,7 @@ class ActiveSessionsController < ApplicationController
 
   def destroy
     Current.user.sessions.find(params[:id]).destroy
+    Rails.event.notify("trivista.session_ended", session_id: params[:id].to_i)
     redirect_to active_sessions_path, notice: "Session ended."
   end
 end

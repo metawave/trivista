@@ -30,6 +30,8 @@ class ProjectsController < ApplicationController
   def update
     @project = manageable_projects.find(params[:id])
     if @project.update(params.expect(project: [ :visibility, :visibility_group ]))
+      Rails.event.notify("trivista.visibility_changed", project_id: @project.id, visibility: @project.visibility,
+        visibility_group: @project.visibility_group)
       redirect_to edit_project_path(@project), notice: "Visibility updated."
     else
       render :edit, status: :unprocessable_content

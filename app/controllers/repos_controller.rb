@@ -23,6 +23,7 @@ class ReposController < ApplicationController
     repo = manageable_repo
     branch = repo.branches.find(params.expect(repo: [ :default_branch_id ])[:default_branch_id])
     repo.with_lock { repo.update!(default_branch: branch, default_branch_manual: true) }
+    Rails.event.notify("trivista.default_branch_changed", repo_id: repo.id, branch_id: branch.id)
     redirect_to edit_project_path(repo.project), notice: "Default branch updated."
   end
 

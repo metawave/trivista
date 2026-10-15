@@ -13,6 +13,7 @@ class UploadTokenGate
     secret = env["HTTP_AUTHORIZATION"].to_s[/\ABearer (\S+)\z/, 1]
     return @app.call(env) if secret && UploadToken.usable.exists?(token_digest: UploadToken.digest(secret))
 
+    Rails.event.notify("trivista.upload_rejected", reason: "token", status: 401, ip: env["REMOTE_ADDR"])
     [ 401, { "www-authenticate" => 'Bearer realm="trivista"', "content-type" => "text/plain" }, [ "" ] ]
   end
 end

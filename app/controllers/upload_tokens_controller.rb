@@ -2,6 +2,8 @@ class UploadTokensController < ApplicationController
   def create
     @service_account = ServiceAccount.manageable_by(Current.user).find(params[:service_account_id])
     @upload_token, @secret = UploadToken.issue_for!(user: Current.user, service_account: @service_account, expires_at:)
+    Rails.event.notify("trivista.token_created", id: @upload_token.id, service_account_id: @service_account.id,
+      expires_at: @upload_token.expires_at.iso8601)
     response.headers["Cache-Control"] = "no-store"
     render :created
   rescue ActiveRecord::RecordInvalid => error
@@ -12,6 +14,7 @@ class UploadTokensController < ApplicationController
   def destroy
     upload_token = UploadToken.where(service_account: ServiceAccount.manageable_by(Current.user)).find(params[:id])
     upload_token.revoke!
+    Rails.event.notify("trivista.token_revoked", id: upload_token.id, service_account_id: upload_token.service_account_id)
     redirect_to upload_token.service_account
   end
 

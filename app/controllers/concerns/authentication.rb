@@ -20,7 +20,7 @@ module Authentication
     end
 
     def resume_session
-      Current.session ||= find_session_by_cookie
+      Current.session ||= find_session_by_cookie&.tap { Rails.event.set_context(user_id: it.user_id) }
     end
 
     # Sessions end after the maximum age and after inactivity; activity is recorded at most once a minute.
@@ -41,6 +41,7 @@ module Authentication
     def start_new_session_for(user)
       user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
         Current.session = session
+        Rails.event.set_context(user_id: user.id)
         cookies.signed.permanent[SESSION_COOKIE] = { value: session.id, httponly: true, same_site: :lax, secure: Rails.env.production? }
       end
     end

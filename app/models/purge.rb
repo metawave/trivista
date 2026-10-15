@@ -15,6 +15,7 @@ class Purge
       owner.update!(occurrence_count: owner.occurrence_count - removed_occurrences)
       reapply_default_branch(repo) if repo
     end
+    Rails.event.notify("trivista.deleted", record: record.class.name, id: record.id, project_id: project.id)
   end
 
   private

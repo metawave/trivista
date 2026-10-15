@@ -26,7 +26,7 @@ module Trivista
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w[assets tasks])
+    config.autoload_lib(ignore: %w[assets logging tasks])
 
     # Keep other sites from holding a reference to Trivista windows or embedding its responses (ASVS V3.4.8, V3.5.8).
     config.action_dispatch.default_headers.merge!(

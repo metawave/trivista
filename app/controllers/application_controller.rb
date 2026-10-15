@@ -9,6 +9,11 @@ class ApplicationController < ActionController::Base
   # Pages show findings that may point at weak spots; browsers and proxies keep no copy (ASVS V14.3.2).
   before_action :no_store
 
+  rescue_from ActiveRecord::RecordNotFound do |error|
+    Rails.event.notify("trivista.not_found", path: request.path, method: request.method)
+    raise error
+  end
+
   helper_method :manageable?
 
   private

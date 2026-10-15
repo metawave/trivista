@@ -11,6 +11,7 @@ module Admin
       raise User::NotDeactivatable, "you cannot deactivate yourself" if user == Current.user
 
       user.deactivate!
+      Rails.event.notify("trivista.user_deactivated", target_user_id: user.id)
       redirect_to admin_users_path, notice: "User deactivated, all tokens revoked."
     rescue User::NotDeactivatable => error
       @users = User.includes(:sessions).order(:name, :sub)
@@ -20,11 +21,13 @@ module Admin
 
     def end_sessions
       User.find(params[:id]).sessions.delete_all
+      Rails.event.notify("trivista.sessions_ended", target_user_id: params[:id].to_i)
       redirect_to admin_users_path, notice: "Sessions ended."
     end
 
     def reactivate
       User.find(params[:id]).reactivate!
+      Rails.event.notify("trivista.user_reactivated", target_user_id: params[:id].to_i)
       redirect_to admin_users_path, notice: "User reactivated. Tokens stay revoked."
     end
   end
