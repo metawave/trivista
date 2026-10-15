@@ -12,6 +12,8 @@ Rails 8 / PostgreSQL app that collects Trivy reports from CI and shows the findi
 ## Conventions
 
 - Code and specs move together. The specs are `CONTEXT.md`, `docs/adr/`, `docs/design-system.md` and the README sections on configuration and the upload API. A change to behavior or vocabulary updates code, tests and every affected spec in the same commit, and a spec change brings code and tests along; search the specs for the changed term before committing. `docs/plan.md` is the completed MVP plan and stays as written.
+- Security target is OWASP ASVS 5.0 Level 2 (ADR 0010): a change to authentication, sessions, the upload path or deployment checks the affected ASVS chapters, and a deliberate deviation goes into `docs/security.md`.
+- Rails built-ins first: for standard concerns (sessions, CSP, rate limiting, caching, encryption) use what Rails ships or generates (for example the session part of `bin/rails generate authentication`) as is, and change only what the app forces; no home-grown mechanism next to a framework one.
 - Test-first. Every security- or data-relevant rule (authorization, allowlist, locks, quota) has a test that turns red when the rule is removed; confirm it by removing the rule once.
 - Authorization goes through scopes: `Project.visible_to` / `manageable_by`, nested records through their own `visible_to`. Records outside the scope answer 404.
 - Trivy data enters only through the `TrivyReport` allowlist (ADR 0003); logs and error messages carry generic text, report content stays out of them.
