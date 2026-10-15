@@ -28,6 +28,8 @@ The last full verification ran on 2026-10-15: one reviewer per ASVS chapter grou
 | V15.2.1 | Base and CI images are pinned by tag, not digest | Nightly image scans show base image CVEs; a stale digest would hide updates without a bot that bumps it |
 | V16.4.3 | Logs are stored on the same host (VictoriaLogs) | Single-node operation; no separate log host exists |
 | V12.3.4 | The PostgreSQL connection is encrypted (`sslmode=require`) but does not verify the server certificate | CNPG's CA lives in another namespace and renews itself; a copied CA would break the connection at renewal. Verification follows once the CA is distributed automatically (for example with trust-manager) |
+| V13.4.5 | The Traefik dashboard and its read-only API are reachable inside the cluster without authentication (`api.insecure`) | They disclose routing configuration only and cannot change it; pods in namespaces with default-deny policies cannot reach them; the dashboard stays available for debugging via `kubectl port-forward` |
+| V13.3.1 | Kubernetes secrets are not encrypted at rest in k3s | On a single node the encryption key would sit on the same disk as the datastore; the manifests in Git are encrypted with SOPS |
 | V3.7.4 | No HSTS preload | A decision for the whole domain, not for this app |
 
 ## Keys and secrets
@@ -99,7 +101,3 @@ Kept in the deployment repository (`apps/trivista` in `metawave/server`):
 - `PGSSLMODE=require` encrypts the connection to PostgreSQL.
 - The certificate uses an ECDSA P-256 key; the TLS option allows TLS 1.2 only with forward-secret AEAD suites.
 - Pods run with `seccompProfile: RuntimeDefault` and `automountServiceAccountToken: false`; the retention CronJob gets only the secrets it needs.
-
-## Open items
-
-Cluster-wide hardening outside this repository, tracked separately: Traefik dashboard without `api.insecure` and k3s secrets encryption at rest.
