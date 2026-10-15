@@ -33,7 +33,7 @@ Trivista is a Rails 8 app shipped as one Docker image and needs a PostgreSQL dat
 ```sh
 docker build -t trivista .
 docker run -p 3000:80 \
-  -e RAILS_MASTER_KEY=... \
+  -e SECRET_KEY_BASE=... \
   -e DATABASE_URL=postgres://trivista:...@db:5432/trivista \
   -e OIDC_ISSUER=https://auth.example.com \
   -e OIDC_CLIENT_ID=... -e OIDC_CLIENT_SECRET=... \
@@ -49,7 +49,7 @@ The app expects TLS to be terminated in front of it (`assume_ssl`).
 | Variable | Default | Purpose |
 |---|---|---|
 | `DATABASE_URL` | | PostgreSQL connection |
-| `RAILS_MASTER_KEY` | | Decrypts `config/credentials.yml.enc` |
+| `SECRET_KEY_BASE` | | Signs and encrypts cookies; generate with `bin/rails secret`, rotating it ends all sessions |
 | `OIDC_ISSUER` | | Issuer URL, discovery is used |
 | `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET` | | OIDC client (authorization code flow with PKCE) |
 | `OIDC_REDIRECT_URI` | | `https://<host>/auth/openid_connect/callback` |

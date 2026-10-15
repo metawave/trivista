@@ -34,6 +34,9 @@
 /.devcontainer
 # Fixture generator with fake secrets, not needed at runtime
 /script/
+# Tests and documentation are not needed at runtime
+/test/
+/docs/
 
 # Ignore Docker-related files
 /.dockerignore
