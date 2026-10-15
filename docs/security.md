@@ -65,7 +65,7 @@ Trivista scans itself nightly and after every build. The maintainer of this repo
 - Every request is logged with its request id; parameters such as tokens, secrets, the report, OIDC `code` and `state` are filtered, and report content never enters a log (ADR 0003).
 - Log lines are single lines in UTC; line breaks in values are escaped.
 - Audit events are JSON lines with the actor (`user_id` or `upload_token_id` and `service_account_id`): `trivista.login`, `login_rejected`, `login_failed`, `logout`, `session_ended`, `sessions_ended`, `token_created`, `token_revoked`, `service_account_created`, `visibility_changed`, `default_branch_changed`, `deleted`, `user_deactivated`, `user_reactivated`, `not_found`, `scan_uploaded`, `upload_rejected`.
-- Logs go to stdout and are collected by VictoriaLogs and kept for 21 days. Restricting the log UI to an operator group is part of the open cluster hardening (see *Open items*).
+- Logs go to stdout and are collected by VictoriaLogs and kept for 21 days. The log UI sits behind oauth2-proxy, whose Pocket ID client admits only the `operators` group.
 
 ## Outbound connections
 
@@ -102,4 +102,4 @@ Kept in the deployment repository (`apps/trivista` in `metawave/server`):
 
 ## Open items
 
-Cluster-wide hardening outside this repository, tracked separately: Traefik dashboard without `api.insecure`, k3s secrets encryption at rest, and the VictoriaLogs UI restricted to an operator group.
+Cluster-wide hardening outside this repository, tracked separately: Traefik dashboard without `api.insecure` and k3s secrets encryption at rest.
