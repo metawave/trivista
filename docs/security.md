@@ -14,7 +14,7 @@ The last full verification ran on 2026-10-15: one reviewer per ASVS chapter grou
 | Input and upload (V1, V2, V5) | App + ingress | Allowlist projection (ADR 0003), field validation, parsing budget, tokens checked before the body is parsed (ADR 0004) |
 | Browser protections (V3) | App | CSP with nonces and `frame-ancestors 'none'`, `__Host-` cookies, HSTS, `no-store`, COOP/CORP |
 | Logging (V16) | App | Audit events with actor as JSON lines; see *Logs* |
-| TLS and network (V12) | Ingress + cluster | HTTPS only at Traefik, TLS 1.2+ with modern ciphers, default-deny NetworkPolicies, `sslmode=verify-full` to PostgreSQL |
+| TLS and network (V12) | Ingress + cluster | HTTPS only at Traefik, TLS 1.2+ with modern ciphers, default-deny NetworkPolicies, encrypted connection to PostgreSQL |
 | Configuration (V13) | Container + manifests | Non-root, read-only root filesystem, no capabilities, seccomp `RuntimeDefault`, no service account token, secrets via SOPS |
 
 ## Accepted deviations
@@ -27,6 +27,7 @@ The last full verification ran on 2026-10-15: one reviewer per ASVS chapter grou
 | V15.1.2 | No separate SBOM document | `Gemfile.lock`, `config/importmap.rb` and the vendored Chart.js (`vendor/javascript/chart.js.js`, 4.5.1) are the component inventory; the nightly Trivy scans of source and image evaluate them |
 | V15.2.1 | Base and CI images are pinned by tag, not digest | Nightly image scans show base image CVEs; a stale digest would hide updates without a bot that bumps it |
 | V16.4.3 | Logs are stored on the same host (VictoriaLogs) | Single-node operation; no separate log host exists |
+| V12.3.4 | The PostgreSQL connection is encrypted (`sslmode=require`) but does not verify the server certificate | CNPG's CA lives in another namespace and renews itself; a copied CA would break the connection at renewal. Verification follows once the CA is distributed automatically (for example with trust-manager) |
 | V3.7.4 | No HSTS preload | A decision for the whole domain, not for this app |
 
 ## Keys and secrets
@@ -95,7 +96,8 @@ Kept in the deployment repository (`apps/trivista` in `metawave/server`):
 
 - The ingress serves only the `websecure` entrypoint; plain HTTP is not routed.
 - `/api/scans` passes a Traefik middleware with a request body limit, in-flight and rate limits per client IP.
-- `DATABASE_URL` uses `sslmode=verify-full` with the CNPG CA mounted into the pod.
+- `PGSSLMODE=require` encrypts the connection to PostgreSQL.
+- The certificate uses an ECDSA P-256 key; the TLS option allows TLS 1.2 only with forward-secret AEAD suites.
 - Pods run with `seccompProfile: RuntimeDefault` and `automountServiceAccountToken: false`; the retention CronJob gets only the secrets it needs.
 
 ## Open items
