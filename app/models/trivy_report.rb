@@ -23,7 +23,13 @@ class TrivyReport
   attr_reader :artifact_category, :artifact_name, :reported_artifact_type, :reported_artifact_name,
     :schema_version, :report_created_at, :trivy_version, :os_family, :os_name, :findings
 
+  # Every array, object and comma becomes Ruby objects; the budget bounds parser memory before parsing (ASVS V5.2.1).
+  # Real reports have one such character per 35 to 60 bytes, so a full 50 MB upload stays far below it.
+  MAX_JSON_NODES = 5_000_000
+
   def self.parse(json)
+    raise UnsupportedReport, "report structure is too large" if json.count("{[,") > MAX_JSON_NODES
+
     new(JSON.parse(json))
   rescue JSON::ParserError
     raise InvalidReport, "Trivy report is not valid JSON"
@@ -210,14 +216,14 @@ class TrivyReport
 
     def text(value)
       return if value.nil? || value == ""
-      raise InvalidReport, "unexpected Trivy report structure" unless value.is_a?(String)
+      raise InvalidReport, "unexpected Trivy report structure" unless value.is_a?(String) && !value.include?("\0")
 
       value
     end
 
     def integer(value)
       return if value.nil?
-      raise InvalidReport, "unexpected Trivy report structure" unless value.is_a?(Integer)
+      raise InvalidReport, "unexpected Trivy report structure" unless value.is_a?(Integer) && value.between?(0, 2**31 - 1)
 
       value
     end
@@ -230,7 +236,7 @@ class TrivyReport
     end
 
     def time(value)
-      string(value)&.then { Time.iso8601(it) }
+      string(value)&.then { Time.iso8601(it) }&.tap { raise InvalidReport, "unexpected Trivy report structure" unless it.year.between?(1970, 9999) }
     rescue ArgumentError
       raise InvalidReport, "unexpected Trivy report structure"
     end

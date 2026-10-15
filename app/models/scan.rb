@@ -9,6 +9,8 @@ class Scan < ApplicationRecord
   scope :visible_to, ->(user) { where(branch: Branch.visible_to(user)) }
 
   enum :trigger, TRIGGERS.index_by(&:itself), prefix: :triggered_by, validate: true
+  validates :commit_sha, presence: true, length: { maximum: 64 }, format: { without: /[[:cntrl:]]/ }
+  validates :tag, length: { maximum: 255 }, format: { without: /[[:cntrl:]]/ }, allow_nil: true
 
   # Latest scan per branch and artifact, ignoring artifacts without a scan in the activity window (ADR 0008).
   def self.current(branches)

@@ -3,6 +3,8 @@ class Repo < ApplicationRecord
   belongs_to :default_branch, class_name: "Branch", optional: true
   has_many :branches, dependent: :delete_all
 
+  validates :name, presence: true, length: { maximum: 255 }, format: { without: /[[:cntrl:]]/ }
+
   scope :visible_to, ->(user) { where(project: Project.visible_to(user)) }
 
   def add_branch!(name)

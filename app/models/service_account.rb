@@ -5,5 +5,5 @@ class ServiceAccount < ApplicationRecord
 
   scope :manageable_by, ->(user) { user.admin? ? all : where(owner: Owner.managed_by(user)) }
 
-  validates :name, presence: true, uniqueness: { scope: :owner_id }
+  validates :name, presence: true, uniqueness: { scope: :owner_id }, length: { maximum: 100 }, format: { without: /[[:cntrl:]]/ }
 end

@@ -6,6 +6,8 @@ module Api
     IMPORT_LOCK = Mutex.new
     REQUIRED_FIELDS = %i[project repo branch commit].freeze
 
+    class TokenRevoked < StandardError; end
+
     before_action :authenticate_upload_token
     before_action :enforce_rate_limit
     before_action :require_multipart
@@ -16,6 +18,10 @@ module Api
       missing = REQUIRED_FIELDS.reject { params[it].is_a?(String) && params[it].present? }
       return render_error(:bad_request, "missing fields: #{missing.join(", ")}") if missing.any?
 
+      return render_error(:bad_request, "tag must be a string") unless params[:tag].nil? || params[:tag].is_a?(String)
+      # PostgreSQL cannot even look up a NUL byte; the model validations reject the other control characters.
+      return render_error(:bad_request, "fields must not contain NUL bytes") if [ *REQUIRED_FIELDS, :tag ].any? { params[it].to_s.include?("\0") }
+
       trigger = params[:trigger].presence || "unknown"
       return render_error(:bad_request, "unknown trigger") unless Scan::TRIGGERS.include?(trigger)
 
@@ -23,8 +29,13 @@ module Api
       render json: { id: scan.id }, status: :created, location: scan_url(scan)
     rescue TrivyReport::InvalidReport => error
       render_error(:bad_request, error.message)
+    rescue ActiveRecord::RecordInvalid => error
+      render_error(:bad_request, error.record.errors.full_messages.to_sentence)
     rescue TrivyReport::UnsupportedReport => error
       render_error(:unprocessable_content, error.message)
+    rescue TokenRevoked
+      response.headers["WWW-Authenticate"] = 'Bearer realm="trivista"'
+      head :unauthorized
     rescue Upload::QuotaExceeded
       render_error(:insufficient_storage, "occurrence quota of the owner is exceeded")
     end
@@ -32,6 +43,9 @@ module Api
     private
       def import(trigger)
         IMPORT_LOCK.synchronize do
+          # The token may have been revoked while this upload waited for the lock (ADR 0005).
+          raise TokenRevoked unless UploadToken.usable.exists?(@upload_token.id)
+
           Upload.new(service_account: @upload_token.service_account, project: params[:project], repo: params[:repo],
             branch: params[:branch], commit: params[:commit], tag: params[:tag].presence, trigger:,
             report: TrivyReport.parse(params[:report].read)).import

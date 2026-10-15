@@ -4,6 +4,8 @@ class Project < ApplicationRecord
   has_many :artifacts, dependent: :delete_all
   has_many :findings, dependent: :delete_all
 
+  validates :name, presence: true, length: { maximum: 255 }, format: { without: /[[:cntrl:]]/ }
+
   enum :visibility, { user: "user", group: "group", public: "public" }, prefix: :visible_to, validate: true
 
   # Owner user, members of the owner group and admins manage a project (ADR 0007).

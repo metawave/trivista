@@ -187,7 +187,93 @@ class ApiScansTest < ActionDispatch::IntegrationTest
     assert_equal "develop", repo.reload.default_branch.name
   end
 
+  test "rejects upload fields that are too long, contain control characters or have the wrong type" do
+    invalid = [ { project: "p" * 256 }, { repo: "a\nb" }, { branch: "main\u0000" }, { commit: "c" * 65 },
+      { tag: "t" * 256 }, { tag: [ "v1" ] } ]
+
+    assert_no_difference [ "Scan.count", "Project.count" ] do
+      invalid.each do |fields|
+        upload(params: upload_params.merge(fields))
+        assert_response :bad_request, fields.inspect
+      end
+    end
+  end
+
+  test "rejects anonymous uploads before the multipart body is parsed" do
+    parses = count_multipart_parses do
+      upload(token: nil)
+      assert_response :unauthorized
+      upload(token: "trv_unknown")
+      assert_response :unauthorized
+    end
+
+    assert_equal 0, parses
+    assert_equal 1, count_multipart_parses { upload }
+  end
+
+  test "rejects reports whose structure exceeds the parsing budget" do
+    with_report_node_budget(100) do
+      upload
+
+      assert_response :unprocessable_content
+    end
+  end
+
+  test "rejects reports with values outside the database ranges" do
+    report = JSON.parse(file_fixture("trivy/fs.json").read)
+    secret = report["Results"].flat_map { it["Secrets"] || [] }.first
+    [ { "StartLine" => 2**40 }, { "Title" => "a\u0000b" } ].each do |values|
+      secret.merge!(values)
+      upload(params: upload_params.merge(report: report_file(report.to_json)))
+      assert_response :bad_request, values.inspect
+      secret.merge!("StartLine" => 1, "Title" => "t")
+    end
+  end
+
+  test "a token revoked while the upload waits for the import stores nothing" do
+    token = upload_tokens(:shop_ci_token)
+    previous = Api::ScansController::IMPORT_LOCK
+    lock = Mutex.new
+    Api::ScansController.send(:remove_const, :IMPORT_LOCK)
+    Api::ScansController.const_set(:IMPORT_LOCK, lock.tap { |it| def it.synchronize = (UploadToken.update_all(revoked_at: Time.current); super) })
+
+    assert_no_difference "Scan.count" do
+      upload
+    end
+    assert_response :unauthorized
+  ensure
+    Api::ScansController.send(:remove_const, :IMPORT_LOCK)
+    Api::ScansController.const_set(:IMPORT_LOCK, previous)
+    token.update_columns(revoked_at: nil)
+  end
+
   private
+    module MultipartParseCounter
+      mattr_accessor :count, default: 0
+
+      def parse(...)
+        MultipartParseCounter.count += 1
+        super
+      end
+    end
+    Rack::Multipart::Parser.singleton_class.prepend(MultipartParseCounter)
+
+    def count_multipart_parses
+      before = MultipartParseCounter.count
+      yield
+      MultipartParseCounter.count - before
+    end
+
+    def with_report_node_budget(budget)
+      previous = TrivyReport::MAX_JSON_NODES
+      TrivyReport.send(:remove_const, :MAX_JSON_NODES)
+      TrivyReport.const_set(:MAX_JSON_NODES, budget)
+      yield
+    ensure
+      TrivyReport.send(:remove_const, :MAX_JSON_NODES)
+      TrivyReport.const_set(:MAX_JSON_NODES, previous)
+    end
+
     def upload(token: SHOP_TOKEN, params: upload_params)
       headers = token ? { "Authorization" => "Bearer #{token}" } : {}
       post api_scans_path, params:, headers:

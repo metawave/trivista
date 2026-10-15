@@ -18,6 +18,10 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  # Bounds runaway queries and lock waits instead of letting them hold a connection (ASVS V15.2.2).
+  variables:
+    statement_timeout: 60s
+    lock_timeout: 10s
 
 
 development:
