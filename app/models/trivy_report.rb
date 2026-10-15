@@ -216,7 +216,7 @@ class TrivyReport
 
     def text(value)
       return if value.nil? || value == ""
-      raise InvalidReport, "unexpected Trivy report structure" unless value.is_a?(String) && !value.include?("\0")
+      raise InvalidReport, "unexpected Trivy report structure" unless value.is_a?(String) && value.valid_encoding? && !value.include?("\0")
 
       value
     end

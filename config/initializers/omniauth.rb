@@ -10,9 +10,10 @@ class OidcCallbackGuard
 
   def call(env)
     request = Rack::Request.new(env)
-    return [ 400, { "content-type" => "text/plain" }, [ "Bad request" ] ] if request.path.downcase.start_with?(PREFIX) && (request.params.keys & %w[code_verifier nonce]).any?
+    return @app.call(env) unless request.path.downcase.start_with?(PREFIX) && (request.params.keys & %w[code_verifier nonce]).any?
 
-    @app.call(env)
+    Rails.event.notify("trivista.login_rejected", reason: "callback carries its own verifier or nonce", ip: request.ip)
+    [ 400, { "content-type" => "text/plain" }, [ "Bad request" ] ]
   end
 end
 

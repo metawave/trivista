@@ -10,6 +10,12 @@ class AuditEventsTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "a login callback carrying its own verifier" do
+    assert_event_reported("trivista.login_rejected", payload: { reason: "callback carries its own verifier or nonce" }) do
+      get "/auth/openid_connect/callback", params: { code: "x", state: "y", code_verifier: "attacker" }
+    end
+  end
+
   test "token issued and revoked" do
     sign_in(sub: "dave-sub")
     service_account = service_accounts(:shop_ci)

@@ -39,6 +39,14 @@ class RepoPageTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "branches of other repos answer not found" do
+    repos(:alice_tools_cli).branches.create!(name: "develop")
+
+    get repo_path(@repo, branch: "develop")
+
+    assert_response :not_found
+  end
+
   test "current findings skip artifacts outside the activity window" do
     @scan.update!(created_at: 31.days.ago)
 

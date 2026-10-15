@@ -6,6 +6,8 @@ class SessionsController < ApplicationController
 
   def create
     user = Login.new(request.env["omniauth.auth"].extra.raw_info.to_hash).user!
+    # A new sign-in replaces the session this browser held, so a copy of the old cookie stops working (ASVS V7.2.4).
+    terminate_session if resume_session
     reset_session
     # An admin may deactivate the user between the claims check and here; re-check under the lock deactivation takes.
     user.with_lock do

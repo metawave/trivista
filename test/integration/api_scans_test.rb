@@ -213,7 +213,7 @@ class ApiScansTest < ActionDispatch::IntegrationTest
 
   test "path variants of the upload route are guarded as well" do
     parses = count_multipart_parses do
-      [ "/api/scans.json", "/api/scans/", "/API/scans" ].each do |path|
+      [ "/api/scans.json", "/api/scans/", "/API/scans", "/api", "/api;x/scans", "/api%2Fscans" ].each do |path|
         post path, params: upload_params
         assert_includes [ 401, 404 ], response.status, path
       end
@@ -239,6 +239,23 @@ class ApiScansTest < ActionDispatch::IntegrationTest
       assert_response :bad_request, values.inspect
       secret.merge!("StartLine" => 1, "Title" => "t")
     end
+  end
+
+  test "rejects reports with text that is not UTF-8" do
+    report = file_fixture("trivy/fs.json").read.b.sub('"Title": "'.b, "\"Title\": \"\xFF".b)
+
+    upload(params: upload_params.merge(report: report_file(report)))
+
+    assert_response :bad_request
+  end
+
+  test "rejects form fields of the wrong shape" do
+    sign_in(sub: "dave-sub")
+
+    post service_accounts_path, params: { service_account: "ci" }
+    assert_response :bad_request
+    post service_account_upload_tokens_path(service_accounts(:shop_ci)), params: { upload_token: "2030-01-01" }
+    assert_response :bad_request
   end
 
   test "a token revoked while the upload waits for the import stores nothing" do
@@ -296,7 +313,7 @@ class ApiScansTest < ActionDispatch::IntegrationTest
     end
 
     def report_file(content)
-      file = Tempfile.new([ "report", ".json" ])
+      file = Tempfile.new([ "report", ".json" ], binmode: true)
       file.write(content)
       file.rewind
       Rack::Test::UploadedFile.new(file.path, "application/json")

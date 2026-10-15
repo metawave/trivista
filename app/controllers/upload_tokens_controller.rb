@@ -20,7 +20,7 @@ class UploadTokensController < ApplicationController
 
   private
     def expires_at
-      Date.iso8601(params.dig(:upload_token, :expires_on).to_s).end_of_day
+      Date.iso8601(params.expect(upload_token: [ :expires_on ])[:expires_on].to_s).end_of_day
     rescue Date::Error
       nil
     end

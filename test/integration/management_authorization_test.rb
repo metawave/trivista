@@ -26,6 +26,15 @@ class ManagementAuthorizationTest < ActionDispatch::IntegrationTest
     assert_equal @main, @repo.reload.default_branch
   end
 
+  test "a manager cannot point the default branch at a branch of another repo" do
+    sign_in
+
+    patch repo_path(@repo), params: { repo: { default_branch_id: branches(:shop_backend_main).id } }
+
+    assert_response :not_found
+    assert_equal @main, @repo.reload.default_branch
+  end
+
   test "a viewer cannot delete repos, branches or scans" do
     delete repo_path(@repo), params: { confirmation: @repo.name }
     assert_response :not_found

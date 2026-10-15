@@ -19,7 +19,7 @@ Texte werden auf 1000 Zeichen gekürzt, `Description` und `Resolution` auf 10000
 
 ## Flüchtige Kopien
 
-Vor der Projektion liegt der unbereinigte Report kurzzeitig in Tempfiles von Puma und Rack. Diese liegen auf flüchtigem Speicher (`emptyDir`) und werden nach dem Request gelöscht. Der Upload-Pfad schreibt weder Request-Body noch Parser-Meldungen in Logs oder Error-Tracker; ungültiges JSON ergibt eine generische `400` ohne Exception-Text, weil Parser-Fehler Ausschnitte des Inputs enthalten.
+Vor der Projektion liegt der unbereinigte Report kurzzeitig im Speicher von Traefik, das den Upload puffert, und in Tempfiles von Puma und Rack. Traefik hält den Body im RAM statt auf der Disk; die Tempfiles liegen auf flüchtigem Speicher (`emptyDir`). Beide Kopien werden nach dem Request verworfen. Der Upload-Pfad schreibt weder Request-Body noch Parser-Meldungen in Logs oder Error-Tracker; ungültiges JSON ergibt eine generische `400` ohne Exception-Text, weil Parser-Fehler Ausschnitte des Inputs enthalten.
 
 ## URLs aus Reports
 

@@ -25,22 +25,35 @@ The last full verification ran on 2026-10-15: one reviewer per ASVS chapter grou
 | V7.6.1 | Pocket ID keeps its own session (48 h) | Trivista asks for re-authentication via `max_age` (8 h) and ends its own session after 60 minutes idle |
 | V12.3.3 | Traefik talks to the pod over plain HTTP | Single-node cluster, traffic stays on the node behind default-deny NetworkPolicies |
 | V15.1.2 | No separate SBOM document | `Gemfile.lock`, `config/importmap.rb` and the vendored Chart.js (`vendor/javascript/chart.js.js`, 4.5.1) are the component inventory; the nightly Trivy scans of source and image evaluate them |
-| V15.2.1 | Base and CI images are pinned by tag, not digest | Nightly image scans show base image CVEs; a stale digest would hide updates without a bot that bumps it |
+| V15.2.4 | Base and CI images are pinned by tag, not digest | Nightly image scans show base image CVEs; a stale digest would hide updates without a bot that bumps it |
 | V16.4.3 | Logs are stored on the same host (VictoriaLogs) | Single-node operation; no separate log host exists |
-| V12.3.4 | The PostgreSQL connection is encrypted (`sslmode=require`) but does not verify the server certificate | CNPG's CA lives in another namespace and renews itself; a copied CA would break the connection at renewal. Verification follows once the CA is distributed automatically (for example with trust-manager) |
+| V12.3.2, V12.3.4 | The PostgreSQL connection is encrypted (`sslmode=require`) but does not verify the server certificate | CNPG's CA lives in another namespace and renews itself; a copied CA would break the connection at renewal. Verification follows once the CA is distributed automatically (for example with trust-manager) |
 | V13.3.1 | Kubernetes secrets are not encrypted at rest in k3s | On a single node the encryption key would sit on the same disk as the datastore; the manifests in Git are encrypted with SOPS |
 | V3.7.4 | No HSTS preload | A decision for the whole domain, not for this app |
+| V10.4.3 | Pocket ID keeps authorization codes valid for 15 minutes, not 10 | Not configurable in Pocket ID; codes are single use, bound to PKCE and redeemable only with the client secret |
+| V10.4.4, V10.4.6, V10.4.11 | Pocket ID gives every client all grant types and scopes and also accepts `plain` PKCE | Not configurable per client in Pocket ID; Trivista uses only the code flow with S256 and asks only for `openid profile groups`, and the other grants need the client secret |
+| V7.5.2 | Ending another session of one's own needs no fresh sign-in | Ending a session only reduces access; a stolen session can at most sign out the owner's other browsers |
+| V13.2.1 | The database role and the OIDC client use static secrets | Rotated yearly (see *Keys and secrets*); both stay in SOPS, and NetworkPolicies limit who can reach PostgreSQL |
+| V15.3.2 | OIDC discovery follows redirects | The issuer is fixed by configuration and served over verified TLS; NetworkPolicies allow no other outbound host |
+| V12.3.1, V16.4.3 | Traffic from the log collector to VictoriaLogs is plain HTTP | Same as V12.3.3: single node, traffic stays on the node |
+| V2.4.1 | Read pages have no rate limit | Only signed-in members of the login group reach them; idle and absolute session limits bound a session |
+| V9.2.1 | The ID token's `nbf` is not checked | `omniauth_openid_connect` checks signature, issuer, audience, expiry and nonce but not `nbf`; Pocket ID does not set it, and a token is redeemed seconds after it is issued |
+| V13.2.2 | The app's database role owns its schema and runs the migrations at start | One database per app; a separate migration role would add a second secret without a second boundary on a single node |
+| V5.2.2 | Uploads are not checked by file extension | The file name is never used; the content must parse as a Trivy JSON report (ADR 0003) |
+| V3.4.4, V3.4.6 | Static files and error pages rendered outside the controller stack lack CSP, `frame-ancestors` and in part `nosniff` | They are static and contain no data or actions; adding the headers would need a home-grown middleware |
 
 ## Keys and secrets
 
 | Secret | Used for | Algorithm | Held in | Rotation |
 |---|---|---|---|---|
-| `SECRET_KEY_BASE` | Signing and encrypting cookies (session id, OmniAuth state) | AES-256-GCM, keys derived with PBKDF2-SHA256 | SOPS secret `trivista` | Yearly or on suspicion; rotating ends all sessions |
+| `SECRET_KEY_BASE` | Signing the session id cookie, encrypting the Rails session cookie (OmniAuth state, flash) | HMAC-SHA256 for the session id, AES-256-GCM for the Rails session; keys derived with PBKDF2-SHA256 | SOPS secret `trivista` | Yearly or on suspicion; rotating ends all sessions |
 | Upload tokens (`trv_…`) | CI uploads | 40 base58 characters from `SecureRandom` (≈ 234 bit); only the SHA-256 digest is stored | Database (digest), CI secret store (plaintext) | Mandatory expiry, at most `TOKEN_MAX_LIFETIME_DAYS`; revoke on suspicion |
 | OIDC client secret | Token request to Pocket ID | `client_secret_basic` over TLS | SOPS secret `trivista`, Pocket ID | Yearly in Pocket ID, then update the secret |
 | Database password | PostgreSQL role `metawave_trivista_user` | SCRAM-SHA-256 | SOPS secrets `trivista`, `metawave-trivista-creds` | Yearly: change both secrets together, CNPG applies the role password |
 | TLS certificate | HTTPS | ECDSA P-256 from Let's Encrypt | cert-manager | Automatic, 90-day certificates |
-| SOPS age key | Decrypting the manifests' secrets | X25519 (age) | Flux secret `sops-age`, operator workstation | On suspicion; re-encrypt all secrets |
+| SOPS age key | Decrypting the manifests' secrets | X25519 (age) | Flux secret `sops-age`, operator workstation | On suspicion: new key, then new values for every secret, because the old ciphertexts stay in the Git history |
+
+New secrets come from `bin/rails secret` or `openssl rand`; a replaced value is removed from SOPS and Pocket ID once nothing uses it anymore. Only Flux and the operator hold the age key.
 
 ## Fixing vulnerabilities
 
@@ -48,17 +61,26 @@ Trivista scans itself nightly and after every build. The maintainer of this repo
 
 | Severity | Deadline |
 |---|---|
-| CRITICAL | 7 days; the CI gate blocks new builds |
+| CRITICAL | 7 days |
 | HIGH | 30 days |
 | MEDIUM | 90 days |
 | LOW, UNKNOWN | With the next dependency update |
 
-`bundler-audit --update`, `importmap audit` and Brakeman run in every CI pipeline; dependencies are updated by hand when a finding or a release asks for it.
+`bundler-audit --update`, `importmap audit` and Brakeman run in every CI pipeline and fail it on any known vulnerability in gems and JavaScript packages; findings in the image's system packages come from the Trivy scans and are triaged in Trivista. Renovate (`renovate.json`) proposes dependency updates; they are merged by hand.
+
+## Authentication
+
+- Signing in happens only at Pocket ID, with passkeys; Trivista stores no passwords.
+- Upload tokens have about 234 bit and cannot be guessed. Requests below `/api` are rate limited per client IP at Traefik, and uploads per token in the app.
+- Nothing locks out an account or a token after failed attempts, so nobody can lock out someone else.
 
 ## Sessions
 
 - A user may have several sessions in parallel (one per browser); each is listed under *Sessions* with browser, IP address and last activity and can be ended there.
-- A session ends after 60 minutes without a request (`SESSION_IDLE_MINUTES`) and at the latest 8 hours after sign-in (`SESSION_MAX_AGE_HOURS`). Signing out deletes it on the server and clears the browser cache and storage.
+- A session ends after 60 minutes without a request (`SESSION_IDLE_MINUTES`) and at the latest 8 hours after sign-in (`SESSION_MAX_AGE_HOURS`). Signing out deletes it on the server and clears the browser cache and storage; Turbo keeps no page snapshots that the back button could show.
+- Trivista accepts a Pocket ID sign-in that is up to 8 hours old, so the last passkey use lies at most twice `SESSION_MAX_AGE_HOURS` back. That is within NIST SP 800-63B-4 AAL2 (re-authentication every 24 hours, 1 hour idle).
+- Signing in again ends the session the browser held before.
+- Signing out of Trivista does not end the Pocket ID session; on a shared device, also sign out at Pocket ID.
 - Admins end all sessions of a user under *Users*; deactivating a user ends them as well. Rotating `SECRET_KEY_BASE` ends every session.
 
 ## Logs
@@ -66,7 +88,14 @@ Trivista scans itself nightly and after every build. The maintainer of this repo
 - Every request is logged with its request id; parameters such as tokens, secrets, the report, OIDC `code` and `state` are filtered, and report content never enters a log (ADR 0003).
 - Log lines are single lines in UTC; line breaks in values are escaped.
 - Audit events are JSON lines with the actor (`user_id` or `upload_token_id` and `service_account_id`): `trivista.login`, `login_rejected`, `login_failed`, `logout`, `session_ended`, `sessions_ended`, `token_created`, `token_revoked`, `service_account_created`, `visibility_changed`, `default_branch_changed`, `deleted`, `user_deactivated`, `user_reactivated`, `not_found`, `scan_uploaded`, `upload_rejected`.
-- Logs go to stdout and are collected by VictoriaLogs and kept for 21 days. The log UI sits behind oauth2-proxy, whose Pocket ID client admits only the `operators` group.
+- Logs go to stdout and are collected by VictoriaLogs and kept for 21 days, together with the logs of all other pods (Traefik, CrowdSec, PostgreSQL) and the host journal. The log UI sits behind oauth2-proxy, which admits only the `operators` group.
+- `RAILS_LOG_LEVEL=debug` writes SQL with report values to the log; use it only briefly and never in normal operation.
+- Times come from the host clock, which NTP keeps in sync.
+- The operator looks at the audit events when something is reported or seems off; there is no automatic alerting.
+
+## Browsers
+
+Trivista needs a current browser (CSP nonces, `__Host-` cookies, import maps). Older browsers get `406` with a static page (`allow_browser versions: :modern`).
 
 ## Outbound connections
 
@@ -81,12 +110,12 @@ Trivista connects only to PostgreSQL and to the OIDC issuer (discovery, token, u
 | Users: issuer, subject, name, groups | Personal | Until deleted by an admin |
 | Sessions: IP address, browser | Personal | Until they end; expired rows are removed nightly |
 
-Database backups (CNPG/barman) are kept 10 days in the object store; encrypted host backups (borg) up to 12 months. Report content outside the allowlist never reaches the database and therefore no backup.
+Database backups (CNPG/barman) are kept 10 days in the object store; encrypted host backups (borg) up to 12 months. The database and the object store are not encrypted at rest; they live on the node's disk, and only the borg copies off the host are encrypted. Report content outside the allowlist never reaches the database and therefore no backup.
 
 ## Identity provider checklist (Pocket ID)
 
 - Register exactly `https://<host>/auth/openid_connect/callback` as callback URL, no wildcards.
-- Enable PKCE for the client, allow only the authorization code flow and the scopes `openid profile groups`.
+- Enable PKCE for the client and restrict it to the Trivista groups. Grant types, scopes and the PKCE method cannot be restricted per client in Pocket ID (see *Accepted deviations*).
 - Sign ID tokens with RS256.
 - Keep email one-time codes and admin login links disabled, so sign-in stays passkey-only.
 - Use group names that are never reused (ADR 0006).
@@ -96,7 +125,8 @@ Database backups (CNPG/barman) are kept 10 days in the object store; encrypted h
 Kept in the deployment repository (`apps/trivista` in `metawave/server`):
 
 - The ingress serves only the `websecure` entrypoint; plain HTTP is not routed.
-- Everything below `/api` passes Traefik middlewares with a request body limit (50 MB) and in-flight and rate limits per client IP; all other paths accept bodies up to 1 MiB.
+- Everything below `/api` passes Traefik middlewares with a request body limit (50 MB, kept in memory) and in-flight and rate limits per client IP; all other paths accept bodies up to 1 MiB.
+- Traefik removes a client-sent `Client-IP` header; Rails would answer it with 500 as a spoofing attempt.
 - `PGSSLMODE=require` encrypts the connection to PostgreSQL.
 - The certificate uses an ECDSA P-256 key; the TLS option allows TLS 1.2 only with forward-secret AEAD suites.
 - Pods run with `seccompProfile: RuntimeDefault` and `automountServiceAccountToken: false`; the retention CronJob gets only the secrets it needs.

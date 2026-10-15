@@ -108,7 +108,7 @@ curl --fail-with-body -X POST "$TRIVISTA_URL/api/scans" \
 | `trigger` | no | `push`, `tag`, `schedule`, `manual`, `pr` or `unknown` (default) |
 | `tag` | no | Release tag |
 
-The response is `201` with the scan URL in `Location`. Errors with a JSON body `{"error": "…"}`: `400` invalid input (names up to 255, `commit` up to 64, `tag` up to 255 characters, no control characters), `422` unsupported report (`trivy k8s`, `SchemaVersion` other than 2, too many findings, more than 5 million arrays, objects and commas, an identifying value such as `Target` or `PkgPath` longer than 1000 characters), `507` quota exceeded. Errors without a body: `401` token (with `WWW-Authenticate`), `413` too large (from Puma), `415` not multipart, `429` rate limit, `503` rate limit unavailable.
+The response is `201` with the scan URL in `Location`. Errors with a JSON body `{"error": "…"}`: `400` invalid input (names up to 255, `commit` up to 64, `tag` up to 255 characters, no control characters; report text must be valid UTF-8), `422` unsupported report (`trivy k8s`, `SchemaVersion` other than 2, too many findings, more than 5 million arrays, objects and commas, an identifying value such as `Target` or `PkgPath` longer than 1000 characters), `507` quota exceeded. Errors without a body: `401` token (with `WWW-Authenticate`), `413` too large (from Puma), `415` not multipart, `429` rate limit, `503` rate limit unavailable.
 
 Recommendations:
 

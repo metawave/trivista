@@ -1,7 +1,7 @@
 # The signed-in user's own sessions, to review them and end the ones they do not recognize (ASVS V7.5.2).
 class ActiveSessionsController < ApplicationController
   def index
-    @sessions = Current.user.sessions.order(updated_at: :desc)
+    @sessions = Current.user.sessions.where.not(id: Session.expired).order(updated_at: :desc)
   end
 
   def destroy

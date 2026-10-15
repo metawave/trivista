@@ -107,7 +107,7 @@ Wer ein Project sehen darf: der Owner-User (`user`), eine Group (`group`) oder a
 _Avoid_: Permission, Access level
 
 **Service Account**:
-In Trivista angelegte, nicht anmeldefähige Identität eines Owners, die Upload Tokens besitzt.
+In Trivista angelegte, nicht anmeldefähige Identität eines Owners, die Upload Tokens besitzt. Der Name hat höchstens 100 Zeichen und keine Steuerzeichen.
 _Avoid_: Bot, Technical user, Service-User
 
 **Upload Token**:

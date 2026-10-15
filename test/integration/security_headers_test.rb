@@ -43,4 +43,16 @@ class SecurityHeadersTest < ActionDispatch::IntegrationTest
 
     assert_equal '"cache", "storage"', response.headers["Clear-Site-Data"]
   end
+
+  test "turbo keeps no snapshots that the back button could show after signing out" do
+    get login_path
+
+    assert_select "meta[name=turbo-cache-control][content=no-cache]"
+  end
+
+  test "static files declare their charset" do
+    %w[.css .js .html .txt .svg].each do |extension|
+      assert_match "charset=utf-8", Rack::Mime.mime_type(extension), extension
+    end
+  end
 end

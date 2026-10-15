@@ -8,7 +8,7 @@ class ServiceAccountsController < ApplicationController
   end
 
   def create
-    @service_account = ServiceAccount.new(name: params.dig(:service_account, :name), owner: selected_owner)
+    @service_account = ServiceAccount.new(name: service_account_params[:name], owner: selected_owner)
     if @service_account.owner.nil?
       @service_account.errors.add(:owner, "must be you or one of your groups")
       render :new, status: :unprocessable_content
@@ -26,8 +26,12 @@ class ServiceAccountsController < ApplicationController
   end
 
   private
+    def service_account_params
+      params.expect(service_account: [ :name, :owner ])
+    end
+
     def selected_owner
-      choice = params.dig(:service_account, :owner).to_s
+      choice = service_account_params[:owner].to_s
       return Owner.find_or_create_by!(user: Current.user) if choice == "user"
 
       group = choice.delete_prefix("group:")

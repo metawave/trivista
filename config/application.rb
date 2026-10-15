@@ -28,6 +28,9 @@ module Trivista
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets logging tasks])
 
+    # Rails still signs cookies with HMAC-SHA1 by default; the session id cookie gets SHA-256 (ASVS V11.4.1).
+    config.action_dispatch.signed_cookie_digest = "SHA256"
+
     # Keep other sites from holding a reference to Trivista windows or embedding its responses (ASVS V3.4.8, V3.5.8).
     config.action_dispatch.default_headers.merge!(
       "Cross-Origin-Opener-Policy" => "same-origin",

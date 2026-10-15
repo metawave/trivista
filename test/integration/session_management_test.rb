@@ -13,6 +13,26 @@ class SessionManagementTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path
   end
 
+  test "signing in again ends the session the browser held before" do
+    sign_in
+    copied = cookies.to_hash
+
+    sign_in
+    copied.each { |name, value| cookies[name] = value }
+    get root_path
+
+    assert_redirected_to login_path
+    assert_equal 1, users(:alice).sessions.count
+  end
+
+  test "the session cookie is signed with HMAC-SHA256" do
+    sign_in
+    data, digest = CGI.unescape(cookies[:session_id]).split("--")
+    key = Rails.application.key_generator.generate_key(Rails.application.config.action_dispatch.signed_cookie_salt)
+
+    assert_equal OpenSSL::HMAC.hexdigest("SHA256", key, data), digest
+  end
+
   test "sessions end after an hour without activity" do
     sign_in
 
@@ -49,10 +69,14 @@ class SessionManagementTest < ActionDispatch::IntegrationTest
 
   test "users see their sessions and end another one" do
     other = users(:alice).sessions.create!(user_agent: "Other browser", ip_address: "192.0.2.1")
+    users(:alice).sessions.create!(user_agent: "Expired browser", updated_at: 2.hours.ago)
+    users(:bob).sessions.create!(user_agent: "Bob browser")
     sign_in
 
     get active_sessions_path
     assert_select "td", text: "Other browser"
+    assert_select "td", text: "Expired browser", count: 0
+    assert_select "td", text: "Bob browser", count: 0
 
     delete active_session_path(other)
     assert_not Session.exists?(other.id)
