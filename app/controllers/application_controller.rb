@@ -6,6 +6,9 @@ class ApplicationController < ActionController::Base
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
+  # Pages show findings that may point at weak spots; browsers and proxies keep no copy (ASVS V14.3.2).
+  before_action :no_store
+
   helper_method :manageable?
 
   private

@@ -28,6 +28,12 @@ module Trivista
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
+    # Keep other sites from holding a reference to Trivista windows or embedding its responses (ASVS V3.4.8, V3.5.8).
+    config.action_dispatch.default_headers.merge!(
+      "Cross-Origin-Opener-Policy" => "same-origin",
+      "Cross-Origin-Resource-Policy" => "same-origin"
+    )
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

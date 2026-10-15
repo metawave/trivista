@@ -21,6 +21,7 @@ class SessionsController < ApplicationController
   def destroy
     terminate_session if resume_session
     reset_session
+    response.headers["Clear-Site-Data"] = '"cache", "storage"'
     redirect_to login_path
   end
 end

@@ -2,6 +2,8 @@ class DesignController < ApplicationController
   SampleDiff = Data.define(:predecessor, :new_finding_ids, :no_longer_reported_finding_ids)
 
   allow_unauthenticated_access
+  # The styleguide paints color swatches with inline styles.
+  content_security_policy { it.style_src_attr :unsafe_inline }
 
   def show
     @diff = SampleDiff.new(predecessor: true, new_finding_ids: [ 1, 2 ], no_longer_reported_finding_ids: [ 3 ])
