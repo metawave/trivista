@@ -15,4 +15,6 @@ steps:
       OIDC_LOGIN_GROUP: trivista_users
     commands:
       - until pg_isready -h postgres -q; do sleep 1; done
+      # CI image only has the gems from main; install what a PR changes
+      - bundle check || bundle install
       - bin/ci
