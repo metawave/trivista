@@ -1,6 +1,6 @@
 [tools]
 ruby = "4.0.9"
-trivy = "0.76.1"
+trivy = "0.76.2"
 
 # Local development defaults; override in mise.local.toml.
 [env]
