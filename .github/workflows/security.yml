@@ -17,7 +17,7 @@ jobs:
   scan:
     runs-on: ubuntu-24.04-arm
     env:
-      IMAGE: registry.metawave.ch/metawave/trivista:${{ inputs.tag || 'latest' }}
+      IMAGE: ghcr.io/metawave/trivista:${{ inputs.tag || 'latest' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Scan source
@@ -28,9 +28,6 @@ jobs:
             --output trivy-source.json .
       - name: Scan image
         uses: docker://aquasec/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb
-        env:
-          TRIVY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
-          TRIVY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
         with:
           args: >-
             image --quiet --format json --scanners vuln,misconfig,secret,license --list-all-pkgs=false
