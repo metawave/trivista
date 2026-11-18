@@ -1,5 +1,6 @@
 # Trivy scans of the checkout and the image, uploaded to Trivista itself: nightly against latest, and against every
 # new image from ci.yml
+name: Security
 on:
   schedule:
     - cron: '0 0 * * *'
@@ -19,7 +20,8 @@ jobs:
     env:
       IMAGE: ghcr.io/metawave/trivista:${{ inputs.tag || 'latest' }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Scan source
         uses: docker://aquasec/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb
         with:
@@ -42,7 +44,7 @@ jobs:
             *) trigger=push ;;
           esac
           for report in trivy-source.json trivy-image.json; do
-            echo "▶ $report ($(du -h $report | cut -f1), limit 50 MB) → Trivista · $trigger on $GITHUB_REF_NAME @ ${GITHUB_SHA::8}"
+            echo "==> $report ($(du -h $report | cut -f1), limit 50 MB) → Trivista · $trigger on $GITHUB_REF_NAME @ ${GITHUB_SHA::8}"
             curl --fail-with-body -sS -X POST https://trivista.metawave.ch/api/scans \
               -H "Authorization: Bearer $TRIVISTA_TOKEN" \
               -F report=@$report -F project=trivista -F repo=trivista \

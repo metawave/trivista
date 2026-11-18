@@ -1,4 +1,5 @@
 # bin/ci on every pull request and push to main; on main, the arm64 image is pushed and scanned (security.yml)
+name: CI
 on:
   push:
     branches: [main]
@@ -22,11 +23,14 @@ jobs:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432
       OIDC_LOGIN_GROUP: trivista_users
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ruby/setup-ruby@20eb24b0d509e2b9ed9b6d42ddfeb992915e0564 # v1.341.0
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Ruby and bundle
+        uses: ruby/setup-ruby@20eb24b0d509e2b9ed9b6d42ddfeb992915e0564 # v1.341.0
         with:
           bundler-cache: true
-      - run: bin/ci
+      - name: Test (bin/ci)
+        run: bin/ci
 
   image:
     needs: test
@@ -40,15 +44,19 @@ jobs:
       tag: ${{ steps.tag.outputs.tag }}
     steps:
       # Flux's ImagePolicy picks the newest main-<timestamp>-<sha8>
-      - id: tag
+      - name: Image tag
+        id: tag
         run: echo "tag=main-$(date +%s)-${GITHUB_SHA::8}" >> "$GITHUB_OUTPUT"
-      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
-      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Log in to ghcr.io
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+      - name: Build and push image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           push: true
           tags: |
