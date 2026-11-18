@@ -32,7 +32,7 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     # The server is arm64: build natively instead of emulating. The public image needs no pull secret in the cluster
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     permissions:
       contents: read
       packages: write
