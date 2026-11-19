@@ -45,9 +45,17 @@ jobs:
           esac
           for report in trivy-source.json trivy-image.json; do
             echo "==> $report ($(du -h $report | cut -f1), limit 50 MB) → Trivista · $trigger on $GITHUB_REF_NAME @ ${GITHUB_SHA::8}"
-            curl --fail-with-body -sS -X POST https://trivista.metawave.ch/api/scans \
+            # Some GitHub runner IPs (Azure) are on CrowdSec blocklists and the server's firewall drops them; a retry
+            # from the same runner can't help. Only an unreachable Trivista is tolerated, an HTTP error still fails.
+            status=0
+            curl --fail-with-body -sS --connect-timeout 20 -X POST https://trivista.metawave.ch/api/scans \
               -H "Authorization: Bearer $TRIVISTA_TOKEN" \
               -F report=@$report -F project=trivista -F repo=trivista \
-              -F branch=$GITHUB_REF_NAME -F commit=$GITHUB_SHA -F trigger=$trigger
+              -F branch=$GITHUB_REF_NAME -F commit=$GITHUB_SHA -F trigger=$trigger || status=$?
             echo
+            case $status in
+              0) ;;
+              7|28) echo "↷ Trivista unreachable from this runner (curl exit $status, its IP is likely on a CrowdSec blocklist): reports not uploaded"; break ;;
+              *) exit $status ;;
+            esac
           done
