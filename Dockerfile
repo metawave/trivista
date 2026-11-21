@@ -9,7 +9,7 @@
 
 # Keep in sync with .ruby-version: Renovate bumps both in one PR (group ruby)
 # renovate: datasource=ruby-version depName=ruby
-ARG RUBY_VERSION=4.0.7
+ARG RUBY_VERSION=4.0.10
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
