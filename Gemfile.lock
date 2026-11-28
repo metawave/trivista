@@ -199,9 +199,10 @@ GEM
     omniauth-rails_csrf_protection (2.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    omniauth_openid_connect (0.8.0)
+    omniauth_openid_connect (0.8.1)
       omniauth (>= 1.9, < 3)
       openid_connect (~> 2.2)
+      ostruct (~> 0.6.3)
     openid_connect (2.5.0)
       activemodel
       attr_required (>= 1.0.0)
@@ -214,6 +215,7 @@ GEM
       tzinfo
       validate_url
       webfinger (~> 2.0)
+    ostruct (0.6.3)
     parallel (2.3.0)
     parser (3.3.14.0)
       ast (~> 2.4.1)
@@ -500,8 +502,9 @@ CHECKSUMS
   nokogiri (1.19.7-x86_64-linux-musl) sha256=464d1f3dfb0d53cf54c0c6a7e23e8e91cf68ec3cafc2b27dc4a7682f2d9bf546
   omniauth (2.4.2) sha256=c2c94fa578de19a4eb90150c96cd80c316ceb6e067d4fd1c7921048dcc882a65
   omniauth-rails_csrf_protection (2.0.1) sha256=c6e3204d7e3925bb537cb52d50fdfc9f05293f1a9d87c5d4ab4ca3a39ba8c32d
-  omniauth_openid_connect (0.8.0) sha256=1f2f3890386e2a742221cee0d2e903b78d874e6fab9ea3bfa31c1462f4793d25
+  omniauth_openid_connect (0.8.1) sha256=37dd5e0464131d2a944f9377fca667cc4a6b39f6ef6c4ab3361f1f975615ab83
   openid_connect (2.5.0) sha256=659aff8edce0907798e3f6837e5f27ae2937ae8735216f3e900ab8daa29e39c4
+  ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
   parallel (2.3.0) sha256=f75a3e904101ce6a1ccb6b8dc800cbafd42166d83330192438dcf29395167a6f
   parser (3.3.14.0) sha256=62f8f76af7b919425ee2d811880e9dcb8011ab40bfd59970dfb583141697e58f
   pg (1.7.0) sha256=f7b536501284e883d4c9ef86dbde0313063e4aaafc23575b0017b0d572a26afb
